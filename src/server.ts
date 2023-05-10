@@ -38,9 +38,18 @@ const errorLogStream = fs.createWriteStream(path.join(__dirname, 'logs', 'error.
 const server_config = () => {
 
     server.use(express.json());
-    
-    server.use(morgan('combined', { stream: accessLogStream }));
-    server.use(morgan('combined', { stream: errorLogStream }));
+
+    server.use(morgan('combined', 
+      {
+        stream: accessLogStream,
+        skip: (req:express.Request,res:express.Response)  => res.statusCode >= 400
+      }));
+      
+      server.use(morgan('combined', 
+      {
+        stream: errorLogStream,
+        skip: (req:express.Request,res:express.Response)  => res.statusCode <= 400
+      }));
 
     server.use("/api/feedbackTemplate" , feedback_template_router);
     server.use("/api/feedback" , feedback_router);
