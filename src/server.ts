@@ -4,6 +4,7 @@ const server =express();
 
 // importing morgan for logging
 import morgan from 'morgan'
+
 // importing routes
 import feedback_template_router from './routes/feedback_template_route'
 import feedback_router from './routes/feedback_route'
@@ -31,7 +32,8 @@ const start_server = async() => {
 const server_config = () => {
 
     server.use(express.json());
-
+    server.use(morgan('combined'));
+    
     server.use("/api/feedbackTemplate" , feedback_template_router);
     server.use("/api/feedback" , feedback_router);
 
