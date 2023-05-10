@@ -25,6 +25,12 @@ export const createFeedback = async( req:Request, res:Response ) => {
     const template_type = req.body?.template_type;
 
     try {
+
+        // getting the user_id from the auth 
+        // const user_id = req.user.id;  // auth token payload 
+        // const delivery_agent_data = DeliveryAgent.findOne({user_id:user_id})
+        // feedback_data.deliveryagent_id = delivery_agent_data._id;
+    
          //searhing for an existing template for the given template type
         const feedback_template = await FeedbackTemplate.findOne({type:template_type});
 
