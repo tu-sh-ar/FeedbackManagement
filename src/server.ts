@@ -2,6 +2,8 @@
 import express from 'express';
 const server =express();
 
+// importing morgan for logging
+import morgan from 'morgan'
 // importing routes
 import feedback_template_router from './routes/feedback_template_route'
 import feedback_router from './routes/feedback_route'
