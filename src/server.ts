@@ -13,7 +13,6 @@ import connect_db from './db/db-connect';
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
-
 // connect db function 
 const start_server = async() => {
 
@@ -42,28 +41,27 @@ const server_config = () => {
 // start the server 
 start_server();
 
-
 // making swagger configurations
 const options = {
-    definition: {
-      openapi: "3.0.0",
-      info: {
-        title: "Feedback Management Swagger UI",
-        version: "0.1.0",
-        description: "Feedback Management API ",
-      },
-      servers: [
-        {
-          url: "http://localhost:4000",
-        },
-      ],
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Feedback Management Swagger UI",
+      version: "0.1.0",
+      description: "Feedback Management API ",
     },
-    apis: ["./routes/*.ts" , "./src/documentation/*.yaml"],
-  };
-  
-  const specs = swaggerJsdoc(options);
-  server.use(
-    "/swagger", 
-    swaggerUi.serve,
-    swaggerUi.setup(specs, { explorer: true })
-  );
+    servers: [
+      {
+        url: "http://localhost:4000",
+      },
+    ],
+  },
+  apis: ["./routes/*.ts" , "./src/documentation/*.yaml"],
+};
+
+const specs = swaggerJsdoc(options);
+server.use(
+  "/swagger", 
+  swaggerUi.serve,
+  swaggerUi.setup(specs, { explorer: true })
+);
