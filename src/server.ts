@@ -4,6 +4,8 @@ const server =express();
 
 // importing morgan for logging
 import morgan from 'morgan'
+import fs from 'fs'
+import path from 'path'
 
 // importing routes
 import feedback_template_router from './routes/feedback_template_route'
@@ -29,11 +31,17 @@ const start_server = async() => {
     }
 }
 
+// making access stream for morgan logger (for both access and error )
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs', 'access.log'), { flags: 'a' });
+const errorLogStream = fs.createWriteStream(path.join(__dirname, 'logs', 'error.log'), { flags: 'a' });
+
 const server_config = () => {
 
     server.use(express.json());
-    server.use(morgan('combined'));
     
+    server.use(morgan('combined', { stream: accessLogStream }));
+    server.use(morgan('combined', { stream: errorLogStream }));
+
     server.use("/api/feedbackTemplate" , feedback_template_router);
     server.use("/api/feedback" , feedback_router);
 
