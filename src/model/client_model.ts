@@ -14,3 +14,4 @@ interface IClient extends Document {
   // Client model
   const Client = model<IClient>('Client', clientSchema);
   
+  export default Client
