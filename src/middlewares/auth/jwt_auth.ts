@@ -16,7 +16,7 @@ export const verifytoken = async(req:Request, res:Response, next:NextFunction) =
         if(decoded) {
             // parsing the data 
             const data = JSON.parse(JSON.stringify(decoded));
-            console.log(data);
+            req.user = data.user;
             next();
         }
         else{
