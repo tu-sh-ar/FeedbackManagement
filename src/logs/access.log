@@ -1,1 +1,4 @@
 ::1 - - [11/May/2023:11:33:30 +0000] "GET /api/feedback HTTP/1.1" 200 616 "-" "PostmanRuntime/7.32.2"
+::1 - - [11/May/2023:11:39:02 +0000] "POST /api/client/signup HTTP/1.1" 201 86 "-" "PostmanRuntime/7.32.2"
+::1 - - [11/May/2023:12:01:32 +0000] "POST /api/client/login HTTP/1.1" 200 217 "-" "PostmanRuntime/7.32.2"
+::1 - - [11/May/2023:12:14:02 +0000] "GET /api/feedback HTTP/1.1" 200 433 "-" "PostmanRuntime/7.32.2"

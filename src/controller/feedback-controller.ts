@@ -6,11 +6,34 @@ import FeedbackTemplate from '../model/feedback_template_model'
 
 // create a feedback
 export const getFeedback = async( req:Request, res:Response ) => {
-    
+
+    let updated_feedback:Array<object>=[];
+
     try {
-        
+
         await FeedbackModel.find()
-        .then(data => res.status(200).send(data))
+        .then(data => {
+            data.forEach(feedback => {
+                const new_feedback:object = {
+                    user:{
+                        id:feedback.user_id,
+                        name:"yash",
+                        email:"yash@yash.com"
+                    },
+                    product:{
+                        id:feedback.product_id,
+                        name:"Abibas Shoes"
+                    },
+                    rating:feedback.rating,
+                    Comment:feedback?.comment,
+                    review:feedback?.additional_fields,
+                    QA:feedback?.qas
+                }
+                
+                updated_feedback.push(new_feedback);
+            })
+            res.status(200).send(updated_feedback);
+        })
         .catch(err => res.status(404).send(err))
 
     } catch (error) {
