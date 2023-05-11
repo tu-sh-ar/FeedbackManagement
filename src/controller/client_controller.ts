@@ -20,7 +20,7 @@ export const user_login = async(req:Request, res:Response) => {
                 email:data?.email,
                 id:data?._id
             }
-        },'secret',{expiresIn:"30m"});
+        },'secret',{expiresIn:"100m"});
         res.status(200).send(token)
     })
     .catch(err => res.status(404).send("no user found"))
