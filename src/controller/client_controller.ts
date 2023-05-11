@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
 // create user 
-export const userSignup = async( req:Request, res:Response )  => {
+export const clientSignup = async( req:Request, res:Response )  => {
     const user_details = req.body;
     await Client.create(user_details)
     .then(user => res.status(201).send(user))
@@ -11,7 +11,7 @@ export const userSignup = async( req:Request, res:Response )  => {
 }
 
 // user login
-export const user_login = async(req:Request, res:Response) => {
+export const client_login = async(req:Request, res:Response) => {
     const { email, password } = req.body;
     await Client.findOne({email:email})
     .then(data => {

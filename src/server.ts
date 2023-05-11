@@ -13,7 +13,7 @@ import feedback_router from './routes/feedback_route'
 
 //importing test routes
 import user_routes from './routes/user_routes'
-// import client_routes from './routes/client_routes'
+import client_routes from './routes/client_routes'
 
 // importing the  db config 
 import connect_db from './db/db-connect';
@@ -61,6 +61,7 @@ const server_config = () => {
     server.use("/api/feedback" , feedback_router);
     // test routes
     server.use("/api/user", user_routes);
+    server.use("/api/client" , client_routes);
 
     server.listen(4000, () => {
         console.log("Server running at 4000");
