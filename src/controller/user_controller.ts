@@ -1,5 +1,6 @@
 import User from '../model/user_model'
 import { Request, Response } from 'express'
+import jwt from 'jsonwebtoken'
 
 // create user 
 export const userSignup = async( req:Request, res:Response )  => {
@@ -9,3 +10,18 @@ export const userSignup = async( req:Request, res:Response )  => {
     .catch(err => res.status(400).send(err))
 }
 
+// user login
+export const user_login = async(req:Request, res:Response) => {
+    const { email, password } = req.body;
+    await User.findOne({email:email})
+    .then(data => {
+        const token = jwt.sign({
+            user:{
+                email:data?.email,
+                id:data?._id
+            }
+        },'secret',{expiresIn:"30m"});
+        res.status(200).send(token)
+    })
+    .catch(err => res.status(404).send("no user found"))
+}
