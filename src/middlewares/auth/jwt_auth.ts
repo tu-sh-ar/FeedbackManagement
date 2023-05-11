@@ -19,7 +19,9 @@ export const verifytoken = async(req:Request, res:Response, next:NextFunction) =
             console.log(data);
             next();
         }
-
-        res.status(401).send("Invalid Token")
+        else{
+            res.status(401).send("Invalid Token")
+        }
+        
     }
 }

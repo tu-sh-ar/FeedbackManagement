@@ -21,7 +21,7 @@ export const user_login = async(req:Request, res:Response) => {
                 id:data?._id
             }
         },'secret',{expiresIn:"30m"});
-        res.status(200).send(token)
+        res.status(200).json(token)
     })
     .catch(err => res.status(404).send("no user found"))
 }

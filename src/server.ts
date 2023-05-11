@@ -11,6 +11,10 @@ import path from 'path'
 import feedback_template_router from './routes/feedback_template_route'
 import feedback_router from './routes/feedback_route'
 
+//importing test routes
+import user_routes from './routes/user_routes'
+// import client_routes from './routes/client_routes'
+
 // importing the  db config 
 import connect_db from './db/db-connect';
 
@@ -38,7 +42,8 @@ const errorLogStream = fs.createWriteStream(path.join(__dirname, 'logs', 'error.
 const server_config = () => {
 
     server.use(express.json());
-
+    
+    // setting up morgan
     server.use(morgan('combined', 
       {
         stream: accessLogStream,
@@ -50,9 +55,12 @@ const server_config = () => {
         stream: errorLogStream,
         skip: (req:express.Request,res:express.Response)  => res.statusCode <= 400
       }));
-
+    
+    // setting up routin middlewares
     server.use("/api/feedbackTemplate" , feedback_template_router);
     server.use("/api/feedback" , feedback_router);
+    // test routes
+    server.use("/api/user", user_routes);
 
     server.listen(4000, () => {
         console.log("Server running at 4000");

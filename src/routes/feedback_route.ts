@@ -3,7 +3,9 @@ const router = express.Router();
 
 import { createFeedback, deleteFeedback, getFeedback, updateFeedback  } from "../controller/feedback-controller";
 import { Validate, validateSchema }  from "../middlewares/validations/schema-validations";
+import { verifytoken } from "../middlewares/auth/jwt_auth";
 
+router.use(verifytoken);
 
 router.get("/", getFeedback);
 
