@@ -11,7 +11,8 @@ const routes: Routes = [
   },
   {
     path:"admin-login",
-    component:AdminLoginComponent
+    component:AdminLoginComponent,
+    title:"Login"
   },
   {
     path:"admin",
