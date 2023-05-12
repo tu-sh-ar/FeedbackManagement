@@ -13,15 +13,24 @@ export const clientSignup = async( req:Request, res:Response )  => {
 // user login
 export const client_login = async(req:Request, res:Response) => {
     const { email, password } = req.body;
-    await Client.findOne({email:email})
+
+    await Client.findOne({email:email,password:password})
     .then(data => {
-        const token = jwt.sign({
+        if(data){
+            
+            const token = jwt.sign({
             user:{
                 email:data?.email,
                 id:data?._id
             }
-        },'secret',{expiresIn:"100m"});
-        res.status(200).send(token)
+            },'secret',{expiresIn:"100m"});
+
+            res.status(200).send(token)
+
+        }else{
+            res.status(400).send(" Invalid credentials")
+        }
+        
     })
-    .catch(err => res.status(404).send("no user found"))
+    .catch(err => res.status(500).send("Internal Server Error"))
 }

@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from 'express'
 
 export const verifytoken = async(req:Request, res:Response, next:NextFunction) => {
     let token:string;
+    console.log(req.headers)
     let authHeader = req.headers.Authorization || req.headers.authorization;
 
     if(authHeader && authHeader.toString().startsWith('Bearer')) {
