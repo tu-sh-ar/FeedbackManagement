@@ -3,15 +3,15 @@ const router = express.Router();
 
 import { createtemplate, getTemplates, updateTemplate, deleteTemplate } from "../controller/feedback_template_controller";
 import { Validate , validateSchema }  from "../middlewares/validations/schema-validations";
-import { verifytoken } from "../middlewares/auth/jwt_auth";
+import { verifyToken } from "../middlewares/auth/jwt_auth";
 
 
-router.get("/", verifytoken, getTemplates);
+router.get("/", verifyToken, getTemplates);
 
 // new template
 router.post(
     "/",
-    verifytoken,
+    verifyToken,
     Validate.checkFeedbackTemplate,
     validateSchema,
     createtemplate
@@ -25,6 +25,6 @@ router.put(
     updateTemplate
     );
 
-router.delete("/:id", verifytoken,  deleteTemplate);
+router.delete("/:id", verifyToken,  deleteTemplate);
 
 export default router;
