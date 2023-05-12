@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Feedback } from 'src/app/interfaces/feedback';
 import { FeedbackService } from 'src/app/services/feedback.service';
+import { PageNotFoundComponent } from 'src/app/shared/page-not-found/page-not-found.component';
 
 @Component({
   selector: 'app-feedback-list',
@@ -17,7 +19,7 @@ export class FeedbackListComponent implements OnInit{
   dataSource!: MatTableDataSource<Feedback>;
   displayFeedbackColumns: string[] = ['id', 'user', 'product', 'rating', 'created_at', 'updated_at', 'review'];
 
-  constructor(private _feedbackService: FeedbackService){}
+  constructor(private _feedbackService: FeedbackService, public _dialog: MatDialog){}
 
   ngOnInit(): void {
     this._feedbackService.getAllFeedbacks().subscribe((res)=>{
@@ -34,5 +36,7 @@ export class FeedbackListComponent implements OnInit{
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openFeedbackDetailDialogue(){}
+  openFeedbackDetailDialogue(){
+    this._dialog.open(PageNotFoundComponent);
+  }
 }
