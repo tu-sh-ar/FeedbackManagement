@@ -5,13 +5,13 @@ import FeedbackTemplate from "../model/feedback_template_model";
 
 // get feedback templates 
 export const getTemplates =  async( req:Request , res:Response ) => {
+
+    const client_id = req.user?.id;
     
     try {
         
-        // autorisation and authentication 
-
         // fetching data 
-        const templates = await FeedbackTemplate.find()
+        const templates = await FeedbackTemplate.find({client_id:client_id})
 
         if(templates.length)
             res.status(200).send(templates);
@@ -28,10 +28,14 @@ export const getTemplates =  async( req:Request , res:Response ) => {
 // create new feedback template 
 export const createtemplate = async( req:Request , res: Response) => {
 
+    // autorisation and authentication 
+    const client_id = req.user?.id; 
+    const feedback_template_data = req.body;
+    
     try {
-        
+         const new_data = {...feedback_template_data, client_id:client_id}
         //creating new template for feedback 
-        FeedbackTemplate.create(req.body)
+        FeedbackTemplate.create(new_data)
         .then(data => res.status(200).send(data))
         .catch(err => res.status(400).send(err))
          
@@ -50,7 +54,7 @@ export const updateTemplate = async( req:Request , res:Response) => {
 
         await FeedbackTemplate.findByIdAndUpdate(template_id, req.body)
         .then(data => res.status(200).send(data))
-        .catch(err => res.status(404).send(err))
+        .catch(err => res.status(404).send("No feedback template found "))
         
     } catch (error) {
         res.status(500).send("Error occured in updating the template")

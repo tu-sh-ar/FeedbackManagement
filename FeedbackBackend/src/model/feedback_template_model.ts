@@ -34,7 +34,8 @@ const FeedbackTemplateSchema: Schema = new Schema(
     client_id: 
     { 
         type: Schema.Types.ObjectId, 
-        ref: 'Client' 
+        ref: 'Client' ,
+        required:true
     },
     user_id: 
     { 
