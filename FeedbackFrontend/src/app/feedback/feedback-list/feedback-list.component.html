@@ -1,10 +1,10 @@
 <mat-form-field appearance="outline" class="filter-input">
     <mat-label>Filter</mat-label>
-    <input matInput placeholder="Search columns" #input>
+    <input matInput type="text" placeholder="Search columns" #input (keyup)="doFilter($event)">
 </mat-form-field>
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z1 feedback-table">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z1 feedback-table" matSort>
     <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> Id </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
         <td mat-cell *matCellDef="let element"> {{element.id}} </td>
     </ng-container>
     <ng-container matColumnDef="user">
@@ -16,16 +16,24 @@
         <td mat-cell *matCellDef="let element"> {{element.product.product_name}} </td>
     </ng-container>
     <ng-container matColumnDef="rating">
-        <th mat-header-cell *matHeaderCellDef> Rating </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Rating </th>
         <td mat-cell *matCellDef="let element"> {{element.rating}} </td>
     </ng-container>
     <ng-container matColumnDef="created_at">
-        <th mat-header-cell *matHeaderCellDef> Created </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Created </th>
         <td mat-cell *matCellDef="let element"> {{element.created_at | date}} </td>
     </ng-container>
     <ng-container matColumnDef="updated_at">
         <th mat-header-cell *matHeaderCellDef> Updated </th>
         <td mat-cell *matCellDef="let element"> {{element.updated_at | date}} </td>
+    </ng-container>
+    <ng-container matColumnDef="review">
+        <th mat-header-cell *matHeaderCellDef> Review </th>
+        <td mat-cell *matCellDef="let element">
+            <button mat-icon-button color="accent" (click)="openFeedbackDetailDialogue()">
+                <mat-icon>visibility</mat-icon>
+            </button>
+        </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayFeedbackColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayFeedbackColumns;"></tr>
