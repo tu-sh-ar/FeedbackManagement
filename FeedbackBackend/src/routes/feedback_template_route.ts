@@ -6,12 +6,12 @@ import { Validate , validateSchema }  from "../middlewares/validations/schema-va
 import { verifyToken } from "../middlewares/auth/jwt_auth";
 
 
-router.get("/", verifyToken, getTemplates);
+router.get("/", getTemplates);
 
 // new template
 router.post(
     "/",
-    verifyToken,
+    //verifyToken,
     Validate.checkFeedbackTemplate,
     validateSchema,
     createtemplate

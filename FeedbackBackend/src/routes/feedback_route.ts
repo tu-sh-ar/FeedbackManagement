@@ -5,7 +5,7 @@ import { createFeedback, deleteFeedback, getFeedback, updateFeedback  } from "..
 import { Validate, validateSchema }  from "../middlewares/validations/schema-validations";
 import { verifyToken } from "../middlewares/auth/jwt_auth";
 
-router.use(verifyToken);
+// router.use(verifyToken);
 
 router.get("/", getFeedback);
 

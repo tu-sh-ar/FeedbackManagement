@@ -36,25 +36,25 @@ const start_server = async() => {
 }
 
 // making access stream for morgan logger (for both access and error )
-const accessLogStream = fs.createWriteStream(path.join('logs', 'access.log'), { flags: 'a' });
-const errorLogStream = fs.createWriteStream(path.join('logs', 'error.log'), { flags: 'a' });
+// const accessLogStream = fs.createWriteStream(path.join('logs', 'access.log'), { flags: 'a' });
+// const errorLogStream = fs.createWriteStream(path.join('logs', 'error.log'), { flags: 'a' });
 
 const server_config = () => {
 
     server.use(express.json());
     
     // setting up morgan
-    server.use(morgan('combined', 
-      {
-        stream: accessLogStream,
-        skip: (req:express.Request,res:express.Response)  => res.statusCode >= 400
-      }));
+    // server.use(morgan('combined', 
+    //   {
+    //     stream: accessLogStream,
+    //     skip: (req:express.Request,res:express.Response)  => res.statusCode >= 400
+    //   }));
       
-      server.use(morgan('combined', 
-      {
-        stream: errorLogStream,
-        skip: (req:express.Request,res:express.Response)  => res.statusCode <= 400
-      }));
+    //   server.use(morgan('combined', 
+    //   {
+    //     stream: errorLogStream,
+    //     skip: (req:express.Request,res:express.Response)  => res.statusCode <= 400
+    //   }));
     
     // setting up routin middlewares
     server.use("/api/feedbackTemplate" , feedback_template_router);

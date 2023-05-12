@@ -46,6 +46,9 @@ export const createFeedback = async( req:Request, res:Response ) => {
 
     const feedback_data = req.body;
     const template_type = req.body?.template_type;
+    
+    // gettting user credentials 
+    const user_id = req.user?.id;
 
     try {
 
@@ -57,9 +60,11 @@ export const createFeedback = async( req:Request, res:Response ) => {
          //searhing for an existing template for the given template type
         const feedback_template = await FeedbackTemplate.findOne({type:template_type});
 
+        // check if the user exists and then make the response 
         const new_feedback_data = {...feedback_data, 
             client_id:feedback_template?.client_id, 
             template_id:feedback_template?._id,
+            user_id:user_id,
             feedback_type:feedback_type.UserToClient
         }
         
@@ -71,7 +76,6 @@ export const createFeedback = async( req:Request, res:Response ) => {
         res.status(500).send("internal server error")
     }
 }
-
 
 // create a feedback
 export const updateFeedback = async( req:Request, res:Response ) => {
