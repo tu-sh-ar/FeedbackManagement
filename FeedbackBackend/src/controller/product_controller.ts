@@ -11,11 +11,7 @@ export const getProduct = async(req:Request, res:Response) => {
 
 
 export const createProduct = async(req:Request, res:Response) => {
-    const product_data = {
-        name:"Nike Shoes",
-        descripton:"Sports shoes",
-        client_id:"645cd3d54f7c08e19e4e9c0e"
-    }
+    const product_data = req.body;
 
     await Product.create(product_data)
     .then(data => res.status(201).send(data))

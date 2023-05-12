@@ -25,3 +25,14 @@ export const user_login = async(req:Request, res:Response) => {
     })
     .catch(err => res.status(404).send("no user found"))
 }
+
+
+// get user with id 
+export const getUser = async(req:Request, res:Response) => {
+
+    const user_id = req.params.id
+
+    await User.findById(user_id)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(404).send(err))
+}
