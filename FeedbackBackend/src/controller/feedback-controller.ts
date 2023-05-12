@@ -15,19 +15,15 @@ export const getFeedback = async( req:Request, res:Response ) => {
         .then(data => {
             data.forEach(feedback => {
                 const new_feedback:object = {
-                    user:{
-                        id:feedback.user_id,
-                        name:"yash",
-                        email:"yash@yash.com"
-                    },
-                    product:{
-                        id:feedback.product_id,
-                        name:"Nike Shoes"
-                    },
+                    feedback_id: feedback._id,
+                    user: feedback.user_id,
+                    product:feedback.product_id,
                     rating:feedback.rating,
                     Comment:feedback?.comment,
                     review:feedback?.additional_fields,
-                    QA:feedback?.qas
+                    QA:feedback?.qas,
+                    created_at:feedback.createdAt,
+                    updated_at:feedback.updatedAt
                 }
                 
                 updated_feedback.push(new_feedback);
@@ -48,7 +44,7 @@ export const createFeedback = async( req:Request, res:Response ) => {
     const template_type = req.body?.template_type;
     
     // gettting user credentials 
-    const user_id = req.user?.id;
+    // const user_id = req.user?.id;
 
     try {
 
@@ -64,7 +60,7 @@ export const createFeedback = async( req:Request, res:Response ) => {
         const new_feedback_data = {...feedback_data, 
             client_id:feedback_template?.client_id, 
             template_id:feedback_template?._id,
-            user_id:user_id,
+            // user_id:user_id,
             feedback_type:feedback_type.UserToClient
         }
         

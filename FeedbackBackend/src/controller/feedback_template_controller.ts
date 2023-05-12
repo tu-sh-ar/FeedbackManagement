@@ -6,12 +6,12 @@ import FeedbackTemplate from "../model/feedback_template_model";
 // get feedback templates 
 export const getTemplates =  async( req:Request , res:Response ) => {
 
-    const client_id = req.user?.id;
+    // const client_id = req.user?.id;
     
     try {
         
-        // fetching data 
-        const templates = await FeedbackTemplate.find({client_id:client_id})
+        // fetching data basis of client Id
+        const templates = await FeedbackTemplate.find()
 
         if(templates.length)
             res.status(200).send(templates);

@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import { Schema, model, Document, Types, Date } from 'mongoose';
 
 interface IFeedback extends Document {
   user_id: Types.ObjectId;
@@ -12,6 +12,8 @@ interface IFeedback extends Document {
   feedback_language: string;
   additional_fields: Record<string, any>;
   qas: Record<string, any>;
+  createdAt: Date;
+  updatedAt: Date
 }
 
 const FeedbackSchema = new Schema(
