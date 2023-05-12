@@ -22,7 +22,7 @@ export const getFeedback = async( req:Request, res:Response ) => {
                     },
                     product:{
                         id:feedback.product_id,
-                        name:"Abibas Shoes"
+                        name:"Nike Shoes"
                     },
                     rating:feedback.rating,
                     Comment:feedback?.comment,
