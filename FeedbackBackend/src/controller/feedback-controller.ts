@@ -10,7 +10,7 @@ export const getFeedback = async( req:Request, res:Response ) => {
     let updated_feedback:Array<object>=[];
 
     try {
-
+        // getting feedback using the client id 
         await FeedbackModel.find()
         .then(data => {
             data.forEach(feedback => {
@@ -103,3 +103,4 @@ export const deleteFeedback = async( req:Request, res:Response ) => {
         
     }
 }
+
