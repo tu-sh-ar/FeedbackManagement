@@ -2,6 +2,9 @@
 import express from 'express';
 const server =express();
 
+// using cors
+import cors from 'cors';
+
 // importing morgan for logging
 import morgan from 'morgan'
 import fs from 'fs'
@@ -42,7 +45,12 @@ const start_server = async() => {
 
 const server_config = () => {
 
+    // using body parser
     server.use(express.json());
+
+    // using cross origin resource sharing for all the routes
+    // Access-Control-Allow-Origin: * i.e api accessed from any routes
+    server.use(cors());
     
     // setting up morgan
     // server.use(morgan('combined', 
