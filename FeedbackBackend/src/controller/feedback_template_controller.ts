@@ -2,9 +2,11 @@
 import { Request , Response , NextFunction } from 'express';
 import FeedbackTemplate from "../model/feedback_template_model";
 
+import asyncHandler from 'express-async-handler'
+
 
 // get feedback templates 
-export const getTemplates =  async( req:Request , res:Response ) => {
+export const getTemplates =  asyncHandler(async( req:Request , res:Response ) => {
 
     // const client_id = req.user?.id;
     
@@ -23,10 +25,10 @@ export const getTemplates =  async( req:Request , res:Response ) => {
         res.status(500).send(`Error in fetching templates : ${error}`)
 
     }                      
-}
+})
 
 // create new feedback template 
-export const createtemplate = async( req:Request , res: Response) => {
+export const createtemplate = asyncHandler(async( req:Request , res: Response) => {
 
     // autorisation and authentication 
     const client_id = req.user?.id; 
@@ -35,7 +37,7 @@ export const createtemplate = async( req:Request , res: Response) => {
     try {
 
          const new_data = {...feedback_template_data, client_id:client_id}
-         
+
         //creating new template for feedback 
         FeedbackTemplate.create(new_data)
         .then(data => res.status(200).send(data))
@@ -46,10 +48,10 @@ export const createtemplate = async( req:Request , res: Response) => {
         res.status(500).send("Error in creating template")
 
     }
-}
+})
 
 // update template 
-export const updateTemplate = async( req:Request , res:Response) => {
+export const updateTemplate = asyncHandler(async( req:Request , res:Response) => {
     const template_id = req.params.id;
 
     try {
@@ -62,11 +64,11 @@ export const updateTemplate = async( req:Request , res:Response) => {
         res.status(500).send("Error occured in updating the template")
     }
 
-}
+})
 
 
 // delete a template 
-export const deleteTemplate = async(req:Request, res:Response) => {
+export const deleteTemplate = asyncHandler(async(req:Request, res:Response) => {
 
     const template_id = req.params.id;
     try {
@@ -78,4 +80,4 @@ export const deleteTemplate = async(req:Request, res:Response) => {
     } catch (error) {
         res.status(500).send(error)
     }
-}
+})
