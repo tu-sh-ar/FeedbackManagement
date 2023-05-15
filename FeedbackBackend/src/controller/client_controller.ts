@@ -25,6 +25,13 @@ export const client_login = async(req:Request, res:Response) => {
             }
             },'secret',{expiresIn:"100m"});
 
+            // res.cookie('jwtToken', token, {
+            //     httpOnly: true,
+            //     maxAge: 100 * 60 * 1000    // Expires in 100 minutes
+            //   });
+        
+                res.status(200).json(token)
+
             res.status(200).send(token)
 
         }else{
