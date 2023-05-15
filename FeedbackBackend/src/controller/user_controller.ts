@@ -28,7 +28,7 @@ export const user_login = async(req:Request, res:Response) => {
         //     maxAge: 100 * 60 * 1000    // Expires in 100 minutes
         //   });
 
-        //     res.status(200).json(token)
+            res.status(200).json(token)
 
     })
     .catch(err => res.status(404).send("no user found"))
