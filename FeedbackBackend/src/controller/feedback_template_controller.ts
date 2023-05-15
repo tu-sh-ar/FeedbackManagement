@@ -33,7 +33,9 @@ export const createtemplate = async( req:Request , res: Response) => {
     const feedback_template_data = req.body;
     
     try {
+
          const new_data = {...feedback_template_data, client_id:client_id}
+         
         //creating new template for feedback 
         FeedbackTemplate.create(new_data)
         .then(data => res.status(200).send(data))
