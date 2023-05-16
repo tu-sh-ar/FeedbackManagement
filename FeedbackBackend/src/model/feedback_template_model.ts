@@ -43,7 +43,7 @@ const FeedbackTemplateSchema: Schema = new Schema(
         ref: 'User' 
     }
   },
-  { timestamps: true }
+  { timestamps: true, versionKey:false }
 );
 
 const FeedbackTemplate = mongoose.model<IFeedbackTemplate>('FeedbackTemplate', FeedbackTemplateSchema);

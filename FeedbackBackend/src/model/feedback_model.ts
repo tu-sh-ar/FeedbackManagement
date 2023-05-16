@@ -71,7 +71,7 @@ const FeedbackSchema = new Schema(
       of: Schema.Types.Mixed 
     },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey:false },
 );
 
 const FeedbackModel = model<IFeedback>('Feedback', FeedbackSchema);

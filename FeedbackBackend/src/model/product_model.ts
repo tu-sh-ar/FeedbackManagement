@@ -12,7 +12,9 @@ const productSchema = new Schema<IProduct>({
   name: { type: String, required: true },
   description: { type: String, required: true },
   client_id: { type: Schema.Types.ObjectId, ref: 'Client', required: true },
-});
+  },
+  {versionKey:false , timestamps:false}
+);
 
 // Product model
 const Product = model<IProduct>('Product', productSchema);
