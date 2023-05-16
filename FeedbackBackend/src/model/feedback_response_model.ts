@@ -2,26 +2,28 @@
 import { Schema, Document, model, mongo, Types } from 'mongoose';
 
 interface IFeedbackResponse extends Document {
-  feedbackId: Types.ObjectId ;
+  feedback_id: Types.ObjectId ;
   response: string;
   timestamp: Date;
 }
 
 const feedbackResponseSchema = new Schema<IFeedbackResponse>({
-  feedbackId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Feedback',
-    required: true,
+    feedback_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'Feedback',
+        required: true,
+    },
+    response: {
+        type: String,
+        required: true,
+    },
+    timestamp: {
+        type: Date,
+        default: Date.now,
+    },
   },
-  response: {
-    type: String,
-    required: true,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { versionKey:false },
+);
 
 const FeedbackResponse = model<IFeedbackResponse>('FeedbackResponse', feedbackResponseSchema);
 
