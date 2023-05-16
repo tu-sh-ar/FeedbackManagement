@@ -11,8 +11,9 @@ import fs from 'fs'
 import path from 'path'
 
 // importing routes
-import feedback_template_router from './routes/feedback_template_route'
-import feedback_router from './routes/feedback_route'
+import feedback_template_router from './routes/feedback_template_route';
+import feedback_router from './routes/feedback_route';
+import feedbackResponse_router from './routes/feedback_response_route';
 
 //importing test routes
 import user_routes from './routes/user_routes'
@@ -68,6 +69,8 @@ const server_config = () => {
     // setting up routin middlewares
     server.use("/api/feedbackTemplate" , feedback_template_router);
     server.use("/api/feedback" , feedback_router);
+    server.use("/api/response", feedbackResponse_router);
+
     // test routes
     server.use("/api/user", user_routes);
     server.use("/api/client" , client_routes);
