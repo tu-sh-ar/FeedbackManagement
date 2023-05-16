@@ -34,8 +34,8 @@ export const createtemplate = asyncHandler(async( req:Request , res: Response) =
     const client_id = req.user?.id; 
     const feedback_template_data = req.body;
     
+    
     try {
-
          const new_data = {...feedback_template_data, client_id:client_id}
 
         //creating new template for feedback 
@@ -81,3 +81,61 @@ export const deleteTemplate = asyncHandler(async(req:Request, res:Response) => {
         res.status(500).send(error)
     }
 })
+
+
+// {
+//     "type": 1,
+//     "fields": {
+//       "quantity": "number",
+//       "missing items": "number"
+//     },
+//     "requiredFields": {
+//       "rating": true,
+//       "feedback_type": false,
+//       "feedback_language": false
+//     },
+//     "qas": {
+//       "Q1": "How was the delivery experience of the product?",
+//       "Q2": "Did the product meet your expectations?",
+//       "Q3": "What improvements would you suggest for the product?"
+//     }
+//   }
+
+
+//   {
+//     "type": 2,
+//     "fields": {
+//       "response time": "number",
+//       "customer support": "string"
+//     },
+//     "requiredFields": {
+//       "rating": true,
+//       "feedback_type": false,
+//       "feedback_language": false
+//     },
+//     "qas": {
+//          "Q1": "How would you rate the professionalism of our staff?",
+//          "Q2": "Did our customer support team resolve your issue effectively?",
+//          "Q3": "What improvements would you suggest for our services?"
+//         }
+//   }
+
+  
+//   {
+//     "type": 3,
+//     "fields": {
+//       "venue": "string",
+//       "organization": "string"
+//     },
+//     "requiredFields": {
+//       "rating": true,
+//       "feedback_type": false,
+//       "feedback_language": false
+//     },
+//     "qas": {
+//       "Q1": "Were the event activities well-organized?",
+//        "Q2": "Did the event meet your expectations?",
+//        "Q3": "How likely are you to attend future events organized by us?"
+//     }
+//   }
+  
