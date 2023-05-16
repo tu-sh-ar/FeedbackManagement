@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Feedback } from 'src/app/interfaces/feedback';
 import { FeedbackService } from 'src/app/services/feedback.service';
-import { PageNotFoundComponent } from 'src/app/shared/page-not-found/page-not-found.component';
+import { FeedbackDetailComponent } from '../feedback-detail/feedback-detail.component';
 
 @Component({
   selector: 'app-feedback-list',
@@ -24,19 +24,20 @@ export class FeedbackListComponent implements OnInit{
   ngOnInit(): void {
     this._feedbackService.getAllFeedbacks().subscribe((res)=>{
       this.feedbacks = res;
-      console.log(this.feedbacks, " - feedbacks");
       this.dataSource = new MatTableDataSource(this.feedbacks);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     })
+
+    this._feedbackService.getFeedbacks();
   }
 
-  doFilter(event:Event){
+  doFilter(event:Event): void{
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openFeedbackDetailDialogue(){
-    this._dialog.open(PageNotFoundComponent);
+  openFeedbackDetailDialogue():void{
+    this._dialog.open(FeedbackDetailComponent);
   }
 }

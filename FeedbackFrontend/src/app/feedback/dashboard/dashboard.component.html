@@ -2,8 +2,17 @@
     <mat-toolbar-row>
         <button mat-icon-button (click)="sidenav.toggle();">
             <mat-icon>menu</mat-icon>
-            <!-- <span>BusinessName</span> -->
+            &NonBreakingSpace;
         </button>
+        <span>BusinessName</span>
+        <span class="example-spacer"></span>
+        <button mat-mini-fab color="accent" matTooltip="Business Admin" [matMenuTriggerFor]="profile">
+            <mat-icon>person</mat-icon>
+        </button>
+        <mat-menu #profile="matMenu">
+            <button mat-menu-item>Profile</button>
+            <button mat-menu-item>Settings</button>
+        </mat-menu>
     </mat-toolbar-row>
 </mat-toolbar>
 <mat-sidenav-container>
@@ -17,8 +26,7 @@
             <mat-toolbar-row>
                 <span>{{todayDate | date:'fullDate'}}</span>
                 <span class="example-spacer"></span>
-                <button type="button" mat-flat-button color="warn" (click)="logout()"><mat-icon>exit_to_app</mat-icon>
-                    Logout</button>
+                <button type="button" mat-icon-button color="warn" (click)="logout()"><mat-icon>exit_to_app</mat-icon></button>
             </mat-toolbar-row>
         </mat-toolbar>
         <div class="panel-content-wrapper">
