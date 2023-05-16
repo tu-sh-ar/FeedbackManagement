@@ -16,10 +16,10 @@ export const getFeedback = async( req:Request, res:Response ) => {
             data.forEach(feedback => {
                 const new_feedback:object = {
                     feedback_id: feedback._id,
-                    user: feedback.user_id,
-                    product:feedback.product_id,
+                    user_id: feedback.user_id,
+                    product_id:feedback.product_id,
                     rating:feedback.rating,
-                    Comment:feedback?.comment,
+                    comment:feedback?.comment,
                     review:feedback?.additional_fields,
                     QA:feedback?.qas,
                     created_at:feedback.createdAt,
