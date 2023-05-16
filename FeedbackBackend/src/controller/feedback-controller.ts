@@ -17,7 +17,7 @@ export const getFeedback = async( req:Request, res:Response ) => {
                 const new_feedback:object = {
                     feedback_id: feedback._id,
                     user_id: feedback.user_id,
-                    product_id:feedback.product_id,
+                    product_id:feedback?.product_id,
                     rating:feedback.rating,
                     comment:feedback?.comment,
                     review:feedback?.additional_fields,
