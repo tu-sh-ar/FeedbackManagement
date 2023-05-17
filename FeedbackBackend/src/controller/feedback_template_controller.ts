@@ -18,11 +18,11 @@ export const getTemplates =  asyncHandler(async( req:Request , res:Response ) =>
         if(templates.length)
             res.status(200).send(templates);
         else
-            res.status(404).send("No feedback templates found")
+            res.status(404).json({ error: 'No feedback templates found' });
 
     } catch (error) {
 
-        res.status(500).send(`Error in fetching templates : ${error}`)
+        res.status(500).json({ error: `Error in fetching templates: ${error}` });
 
     }                      
 })
@@ -41,11 +41,11 @@ export const createtemplate = asyncHandler(async( req:Request , res: Response) =
         //creating new template for feedback 
         FeedbackTemplate.create(new_data)
         .then(data => res.status(200).send(data))
-        .catch(err => res.status(400).send(err))
+        .catch(err => res.status(400).json({error: "Bad Request"}))
          
     } catch (error) {
 
-        res.status(500).send("Error in creating template")
+        res.status(500).json({error:`Error in creating template ${error} `})
 
     }
 })
@@ -58,10 +58,12 @@ export const updateTemplate = asyncHandler(async( req:Request , res:Response) =>
 
         await FeedbackTemplate.findByIdAndUpdate(template_id, req.body)
         .then(data => res.status(200).send(data))
-        .catch(err => res.status(404).send("No feedback template found "))
+        .catch(err => res.status(404).json({error:"No feedback template found"}))
         
     } catch (error) {
-        res.status(500).send("Error occured in updating the template")
+
+        res.status(500).send({error:"Error occured in updating the template"})
+
     }
 
 })
@@ -75,10 +77,10 @@ export const deleteTemplate = asyncHandler(async(req:Request, res:Response) => {
         
         FeedbackTemplate.findByIdAndDelete(template_id)
         .then(data => res.status(200).send(data))
-        .catch(err => res.status(404).send(err))
+        .catch(err => res.status(404).json({error:"No template exist with the given id"}))
 
     } catch (error) {
-        res.status(500).send(error)
+        res.status(500).json({error:`Template not deleted`})
     }
 })
 
