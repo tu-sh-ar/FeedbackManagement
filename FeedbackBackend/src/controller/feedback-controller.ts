@@ -1,6 +1,7 @@
 // creating the feedback controller 
 import { Request, Response } from 'express'
 import FeedbackModel from '../model/feedback_model'
+import DeliveryAgent from '../model/delivery_agent_model'
 import { feedback_type } from '../middlewares/enums/feedback_type_enum' 
 import FeedbackTemplate from '../model/feedback_template_model'
 
@@ -49,7 +50,7 @@ export const createFeedback = async( req:Request, res:Response ) => {
     try {
 
         // getting the user_id from the auth 
-        // const user_id = req.user.id;  // auth token payload 
+        const user_id = req.user?.id;  // auth token payload 
         // const delivery_agent_data = DeliveryAgent.findOne({user_id:user_id})
         // feedback_data.deliveryagent_id = delivery_agent_data._id;
     
