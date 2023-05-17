@@ -17,7 +17,7 @@ export class FeedbackListComponent implements OnInit{
   @ViewChild(MatSort) sort!: MatSort;
   feedbacks!: Feedback[];
   dataSource!: MatTableDataSource<Feedback>;
-  displayFeedbackColumns: string[] = ['id', 'user', 'product', 'rating', 'created_at', 'updated_at', 'review'];
+  displayFeedbackColumns: string[] = ['feedback_id', 'rating', 'comment', 'created_at', 'updated_at', 'review'];
 
   constructor(private _feedbackService: FeedbackService, public _dialog: MatDialog){}
 
@@ -28,8 +28,6 @@ export class FeedbackListComponent implements OnInit{
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     })
-
-    this._feedbackService.getFeedbacks();
   }
 
   doFilter(event:Event): void{
