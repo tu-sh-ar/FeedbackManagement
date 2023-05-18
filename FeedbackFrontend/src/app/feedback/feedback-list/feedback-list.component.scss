@@ -1,6 +1,10 @@
 .feedback-table{
     width: 100%;
 }
-.filter-input{
+mat-form-field{
+    width: 40%;
+    padding-inline: 20px;
+}
+mat-paginator{
     width: 100%;
 }
