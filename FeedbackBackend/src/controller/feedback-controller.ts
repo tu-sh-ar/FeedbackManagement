@@ -110,12 +110,13 @@ export const get_feedback = async(req:Request, res:Response) => {
     const feedback_id = req.params.id;
 
     try {
-        const feedback = FeedbackModel.findByIdAndDelete(feedback_id);
+        const data = await FeedbackModel.findById(feedback_id);
+        const feedback = JSON.parse(JSON.stringify(data));
+
         if(Object.keys(feedback).length !=0){
             res.status(200).send(feedback)
         }else{
             res.status(404).json({error:"No Feedback Found"});
-            return;
         }
     } catch (error) {
         res.status(500).json({error:`Internal Server Error: ${error}`})
