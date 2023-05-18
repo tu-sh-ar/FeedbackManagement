@@ -1,13 +1,14 @@
 import express from "express";
 const router = express.Router();
 
-import { createFeedback, deleteFeedback, getFeedback, updateFeedback  } from "../controller/feedback-controller";
+import { createFeedback, deleteFeedback, getFeedbacks, get_feedback, updateFeedback  } from "../controller/feedback-controller";
 import { Validate, validateSchema }  from "../middlewares/validations/schema-validations";
 import { verifyToken } from "../middlewares/auth/jwt_auth";
 
 // router.use(verifyToken);
 
-router.get("/", getFeedback);
+router.get("/", getFeedbacks);
+router.get("/:id", get_feedback);
 
 router.post(
     "/", 

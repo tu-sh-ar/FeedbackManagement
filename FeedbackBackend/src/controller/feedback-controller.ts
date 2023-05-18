@@ -6,7 +6,7 @@ import { feedback_type } from '../middlewares/enums/feedback_type_enum'
 import FeedbackTemplate from '../model/feedback_template_model'
 
 // create a feedback
-export const getFeedback = async( req:Request, res:Response ) => {
+export const getFeedbacks = async( req:Request, res:Response ) => {
 
     let updated_feedback:Array<object>=[];
 
@@ -105,3 +105,19 @@ export const deleteFeedback = async( req:Request, res:Response ) => {
     }
 }
 
+// get feedback by id 
+export const get_feedback = async(req:Request, res:Response) => {
+    const feedback_id = req.params.id;
+
+    try {
+        const feedback = FeedbackModel.findByIdAndDelete(feedback_id);
+        if(Object.keys(feedback).length !=0){
+            res.status(200).send(feedback)
+        }else{
+            res.status(404).json({error:"No Feedback Found"});
+            return;
+        }
+    } catch (error) {
+        res.status(500).json({error:`Internal Server Error: ${error}`})
+    }
+}
