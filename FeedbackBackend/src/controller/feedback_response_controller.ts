@@ -20,20 +20,6 @@ export const create_Response = async( req:Request, res:Response ) => {
     }
 }
 
-// // update response 
-// export const update_response = async(req:Request, res:Response) => {
-//     const updated_response = req.body;
-//     const response_id = req.params.id;
-
-//     try {
-//         const updated_data = await FeedbackResponse.findByIdAndUpdate(response_id, update_response);
-//         if(Object.keys(updated_data).length != 0){
-//             res.status(201).send(updated_data)
-//         }
-//     } catch (error) {
-//         res.status(500).json({error: `Internal Server Error ${error}`})
-//     }
-// }
 
 // delete response 
 export const delete_response = async(req:Request, res:Response) => {
@@ -48,6 +34,6 @@ export const delete_response = async(req:Request, res:Response) => {
     } catch (error) {
 
         res.status(500).json({error:`internal server error: ${error}`})
-        
+
     }
 }
