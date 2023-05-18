@@ -17,9 +17,12 @@ export class FeedbackListComponent implements OnInit{
   @ViewChild(MatSort) sort!: MatSort;
   feedbacks!: Feedback[];
   dataSource!: MatTableDataSource<Feedback>;
-  displayFeedbackColumns: string[] = ['feedback_id', 'rating', 'comment', 'created_at', 'updated_at', 'review'];
-
-  constructor(private _feedbackService: FeedbackService, public _dialog: MatDialog){}
+  displayFeedbackColumns: string[] = ['feedback_id', 'rating', 'comment', 'created_at', 'updated_at', 'action'];
+  
+  constructor(
+    private _feedbackService: FeedbackService,
+    public _dialog: MatDialog,
+    ){}
 
   ngOnInit(): void {
     this._feedbackService.getAllFeedbacks().subscribe((res)=>{
@@ -30,12 +33,21 @@ export class FeedbackListComponent implements OnInit{
     })
   }
 
-  doFilter(event:Event): void{
+  applyFilter(event:Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openFeedbackDetailDialogue():void{
-    this._dialog.open(FeedbackDetailComponent);
+  openFeedbackDetailDialogue(feedbackId:string, feedbackCreation:string, feedbackRating:string, feedbackComment:string): void {
+    this._dialog.open(FeedbackDetailComponent,
+      {data:
+        {
+          feedbackId:feedbackId,
+          feedbackCreation:feedbackCreation,
+          feedbackRating:feedbackRating,
+          feedbackComment:feedbackComment
+        }
+      });
   }
+
 }
