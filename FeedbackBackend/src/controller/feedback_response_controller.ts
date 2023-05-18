@@ -19,3 +19,17 @@ export const create_Response = async( req:Request, res:Response ) => {
 
     }
 }
+
+export const update_response = async(req:Request, res:Response) => {
+    const updated_response = req.body;
+    const response_id = req.params.id;
+
+    try {
+        const updated_data = FeedbackResponse.findByIdAndUpdate(response_id, update_response);
+        if(Object.keys(updated_data).length != 0){
+            res.status(201).send(updated_data)
+        }
+    } catch (error) {
+        res.status(500).json({error: `Internal Server Error ${error}`})
+    }
+}
