@@ -113,8 +113,20 @@ export const get_feedback = async(req:Request, res:Response) => {
         const data = await FeedbackModel.findById(feedback_id);
         const feedback = JSON.parse(JSON.stringify(data));
 
-        if(Object.keys(feedback).length !=0){
-            res.status(200).send(feedback)
+        const new_feedback:object = {
+            feedback_id: feedback._id,
+            user_id: feedback.user_id,
+            product_id:feedback?.product_id,
+            rating:feedback.rating,
+            comment:feedback?.comment,
+            review:feedback?.additional_fields,
+            QA:feedback?.qas,
+            created_at:feedback.createdAt,
+            updated_at:feedback.updatedAt
+        }
+
+        if(Object.keys(new_feedback).length !=0){
+            res.status(200).send(new_feedback)
         }else{
             res.status(404).json({error:"No Feedback Found"});
         }
