@@ -11,7 +11,7 @@ function firebaseSetup(){
   });  
   console.log("Firebase Connected");
 }
-
+  
 firebaseSetup();
 
 // Create an instance of the Firebase Messaging service
@@ -33,7 +33,7 @@ export const sendNotification = async (req:Request , res:Response ) => {
       token: appToken
     };
 
-//    await messaging.send(message)
-//          .then( data => res.status(200).send(`Notification: ${data}`))
-//          .catch(err => res.status(400).send(`Some error occured in sending notification  Error: ${err}`))
+   await messaging.send(message)
+         .then( data => res.status(200).send(`Notification: ${data}`))
+         .catch(err => res.status(400).send(`Some error occured in sending notification  Error: ${err}`))
  }
