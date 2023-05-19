@@ -37,3 +37,24 @@ export const delete_response = async(req:Request, res:Response) => {
 
     }
 }
+
+// get response by feedback id
+export const get_response = async(req:Request , res:Response) => {
+    const feedback_id = req.query.feedback_id as String
+   
+    try {
+        const response_data = await FeedbackResponse.findOne({feedback_id:feedback_id})
+        
+        if(!response_data){
+            res.status(404).json({error:"No response Found"})
+            return;
+        }
+
+        res.status(200).send(response_data)
+
+    } catch (error) {
+
+        res.status(500).json({error:`Internal Server Error: ${error}`})
+
+    }
+}
