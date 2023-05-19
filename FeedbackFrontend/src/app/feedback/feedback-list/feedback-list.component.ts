@@ -38,14 +38,16 @@ export class FeedbackListComponent implements OnInit{
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openFeedbackDetailDialogue(feedbackId:string, feedbackCreation:string, feedbackRating:string, feedbackComment:string): void {
+  openFeedbackDetailDialogue(feedbackId:string, feedbackCreationDate:string, rating:string, comment:string,  userId:string, productId:string): void {
     this._dialog.open(FeedbackDetailComponent,
       {data:
         {
           feedbackId:feedbackId,
-          feedbackCreation:feedbackCreation,
-          feedbackRating:feedbackRating,
-          feedbackComment:feedbackComment
+          feedbackCreationDate:feedbackCreationDate,
+          rating:rating,
+          comment:comment,
+          userId:userId,
+          productId:productId
         }
       });
   }

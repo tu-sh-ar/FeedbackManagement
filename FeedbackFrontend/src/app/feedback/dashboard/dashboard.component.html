@@ -12,6 +12,7 @@
         <mat-menu #profile="matMenu">
             <button mat-menu-item>Profile</button>
             <button mat-menu-item>Settings</button>
+            <button (click)="logout()" mat-menu-item>Logout</button>
         </mat-menu>
     </mat-toolbar-row>
 </mat-toolbar>
@@ -22,13 +23,6 @@
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
-        <mat-toolbar>
-            <mat-toolbar-row>
-                <span>{{todayDate | date:'fullDate'}}</span>
-                <span class="example-spacer"></span>
-                <button type="button" mat-icon-button color="warn" (click)="logout()" matTooltip="Logout"><mat-icon>exit_to_app</mat-icon></button>
-            </mat-toolbar-row>
-        </mat-toolbar>
         <div class="panel-content-wrapper">
             <router-outlet></router-outlet>
         </div>
