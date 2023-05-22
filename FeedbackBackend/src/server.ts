@@ -5,6 +5,9 @@ const server =express();
 // using cors
 import cors from 'cors';
 
+// using socketio
+import { Server as SocketIOServer } from 'socket.io';
+
 // importing morgan for logging
 import morgan from 'morgan'
 import fs from 'fs'
@@ -79,6 +82,8 @@ const server_config = () => {
     const app_server =  server.listen(4000, () => {
         console.log("Server running at 4000");
     })
+
+    const io = new SocketIOServer(app_server);
 }
 
 // start the server 
