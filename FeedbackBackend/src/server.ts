@@ -7,6 +7,7 @@ import cors from 'cors';
 
 // using socketio
 import { Server as SocketIOServer } from 'socket.io';
+import io from './middlewares/notification/socketIOInstance'
 
 // importing morgan for logging
 import morgan from 'morgan'
@@ -82,8 +83,7 @@ const server_config = () => {
     const app_server =  server.listen(4000, () => {
         console.log("Server running at 4000");
     })
-
-    const io = new SocketIOServer(app_server);
+    io.attach(app_server);
 }
 
 // start the server 
