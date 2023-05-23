@@ -1,18 +1,28 @@
 import { Request, Response } from 'express'
 import FeedbackResponse from '../model/feedback_response_model'
-import pushNotificationMiddleware from '../middlewares/notification/response_notification';
+import FeedbackModel from '../model/feedback_model';
+import responseNotification from '../middlewares/notification/response_notification';
 import io from "../middlewares/notification/socketIOInstance";
 
-const notificationMiddleware = pushNotificationMiddleware(io); // Pass the Socket.IO server instance here
+const notification = responseNotification(io); // Pass the Socket.IO server instance here
 
 // creat Response 
 export const create_Response = async( req:Request, res:Response ) => {
-    const response_data = req.body;
+    const { feedback_id, response } = req.body;
+
 
     try {
+        const feedback_data = await FeedbackModel.findById(feedback_id);
+        const user_id = feedback_data?.user_id;
+
         // saving the feeedback response
-        await FeedbackResponse.create(req.body)
-        .then(data => res.status(201).send(data))
+        await FeedbackResponse.create({ feedback_id, response } )
+        .then(data => {
+            if(Object.keys(data).length != 0){
+                const not_data = notification.sendNotificationToUser(user_id,response)
+                res.status(201).json({not:not_data, res_data:data})
+            }
+        })
         .catch(err => res.status(401).send("Response not Saved"))
 
     } catch (error) {

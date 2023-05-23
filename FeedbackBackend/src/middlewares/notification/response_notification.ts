@@ -19,7 +19,10 @@ const pushNotificationMiddleware = (io: SocketIOServer) => {
   });
 
   // Send notification to a specific user
-  const sendNotificationToUser = (userId: string, message: string) => {
+  const sendNotificationToUser = (userId: any, message: string) => {
+    
+    console.log(`sending notification user : ${userId} , message: ${message} `)
+
     const userSocket = users[userId];
     if (userSocket) {
       userSocket.emit('notification', { message });
