@@ -5,10 +5,6 @@ const server =express();
 // using cors
 import cors from 'cors';
 
-// using socketio
-import { Server as SocketIOServer } from 'socket.io';
-import io from './middlewares/notification/socketIOInstance'
-
 // importing morgan for logging
 import morgan from 'morgan'
 import fs from 'fs'
@@ -30,6 +26,13 @@ import connect_db from './db/db-connect';
 //importing swagger modules for documentation
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+
+// using socketio
+import { Server , Socket } from 'socket.io';
+import io from './middlewares/notification/socketIOInstance'
+import http from 'http';
+const app = http.createServer(server);
+io.attach(app);
 
 // connect db function 
 const start_server = async() => {
@@ -80,10 +83,10 @@ const server_config = () => {
     server.use("/api/client" , client_routes);
     server.use("/api/product" , product_routes)
 
-    const app_server =  server.listen(4000, () => {
+    server.listen(4000, () => {
         console.log("Server running at 4000");
     })
-    io.attach(app_server);
+    
 }
 
 // start the server 

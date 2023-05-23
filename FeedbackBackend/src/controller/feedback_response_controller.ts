@@ -13,14 +13,15 @@ export const create_Response = async( req:Request, res:Response ) => {
 
     try {
         const feedback_data = await FeedbackModel.findById(feedback_id);
-        const user_id = feedback_data?.user_id;
+        const user = feedback_data?.user_id;
+        const user_id = JSON.stringify(user);
 
         // saving the feeedback response
         await FeedbackResponse.create({ feedback_id, response } )
         .then(data => {
             if(Object.keys(data).length != 0){
-                const not_data = notification.sendNotificationToUser(user_id,response)
-                res.status(201).json({not:not_data, res_data:data})
+                notification.sendNotificationToUser(user_id,response)
+                res.status(201).json(data)
             }
         })
         .catch(err => res.status(401).send("Response not Saved"))
