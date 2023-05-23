@@ -83,7 +83,7 @@ const server_config = () => {
     server.use("/api/client" , client_routes);
     server.use("/api/product" , product_routes)
 
-    server.listen(4000, () => {
+    app.listen(4000, () => {
         console.log("Server running at 4000");
     })
     
