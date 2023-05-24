@@ -27,12 +27,9 @@ const pushNotificationMiddleware = (io: SocketIOServer) => {
 
   // Send notification to a specific user
   const sendNotificationToUser = (userId: string, message: string) => {
-    console.log(`Sending notification to user: ${userId}, message: ${message}`);
 
     let userSocket = users[userId];
-
     if (!userSocket) {
-
       // User socket doesn't exist, create a new one
       const connectedSockets = io.sockets.sockets;
       userSocket = connectedSockets.get(userId)!;
@@ -43,12 +40,9 @@ const pushNotificationMiddleware = (io: SocketIOServer) => {
         console.log(`User socket not found for user ID: ${userId}`);
         return; // Exit if user socket not found
       }
-      
     }
-
     userSocket.emit('notification', { message });
   };
-
   return {
     sendNotificationToUser,
   };
