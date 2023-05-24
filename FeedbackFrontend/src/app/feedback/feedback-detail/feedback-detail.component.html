@@ -67,7 +67,7 @@
         </mat-card-content>
         
         <mat-card-actions align="end">
-            <button mat-flat-button color="primary" (click)="replyToFeedback()">Reply</button>
+            <button mat-flat-button *ngIf="enableReply" color="primary" (click)="replyToFeedback()">Reply</button>
             &NonBreakingSpace;
             <button mat-flat-button color="warn" (click)="closeDialog()">Close</button>
         </mat-card-actions>

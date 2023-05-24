@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Feedback, PostFeedbackResponse, GetFeedbackResponse } from '../interfaces/feedback';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class FeedbackService {
 
   constructor(private _http: HttpClient) { }
 
-  baseURL:string = "http://localhost:4000/api/";
+  baseURL:string = environment.baseUrl;
 
   //get all the feedbacks
   getAllFeedbacks():Observable<Feedback[]>{
@@ -24,7 +25,8 @@ export class FeedbackService {
 
   //post response for particular feedback
   postResponse(feedbackResponseData:PostFeedbackResponse){
-    this._http.post(`${this.baseURL}`, feedbackResponseData)
+    console.log(JSON.stringify(feedbackResponseData));
+    // this._http.post(`${this.baseURL}response`, JSON.stringify(feedbackResponseData));
   }
 
   //get response for particular feedback based on id

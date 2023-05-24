@@ -5,7 +5,6 @@ import { ProductService } from 'src/app/services/product.service';
 import { FeedbackService } from 'src/app/services/feedback.service';
 import { User } from 'src/app/interfaces/user';
 import { Product } from 'src/app/interfaces/product';
-import { PostFeedbackResponse } from 'src/app/interfaces/feedback';
 
 export interface FeedbackDetails {
   feedbackId:string,
@@ -29,6 +28,7 @@ export class FeedbackDetailComponent implements OnInit{
   fetchingUser:boolean = true;
   fetchingProduct:boolean = true;
   response!:string;
+  enableReply:boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<FeedbackDetailComponent>,
@@ -53,12 +53,13 @@ export class FeedbackDetailComponent implements OnInit{
       this.response = res.response;
     }, (err)=>{
       this.response = "";
+      this.enableReply = true;
     })
-    
   }
 
   replyToFeedback():void {
     this._feedbackService.postResponse({feedback_id:this.data.feedbackId, response:this.response});
+    this.dialogRef.close();
   }
 
   closeDialog():void {
