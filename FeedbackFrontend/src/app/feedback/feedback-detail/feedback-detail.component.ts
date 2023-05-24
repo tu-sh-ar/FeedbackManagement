@@ -5,6 +5,7 @@ import { ProductService } from 'src/app/services/product.service';
 import { FeedbackService } from 'src/app/services/feedback.service';
 import { User } from 'src/app/interfaces/user';
 import { Product } from 'src/app/interfaces/product';
+import { PostFeedbackResponse } from 'src/app/interfaces/feedback';
 
 export interface FeedbackDetails {
   feedbackId:string,
@@ -25,6 +26,8 @@ export class FeedbackDetailComponent implements OnInit{
   Arr = Array;
   user!: User;
   product!: Product;
+  fetchingUser:boolean = true;
+  fetchingProduct:boolean = true;
   response!:string;
 
   constructor(
@@ -38,16 +41,24 @@ export class FeedbackDetailComponent implements OnInit{
   ngOnInit(): void {
     this._userService.getUser(this.data.userId).subscribe((res)=>{
       this.user = res;
+      this.fetchingUser = false;
     })
 
     this._productService.getProduct(this.data.productId).subscribe((res)=>{
       this.product = res;
+      this.fetchingProduct = false;
+    })
+
+    this._feedbackService.getResponse(this.data.feedbackId).subscribe((res)=>{
+      this.response = res.response;
+    }, (err)=>{
+      this.response = "";
     })
     
   }
 
   replyToFeedback():void {
-    this._feedbackService.postResponse("")
+    this._feedbackService.postResponse({feedback_id:this.data.feedbackId, response:this.response});
   }
 
   closeDialog():void {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Feedback } from '../interfaces/feedback';
+import { Feedback, PostFeedbackResponse, GetFeedbackResponse } from '../interfaces/feedback';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -23,8 +23,13 @@ export class FeedbackService {
   }
 
   //post response for particular feedback
-  postResponse(feedbackResponseData:any){
+  postResponse(feedbackResponseData:PostFeedbackResponse){
     this._http.post(`${this.baseURL}`, feedbackResponseData)
+  }
+
+  //get response for particular feedback based on id
+  getResponse(feedbackId:string):Observable<GetFeedbackResponse>{
+    return this._http.get<GetFeedbackResponse>(`${this.baseURL}response?feedback_id=${feedbackId}`)
   }
 
 }

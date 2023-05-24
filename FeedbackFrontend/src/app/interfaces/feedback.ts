@@ -9,3 +9,15 @@ export interface Feedback {
     created_at:string,
     updated_at:string
 }
+
+export interface PostFeedbackResponse {
+    feedback_id: string,
+    response: string
+}
+
+export interface GetFeedbackResponse {
+    _id:string,
+    feedback_id:string,
+    response:string,
+    timestamp:string
+}

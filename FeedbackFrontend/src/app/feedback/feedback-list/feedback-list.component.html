@@ -1,75 +1,81 @@
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z2 feedback-table" matSort>
+<div *ngIf="!listReceived" class="spinner-div">
+    <mat-spinner></mat-spinner>
+</div>
 
-    <ng-container matColumnDef="feedback_id">
-        <th mat-header-cell *matHeaderCellDef>
-            Id
-        </th>
-        <td mat-cell *matCellDef="let element">
-            {{element.feedback_id}}
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="rating">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            Rating
-        </th>
-        <td mat-cell *matCellDef="let element">
-            {{element.rating}}
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="comment">
-        <th mat-header-cell *matHeaderCellDef>
-            Comment
-        </th>
-        <td mat-cell *matCellDef="let element">
-            {{element.comment.length ? element.comment : "N/A"}}
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="created_at">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            Created
-        </th>
-        <td mat-cell *matCellDef="let element">
-            {{element.created_at | date}}
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="updated_at">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            Updated
-        </th>
-        <td mat-cell *matCellDef="let element">
-            {{element.updated_at | date}}
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef>
-            Action
-        </th>
-        <td mat-cell *matCellDef="let element">
-            <button 
-            mat-icon-button
-            color="warn"
-            (click)="openFeedbackDetailDialogue(
-                element.feedback_id,
-                element.created_at,
-                element.rating,
-                element.comment,
-                element.user_id,
-                element.product_id
-            )"
-            matTooltip="Review and Reply"
-            >
-                <mat-icon>visibility</mat-icon>
-            </button>
-        </td>
-    </ng-container>
+<div *ngIf="listReceived">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 feedback-table" matSort>
 
-    <tr mat-header-row *matHeaderRowDef="displayFeedbackColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayFeedbackColumns;"></tr>
-</table>
-
-<mat-paginator [length]="100"
-              [pageSize]="5"
-              [pageSizeOptions]="[2, 5, 10, 25, 100]"
-              #paginator
-              >
-</mat-paginator>
+        <ng-container matColumnDef="feedback_id">
+            <th mat-header-cell *matHeaderCellDef>
+                Id
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.feedback_id}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="rating">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Rating
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.rating}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="comment">
+            <th mat-header-cell *matHeaderCellDef>
+                Comment
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.comment.length ? element.comment : "N/A"}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="created_at">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Created
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.created_at | date}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="updated_at">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Updated
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.updated_at | date}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+                Details
+            </th>
+            <td mat-cell *matCellDef="let element">
+                <button 
+                mat-icon-button
+                color="warn"
+                (click)="openFeedbackDetailDialogue(
+                    element.feedback_id,
+                    element.created_at,
+                    element.rating,
+                    element.comment,
+                    element.user_id,
+                    element.product_id
+                )"
+                matTooltip="Review and Reply"
+                >
+                    <mat-icon>visibility</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="displayFeedbackColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayFeedbackColumns;"></tr>
+    </table>
+    
+    <mat-paginator [length]="1000"
+                  [pageSize]="25"
+                  [pageSizeOptions]="[25, 50, 100]"
+                  #paginator
+                  >
+    </mat-paginator>
+</div>

@@ -15,6 +15,7 @@ import { FeedbackDetailComponent } from '../feedback-detail/feedback-detail.comp
 export class FeedbackListComponent implements OnInit{
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  listReceived:boolean = false;
   feedbacks!: Feedback[];
   dataSource!: MatTableDataSource<Feedback>;
   displayFeedbackColumns: string[] = ['feedback_id', 'rating', 'comment', 'created_at', 'updated_at', 'action'];
@@ -27,6 +28,7 @@ export class FeedbackListComponent implements OnInit{
   ngOnInit(): void {
     this._feedbackService.getAllFeedbacks().subscribe((res)=>{
       this.feedbacks = res;
+      this.listReceived  = true;
       this.dataSource = new MatTableDataSource(this.feedbacks);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
