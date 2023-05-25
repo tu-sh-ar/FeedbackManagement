@@ -72,9 +72,9 @@
         <tr mat-row *matRowDef="let row; columns: displayFeedbackColumns;"></tr>
     </table>
     
-    <mat-paginator [length]="1000"
-                  [pageSize]="25"
-                  [pageSizeOptions]="[25, 50, 100]"
+    <mat-paginator [length]="10000"
+                  [pageSize]="100"
+                  [pageSizeOptions]="[100, 250, 500]"
                   #paginator
                   >
     </mat-paginator>
