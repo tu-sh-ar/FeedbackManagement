@@ -7,17 +7,16 @@ const pushNotificationMiddleware = (io: SocketIOServer) => {
   io.on('connection', (socket: Socket) => {
     console.log('A client connected.');
 
-    // set user_id event 
+    // Handle 'setUserId' event
     socket.on('setUserId', (userId: string) => {
-      users[userId] = socket;
-      console.log(`User socket stored for user ID: ${userId}`);
+      setUserId(socket, userId);
     });
 
     // Handle disconnection
     socket.on('disconnect', () => {
       console.log('A client disconnected.');
 
-      // Find the user ID associated with the socket and remove it from the users object
+      // Find and remove the user ID associated with the socket from the users object
       const userId = Object.keys(users).find((key) => users[key] === socket);
       if (userId) {
         delete users[userId];
@@ -25,25 +24,24 @@ const pushNotificationMiddleware = (io: SocketIOServer) => {
     });
   });
 
+  // Store the socket instance with the user ID
+  const setUserId = (socket: Socket, userId: string) => {
+    users[userId] = socket;
+    console.log(`User socket stored for user ID: ${userId}`);
+  };
+
   // Send notification to a specific user
   const sendNotificationToUser = (userId: string, message: string) => {
-
-    let userSocket = users[userId];
+    const userSocket = users[userId];
     if (!userSocket) {
-      // User socket doesn't exist, create a new one
-      const connectedSockets = io.sockets.sockets;
-      userSocket = connectedSockets.get(userId)!;
-
-      if (userSocket) {
-        users[userId] = userSocket;
-      } else {
-        console.log(`User socket not found for user ID: ${userId}`);
-        return; // Exit if user socket not found
-      }
+      console.log(`User socket not found for user ID: ${userId}`);
+      return; // Exit if user socket not found
     }
     userSocket.emit('notification', { message });
   };
+
   return {
+    setUserId,
     sendNotificationToUser,
   };
 };
