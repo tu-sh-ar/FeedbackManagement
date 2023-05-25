@@ -5,6 +5,7 @@ import { ProductService } from 'src/app/services/product.service';
 import { FeedbackService } from 'src/app/services/feedback.service';
 import { User } from 'src/app/interfaces/user';
 import { Product } from 'src/app/interfaces/product';
+import { PostFeedbackResponse } from 'src/app/interfaces/feedback';
 
 export interface FeedbackDetails {
   feedbackId:string,
@@ -58,7 +59,10 @@ export class FeedbackDetailComponent implements OnInit{
   }
 
   replyToFeedback():void {
-    this._feedbackService.postResponse({feedback_id:this.data.feedbackId, response:this.response});
+    const responseObject:PostFeedbackResponse = {feedback_id:this.data.feedbackId, response:this.response};
+    this._feedbackService.postResponse(responseObject).subscribe((res)=>{
+      console.log(res);
+    })
     this.dialogRef.close();
   }
 

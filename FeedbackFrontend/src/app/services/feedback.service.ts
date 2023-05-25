@@ -24,9 +24,9 @@ export class FeedbackService {
   }
 
   //post response for particular feedback
-  postResponse(feedbackResponseData:PostFeedbackResponse){
-    console.log(JSON.stringify(feedbackResponseData));
-    // this._http.post(`${this.baseURL}response`, JSON.stringify(feedbackResponseData));
+  postResponse(feedbackResponseData:PostFeedbackResponse):Observable<any>{
+    const headers = { 'content-type': 'application/json'};
+    return this._http.post<any>(`${this.baseURL}response`, JSON.stringify(feedbackResponseData), {'headers':headers});
   }
 
   //get response for particular feedback based on id
