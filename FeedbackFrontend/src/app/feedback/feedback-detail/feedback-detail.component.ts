@@ -6,6 +6,7 @@ import { FeedbackService } from 'src/app/services/feedback.service';
 import { User } from 'src/app/interfaces/user';
 import { Product } from 'src/app/interfaces/product';
 import { PostFeedbackResponse } from 'src/app/interfaces/feedback';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface FeedbackDetails {
   feedbackId:string,
@@ -36,7 +37,8 @@ export class FeedbackDetailComponent implements OnInit{
     @Inject(MAT_DIALOG_DATA) public data:FeedbackDetails,
     private _userService: UserService,
     private _productService: ProductService,
-    private _feedbackService: FeedbackService
+    private _feedbackService: FeedbackService,
+    private _snackbar: MatSnackBar
   ){}
 
   ngOnInit(): void {
@@ -61,9 +63,11 @@ export class FeedbackDetailComponent implements OnInit{
   replyToFeedback():void {
     const responseObject:PostFeedbackResponse = {feedback_id:this.data.feedbackId, response:this.response};
     this._feedbackService.postResponse(responseObject).subscribe((res)=>{
-      console.log(res);
+      this.dialogRef.close();
+      this._snackbar.open("Response recorded.", "OK");
+    }, (err)=>{
+      this._snackbar.open("Failed to record the response.", "Dismiss");
     })
-    this.dialogRef.close();
   }
 
   closeDialog():void {

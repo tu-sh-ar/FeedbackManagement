@@ -16,17 +16,17 @@ export class AuthService {
   ) { }
 
   adminLogin(loginData: Admin): void{
-    this._http.get(
-      `http://localhost:3000/admin?username=${loginData.username}&password=${loginData.password}`,
-      {observe:'response'}
-    )
-    .subscribe((result:any)=>{
-      if(result && result.body && result.body.length){
-        localStorage.setItem("user", JSON.stringify(result.body[0].username));
-        this._router.navigate(["admin/dashboard"])
-      } else {
-        this.isLoginError.emit(true);
-      }
-    })
+    // this._http.get(
+    //   `http://localhost:3000/admin?username=${loginData.username}&password=${loginData.password}`,
+    //   {observe:'response'}
+    // )
+    // .subscribe((result:any)=>{
+    //   if(result && result.body && result.body.length){
+    //     localStorage.setItem("user", JSON.stringify(result.body[0].username));
+    //     this._router.navigate(["admin/dashboard"])
+    //   } else {
+    //     this.isLoginError.emit(true);
+    //   }
+    // })
   }
 }
