@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import { createtemplate, getTemplates, updateTemplate, deleteTemplate } from "../controller/feedback_template_controller";
+import { createTemplate, getTemplates, updateTemplate, deleteTemplate } from "../controller/feedback_template_controller";
 import { Validate , validateSchema }  from "../middlewares/validations/schema-validations";
 import { verifyToken } from "../middlewares/auth/jwt_auth";
 
@@ -14,7 +14,7 @@ router.post(
     verifyToken,
     Validate.checkFeedbackTemplate,
     validateSchema,
-    createtemplate
+    createTemplate
     );
 
 //update template

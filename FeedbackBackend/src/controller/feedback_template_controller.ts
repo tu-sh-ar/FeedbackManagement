@@ -28,27 +28,29 @@ export const getTemplates =  asyncHandler(async( req:Request , res:Response ) =>
 })
 
 // create new feedback template 
-export const createtemplate = asyncHandler(async( req:Request , res: Response) => {
-
-    // autorisation and authentication 
-    const client_id = req.user?.id; 
-    const feedback_template_data = req.body;
-    
-    
+export const createTemplate = asyncHandler(async (req: Request, res: Response) => {
     try {
-         const new_data = {...feedback_template_data, client_id:client_id}
-
-        //creating new template for feedback 
-        FeedbackTemplate.create(new_data)
-        .then(data => res.status(200).send(data))
-        .catch(err => res.status(400).json({error: "Bad Request"}))
-         
+      // Authorization and authentication
+      const client_id = req.user?.id;
+      const feedback_template_data = req.body;
+  
+      // Check if required fields are present
+      if (!client_id || !feedback_template_data) {
+        res.status(400).json({ error: 'Bad Request: Missing required fields' });
+        return;
+      }
+  
+      // Add client_id to the feedback template data
+      const new_data = { ...feedback_template_data, client_id };
+  
+      // Create a new template for feedback
+      const createdTemplate = await FeedbackTemplate.create(new_data);
+  
+      res.status(200).json(createdTemplate);
     } catch (error) {
-
-        res.status(500).json({error:`Error in creating template ${error} `})
-
+      res.status(500).json({ error: `Error in creating template: ${error}` });
     }
-})
+  });
 
 // update template 
 export const updateTemplate = asyncHandler(async( req:Request , res:Response) => {
