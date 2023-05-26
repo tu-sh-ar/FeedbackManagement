@@ -27,13 +27,6 @@ import connect_db from './db/db-connect';
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
-// using socketio
-import { Server , Socket } from 'socket.io';
-import io from './middlewares/notification/socketIOInstance'
-import http from 'http';
-const app = http.createServer(server);
-io.attach(app);
-
 // connect db function 
 const start_server = async() => {
 
@@ -83,7 +76,7 @@ const server_config = () => {
     server.use("/api/client" , client_routes);
     server.use("/api/product" , product_routes)
 
-    app.listen(4000, () => {
+    server.listen(4000, () => {
         console.log("Server running at 4000");
     })
     

@@ -1,10 +1,6 @@
 import { Request, Response } from 'express'
 import FeedbackResponse from '../model/feedback_response_model'
 import FeedbackModel from '../model/feedback_model';
-import responseNotification from '../middlewares/notification/response_notification';
-import io from "../middlewares/notification/socketIOInstance";
-
-const notification = responseNotification(io); // Pass the Socket.IO server instance here
 
 // creat Response 
 export const create_Response = async( req:Request, res:Response ) => {
@@ -12,18 +8,9 @@ export const create_Response = async( req:Request, res:Response ) => {
 
 
     try {
-        const feedback_data = await FeedbackModel.findById(feedback_id);
-        const user = feedback_data?.user_id;
-        const user_id = JSON.stringify(user);
-
         // saving the feeedback response
         await FeedbackResponse.create({ feedback_id, response } )
-        .then(data => {
-            if(Object.keys(data).length != 0){
-                notification.sendNotificationToUser(user_id,response)
-                res.status(201).json(data)
-            }
-        })
+        .then(data => res.status(201).json(data))
         .catch(err => res.status(401).send("Response not Saved"))
 
     } catch (error) {
