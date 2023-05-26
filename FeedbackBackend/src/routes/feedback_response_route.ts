@@ -1,12 +1,12 @@
 import express from 'express'
 const router = express.Router();
 
-import { create_Response, delete_response, get_response } from '../controller/feedback_response_controller'
+import { create_Response, deleteResponse, getResponse } from '../controller/feedback_response_controller'
 import { verifyToken } from '../middlewares/auth/jwt_auth';
 
 //router.use(verifyToken);
 
-router.get("/" , get_response)
+router.get("/" , getResponse)
 
 router.post(
     "/", 
@@ -14,6 +14,6 @@ router.post(
     create_Response
    )
 
-router.delete("/:id", delete_response);
+router.delete("/:id", deleteResponse);
 
 export default router
