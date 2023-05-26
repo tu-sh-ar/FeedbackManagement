@@ -2,24 +2,31 @@ import { Request, Response } from 'express'
 import FeedbackResponse from '../model/feedback_response_model'
 import FeedbackModel from '../model/feedback_model';
 
-// creat Response 
-export const create_Response = async( req:Request, res:Response ) => {
-    const { feedback_id, response } = req.body;
-
-
+// create response 
+export const create_Response = async (req: Request, res: Response) => {
     try {
-        // saving the feeedback response
-        await FeedbackResponse.create({ feedback_id, response } )
-        .then(data => res.status(201).json(data))
-        .catch(err => res.status(401).send("Response not Saved"))
-
+      const { feedback_id, response } = req.body;
+  
+      // Check if required fields are present
+      if (!feedback_id || !response) {
+        res.status(400).json({ error: 'Bad Request: Missing required fields' });
+        return;
+      }
+  
+      // Check if feedback exists
+      const feedbackExists = await FeedbackModel.exists({ _id: feedback_id });
+      if (!feedbackExists) {
+        res.status(404).json({ error: 'Feedback not found' });
+        return;
+      }
+  
+      // Save the feedback response
+      const feedbackResponse = await FeedbackResponse.create({ feedback_id, response });
+      res.status(201).json(feedbackResponse);
     } catch (error) {
-        
-        res.status(500).send("Internal Server Error")
-
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-}
-
+  };
 
 // Delete Response
 export const deleteResponse = async (req: Request, res: Response) => {
