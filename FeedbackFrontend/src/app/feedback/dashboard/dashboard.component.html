@@ -1,28 +1,29 @@
-<mat-toolbar color="primary">
-    <mat-toolbar-row>
-        <button mat-icon-button (click)="sidenav.toggle();">
-            <mat-icon>menu</mat-icon>
-            &NonBreakingSpace;
-        </button>
-        <span>BusinessName</span>
-        <span class="example-spacer"></span>
-        <button mat-mini-fab color="accent" matTooltip="Business Admin" [matMenuTriggerFor]="profile">
-            <mat-icon>person</mat-icon>
-        </button>
-        <mat-menu #profile="matMenu">
-            <button mat-menu-item>Profile</button>
-            <button mat-menu-item>Settings</button>
-            <button (click)="logout()" mat-menu-item>Logout</button>
-        </mat-menu>
-    </mat-toolbar-row>
-</mat-toolbar>
 <mat-sidenav-container>
     <mat-sidenav #sidenav opened="true" mode="side">
         <mat-nav-list>
-            <a mat-list-item routerLink="feedbacks" routerLinkActive="active"><button mat-flat-button><mat-icon>feedback</mat-icon>Feedback</button></a>
+            <h3>Business Logo</h3>
+            <a mat-list-item routerLink="feedbacks" routerLinkActive="active"><button
+                    mat-flat-button><mat-icon>feedback</mat-icon>Feedback</button></a>
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
+        <mat-toolbar color="primary">
+            <mat-toolbar-row>
+                <button mat-icon-button (click)="sidenav.toggle();">
+                    <mat-icon>menu</mat-icon>
+                    &NonBreakingSpace;
+                </button>
+                <span class="example-spacer"></span>
+                <button mat-mini-fab color="accent" matTooltip="Business Admin" [matMenuTriggerFor]="profile">
+                    <mat-icon>person</mat-icon>
+                </button>
+                <mat-menu #profile="matMenu">
+                    <button mat-menu-item>Profile</button>
+                    <button mat-menu-item>Settings</button>
+                    <button (click)="logout()" mat-menu-item>Logout</button>
+                </mat-menu>
+            </mat-toolbar-row>
+        </mat-toolbar>
         <div class="panel-content-wrapper">
             <router-outlet></router-outlet>
         </div>
