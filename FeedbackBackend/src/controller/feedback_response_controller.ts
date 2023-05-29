@@ -84,7 +84,14 @@ export const deleteResponse = async (req: Request, res: Response) => {
           } else {
             response = "Sorry for the inconvenience , we will look into the issue"
           }
+
+          if(!data?.response){
+             FeedbackResponse.create({ feedback_id:feedback._id , response })
+             .then(data => res.status(200).send(data))
+             .catch(err => res.status(400).json({error:"Bad Request"}))
+          }
       })
+      .catch(error => res.status(404).json({Error:"Error in getting response "}))
     })
   }
 
