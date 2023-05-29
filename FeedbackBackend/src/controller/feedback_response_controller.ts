@@ -71,3 +71,20 @@ export const deleteResponse = async (req: Request, res: Response) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   };
+
+  // generate automatic  response 
+  export const createMissingResponse = async(req:Request, res:Response) => {
+    const Feedbacks = await FeedbackModel.find();
+    Feedbacks.forEach(feedback => {
+      FeedbackResponse.findOne({feedback_id:feedback._id})
+      .then(data => {
+          let response:string;
+          if(feedback.rating>3){
+            response = "ThanK You for your feedback"
+          } else {
+            response = "Sorry for the inconvenience , we will look into the issue"
+          }
+      })
+    })
+  }
+
