@@ -30,7 +30,6 @@ export class FeedbackListComponent implements OnInit{
       this.dataSource = new MatTableDataSource(this.feedbacks);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      console.log(res);
     })
   }
 
