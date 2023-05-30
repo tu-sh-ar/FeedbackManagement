@@ -91,8 +91,7 @@ export const deleteResponse = async (req: Request, res: Response) => {
           sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
           
           if (JSON.stringify(feedback.createdAt) < JSON.stringify(sevenDaysAgo)) {
-            console.log("Working")
-            await FeedbackResponse.create({ feedback_id: feedback._id, response: generatedResponse });
+             await FeedbackResponse.create({ feedback_id: feedback._id, response: generatedResponse });
           }
         }
       }
