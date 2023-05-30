@@ -73,25 +73,33 @@ export const deleteResponse = async (req: Request, res: Response) => {
   };
 
   // generate automatic  response 
-  export const createMissingResponse = async(req:Request, res:Response) => {
-    const Feedbacks = await FeedbackModel.find();
-    Feedbacks.forEach(feedback => {
-      FeedbackResponse.findOne({feedback_id:feedback._id})
-      .then(data => {
-          let response:string;
-          if(feedback.rating>3){
-            response = "ThanK You for your feedback"
-          } else {
-            response = "Sorry for the inconvenience , we will look into the issue"
+  export const createMissingResponse = async (req: Request, res: Response) => {
+    try {
+      const feedbacks = await FeedbackModel.find();
+  
+      for (const feedback of feedbacks) {
+        const response = await FeedbackResponse.findOne({ feedback_id: feedback._id });
+       
+        let generatedResponse: string;
+        if (feedback.rating > 3) {
+          generatedResponse = "Thank you for your feedback.";
+        } else {
+          generatedResponse = "Sorry for the inconvenience. We will look into the issue.";
+        }
+        if (!response) {
+          const sevenDaysAgo = new Date();
+          sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+          
+          if (JSON.stringify(feedback.createdAt) < JSON.stringify(sevenDaysAgo)) {
+            console.log("Working")
+            await FeedbackResponse.create({ feedback_id: feedback._id, response: generatedResponse });
           }
+        }
+      }
 
-          if(!data?.response){
-             FeedbackResponse.create({ feedback_id:feedback._id , response })
-             .then(data => res.status(200).send(data))
-             .catch(err => res.status(400).json({error:"Bad Request"}))
-          }
-      })
-      .catch(error => res.status(404).json({Error:"Error in getting response "}))
-    })
-  }
+      res.status(200).json({ message: "Automatic responses generated successfully." });
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
 
