@@ -1,6 +1,9 @@
 .feedback-table{
     width: 100%;
 }
+th{
+    background-color: gainsboro !important;
+}
 mat-form-field{
     width: 40%;
     padding-inline: 20px;
