@@ -8,7 +8,7 @@ import { verifyToken } from "../middlewares/auth/jwt_auth";
 // router.use(verifyToken);
 
 router.get("/", getFeedbacks);
-router.get("/:id", get_feedback);
+router.get("/:id", verifyToken, get_feedback);
 
 router.post(
     "/", 
