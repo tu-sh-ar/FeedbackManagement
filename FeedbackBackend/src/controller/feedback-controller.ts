@@ -1,4 +1,5 @@
 // creating the feedback controller 
+import mongoose from 'mongoose'
 import { Request, Response } from 'express'
 import FeedbackModel from '../model/feedback_model'
 import DeliveryAgent from '../model/delivery_agent_model'
@@ -136,8 +137,12 @@ export const get_feedback = async(req:Request, res:Response) => {
 }
 
 // get feedbacks based on product id
-export const getFeedbacks_Product = async(req:Request, res:Response) => {
-    const product_id = req.query.product_id as String;
+export const getPoductFeedbacks = async(req:Request, res:Response) => {
+     
+    const product_id = req.query.product_id as string;
+    //console.log(id)
+    //const product_id = new mongoose.Types.ObjectId(id)
+    //console.log(product_id)
     try {
         const feedbacks = await FeedbackModel.find({product_id:product_id});
 
@@ -148,8 +153,8 @@ export const getFeedbacks_Product = async(req:Request, res:Response) => {
                     comment:feedback.comment,
                     rating:feedback.rating
                 }
-                res.status(200).send(updated_feedbacks)
             })
+            res.status(200).send(updated_feedbacks)
         } else {
             res.status(404).json({error:"No feedbacks found for the product"})
         }
