@@ -137,7 +137,7 @@ export const get_feedback = async(req:Request, res:Response) => {
 
 // get feedbacks based on product id
 export const getFeedbacks_Product = async(req:Request, res:Response) => {
-    const product_id = req.query.product_id;
+    const product_id = req.query.product_id as String;
     try {
         const feedbacks = await FeedbackModel.find({product_id:product_id});
 
