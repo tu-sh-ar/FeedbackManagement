@@ -25,8 +25,6 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
           role,
         };
 
-        console.log(req.user);
-
         next();
       } else {
         res.status(401).send('Invalid Token');
