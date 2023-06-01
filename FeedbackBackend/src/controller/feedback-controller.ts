@@ -140,9 +140,7 @@ export const get_feedback = async(req:Request, res:Response) => {
 export const getPoductFeedbacks = async(req:Request, res:Response) => {
      
     const product_id = req.query.product_id as string;
-    //console.log(id)
-    //const product_id = new mongoose.Types.ObjectId(id)
-    //console.log(product_id)
+
     try {
         const feedbacks = await FeedbackModel.find({product_id:product_id});
 
