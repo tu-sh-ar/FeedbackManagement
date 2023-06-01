@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import { createFeedback, deleteFeedback, getFeedbacks, get_feedback, updateFeedback  } from "../controller/feedback-controller";
+import { createFeedback, deleteFeedback, getFeedbacks, getFeedbacks_Product, get_feedback, updateFeedback  } from "../controller/feedback-controller";
 import { Validate, validateSchema }  from "../middlewares/validations/schema-validations";
 import { verifyToken } from "../middlewares/auth/jwt_auth";
 
@@ -9,6 +9,7 @@ import { verifyToken } from "../middlewares/auth/jwt_auth";
 
 router.get("/", getFeedbacks);
 router.get("/:id", verifyToken, get_feedback);
+router.get("/product" , getFeedbacks_Product);
 
 router.post(
     "/", 
