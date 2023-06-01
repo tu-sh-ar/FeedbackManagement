@@ -1,4 +1,3 @@
-
 paths:
   /api/feedback:
     get:
@@ -45,6 +44,59 @@ paths:
           description: Invalid request body
         '500':
           description: Internal Server Error
+  /api/feedback/product:
+    get:
+      summary: Get Feedbacks for specific Product 
+      tags:
+        - Feedback
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: query
+          name: product_id
+          required: true
+          schema:
+            type: string
+          description: ID of the product to retrieve feedbacks for
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    feedback_id:
+                      type: string
+                      description: ID of the feedback
+                    comment:
+                      type: string
+                      description: Comment for the feedback
+                    rating:
+                      type: number
+                      description: Rating for the feedback
+        '404':
+          description: No feedbacks found for the product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
   /api/feedback/{id}:
     put:
       summary: Update a feedback
