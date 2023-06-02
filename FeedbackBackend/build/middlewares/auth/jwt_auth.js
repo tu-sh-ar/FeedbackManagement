@@ -50,7 +50,6 @@ const verifyToken = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                     nameIdentifier,
                     role,
                 };
-                console.log(req.user);
                 next();
             }
             else {
