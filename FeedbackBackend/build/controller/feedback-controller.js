@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_feedback = exports.deleteFeedback = exports.updateFeedback = exports.createFeedback = exports.getFeedbacks = void 0;
+exports.getPoductFeedbacks = exports.get_feedback = exports.deleteFeedback = exports.updateFeedback = exports.createFeedback = exports.getFeedbacks = void 0;
 const feedback_model_1 = __importDefault(require("../model/feedback_model"));
 const feedback_type_enum_1 = require("../middlewares/enums/feedback_type_enum");
 const feedback_template_model_1 = __importDefault(require("../model/feedback_template_model"));
@@ -129,3 +129,27 @@ const get_feedback = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.get_feedback = get_feedback;
+// get feedbacks based on product id
+const getPoductFeedbacks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const product_id = req.query.product_id;
+    try {
+        const feedbacks = yield feedback_model_1.default.find({ product_id: product_id });
+        if (feedbacks.length) {
+            const updated_feedbacks = feedbacks.map(feedback => {
+                return {
+                    feedback_id: feedback._id,
+                    comment: feedback.comment,
+                    rating: feedback.rating
+                };
+            });
+            res.status(200).send(updated_feedbacks);
+        }
+        else {
+            res.status(404).json({ error: "No feedbacks found for the product" });
+        }
+    }
+    catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+exports.getPoductFeedbacks = getPoductFeedbacks;
