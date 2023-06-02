@@ -23,9 +23,13 @@
         font-size: 0.90em;
         .user-wrapper, .product-wrapper{
             border: 1px solid rgb(230, 230, 230);
+            border-radius: 5px;
             padding: 10px;
             width: 45%;
             min-height: 6rem;
+            .grey{
+                color: rgb(120, 120, 120);
+            }
         }
     }
     textarea{

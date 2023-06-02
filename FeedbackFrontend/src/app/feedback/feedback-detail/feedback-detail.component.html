@@ -38,7 +38,7 @@
                     <div *ngIf="!fetchingUser">
                         <b>User</b>
                         <mat-divider></mat-divider>
-                        <p>{{user.name}} <small>({{data.userId}})</small></p>
+                        <p>{{user.name}} <small class="grey">({{data.userId}})</small></p>
                         <small>{{user.email}}</small>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                     <div *ngIf="!fetchingProduct">
                         <b>Product</b>
                         <mat-divider></mat-divider>
-                        <p>{{product.description}} <small>({{data.productId}})</small></p>
+                        <p>{{product.description}} <small class="grey">({{data.productId}})</small></p>
                         <small>(Avg. Rating {{product.avg_rating}})</small>
                     </div>
                 </div>
