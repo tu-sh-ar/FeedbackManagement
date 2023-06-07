@@ -62,7 +62,7 @@
             
             <mat-form-field class="example-full-width">
                 <mat-label>Reply to the feedback:</mat-label>
-                <textarea matInput [(ngModel)]="response"></textarea>
+                <textarea matInput [(ngModel)]="response" [disabled]="responseAvailable"></textarea>
             </mat-form-field>
         </mat-card-content>
         
