@@ -15,7 +15,7 @@ const routes: Routes = [
     title:"Login"
   },
   {
-    path:"admin",
+    path:"admin/dashboard",
     loadChildren: () => import("./feedback/feedback.module").then(mod=>mod.FeedbackModule)
   }
   ,

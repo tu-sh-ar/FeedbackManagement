@@ -16,7 +16,7 @@ export class AdminLoginComponent {
   ){}
 
   adminLoginForm = new FormGroup({
-    username: new FormControl('', [Validators.required]),
+    username: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required])
   })
 
