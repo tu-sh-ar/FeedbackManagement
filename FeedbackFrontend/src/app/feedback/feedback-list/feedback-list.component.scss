@@ -1,8 +1,11 @@
 .feedback-table{
     width: 100%;
+    overflow: hidden;
+    border-radius: 20px;
 }
 th{
-    background-color: gainsboro !important;
+    background-color: #F1F3F6 !important;
+    font-weight: 500 !important;
 }
 mat-form-field{
     width: 40%;
@@ -10,6 +13,8 @@ mat-form-field{
 }
 mat-paginator{
     width: 100%;
+    margin-block: 5px;
+    background-color: transparent;
 }       
 mat-spinner{
     margin: 0 auto;

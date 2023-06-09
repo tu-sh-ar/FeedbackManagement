@@ -31,6 +31,7 @@ export class FeedbackDetailComponent implements OnInit{
   fetchingProduct:boolean = true;
   response!:string;
   enableReply:boolean = false;
+  responseAvailable:boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<FeedbackDetailComponent>,
@@ -54,6 +55,7 @@ export class FeedbackDetailComponent implements OnInit{
 
     this._feedbackService.getResponse(this.data.feedbackId).subscribe((res)=>{
       this.response = res.response;
+      this.responseAvailable = true;
     }, (err)=>{
       this.response = "";
       this.enableReply = true;
