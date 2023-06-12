@@ -27,9 +27,7 @@
                     {{data.comment.length ? data.comment : "N/A"}}
                 </div>
             </div>
-    
             <br>
-    
             <div class="detailing-wrapper">
                 <div class="user-wrapper">
                     <div *ngIf="fetchingUser">
@@ -38,7 +36,7 @@
                     <div *ngIf="!fetchingUser">
                         <b>User</b>
                         &NonBreakingSpace;
-                        <small class="grey">(UserID: {{data.userId}})</small>
+                        <small class="grey">({{data.userId}})</small>
                         <mat-divider></mat-divider>
                         <p>{{user.name}}</p>
                         <small>{{user.email}}</small>
@@ -52,7 +50,7 @@
                     <div *ngIf="!fetchingProduct">
                         <b>Product</b>
                         &NonBreakingSpace;
-                        <small class="grey">(ProductID: {{data.productId}})</small>
+                        <small class="grey">({{data.productId}})</small>
                         <mat-divider></mat-divider>
                         <p>{{product.description}}</p>
                         <small>(Avg. Rating {{product.avg_rating}})</small>
