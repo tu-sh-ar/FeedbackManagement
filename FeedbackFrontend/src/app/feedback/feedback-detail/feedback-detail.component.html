@@ -8,19 +8,18 @@
                 {{data.feedbackCreationDate | date:'medium'}}
             </mat-card-subtitle>
         </mat-card-header>
-        <br>
         <mat-divider></mat-divider>
-    
+        <br>
         <mat-card-content>
-            <p>
+            <div>
                 <sup><b>Rating:</b></sup>
                 &NonBreakingSpace;
                 <span *ngFor="let star of Arr(data.rating)">
                     <img src="../../../assets/star.png" alt="star">
                 </span>
                 &NonBreakingSpace;
-                <sup>({{data.rating}})</sup>
-            </p>
+                <span>({{data.rating}})</span>
+            </div>
             <div>
                 <sup><b>Comment:</b></sup>
                 <div class="comment-wrapper">
