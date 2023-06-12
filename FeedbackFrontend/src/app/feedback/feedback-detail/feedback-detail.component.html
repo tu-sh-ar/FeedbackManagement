@@ -41,7 +41,6 @@
                         <small>{{user.email}}</small>
                     </div>
                 </div>
-
                 <div class="product-wrapper">
                     <div *ngIf="fetchingProduct">
                         <mat-spinner></mat-spinner>
@@ -56,17 +55,14 @@
                     </div>
                 </div>
             </div>
-    
             <br>
             <mat-divider></mat-divider>
             <br>
-            
             <mat-form-field class="example-full-width" appearance="outline">
                 <mat-label>Reply to the feedback:</mat-label>
                 <textarea matInput [(ngModel)]="response" [disabled]="responseAvailable"></textarea>
             </mat-form-field>
         </mat-card-content>
-        
         <mat-card-actions align="end">
             <button mat-flat-button *ngIf="enableReply" color="primary" (click)="replyToFeedback()">Reply</button>
             &NonBreakingSpace;
