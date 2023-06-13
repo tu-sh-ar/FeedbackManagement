@@ -97,7 +97,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:4000",
+        url: "https://feedbackbackend-dev.azurewebsites.net",
       },
     ],
   },
