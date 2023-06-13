@@ -3,10 +3,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeedbackListComponent } from './feedback-list/feedback-list.component';
 import { FeedbackDetailComponent } from './feedback-detail/feedback-detail.component';
+import { PageNotFoundComponent } from '../shared/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {
-    path:"dashboard",
+    path:"",
     component:DashboardComponent,
     title:"Admin - Dashboard",
     children:[
@@ -20,8 +21,8 @@ const routes: Routes = [
         component:FeedbackListComponent
       },
       {
-        path:"feedback/:id",
-        component:FeedbackDetailComponent
+        path:"feedbacks/:id",
+        component:PageNotFoundComponent
       }
     ]
   }

@@ -3,18 +3,18 @@
         <mat-card>
             <h1>Business Admin</h1>
             <mat-form-field appearance="fill">
-                <mat-label>Username</mat-label>
-                <input type="text" matInput formControlName="username">
-                <mat-error>Username is a required field.</mat-error>
+                <mat-label>Email</mat-label>
+                <input type="email" matInput formControlName="username">
+                <mat-error>Enter a valid email address.</mat-error>
             </mat-form-field>
+            <br>
             <mat-form-field appearance="fill">
                 <mat-label>Password</mat-label>
                 <input type="password" matInput formControlName="password">
                 <mat-error>Password is a required field.</mat-error>
             </mat-form-field>
-            <button type="submit" mat-raised-button color="primary">Login</button>
             <br>
-            <a routerLink="/admin/dashboard">Go to dashboard</a>
+            <button type="submit" mat-raised-button color="primary">Login</button>
         </mat-card>
     </form>
 </div>

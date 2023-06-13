@@ -2,7 +2,7 @@
 
     <ng-container matColumnDef="feedback_id">
         <th mat-header-cell *matHeaderCellDef>
-            Id
+            <b>Id</b>
         </th>
         <td mat-cell *matCellDef="let element">
             {{element.feedback_id}}
@@ -10,7 +10,7 @@
     </ng-container>
     <ng-container matColumnDef="rating">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            Rating
+            <b>Rating</b>
         </th>
         <td mat-cell *matCellDef="let element">
             {{element.rating}}
@@ -18,7 +18,7 @@
     </ng-container>
     <ng-container matColumnDef="comment">
         <th mat-header-cell *matHeaderCellDef>
-            Comment
+            <b>Comment</b>
         </th>
         <td mat-cell *matCellDef="let element">
             {{element.comment.length ? element.comment : "N/A"}}
@@ -26,7 +26,7 @@
     </ng-container>
     <ng-container matColumnDef="created_at">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            Posted
+            <b>Posted</b>
         </th>
         <td mat-cell *matCellDef="let element">
             {{element.created_at | date}}
@@ -34,7 +34,7 @@
     </ng-container>
     <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef>
-            Details
+            <b>Details</b>
         </th>
         <td mat-cell *matCellDef="let element">
             <button 
@@ -50,8 +50,7 @@
             )"
             matTooltip="Review and Reply"
             >
-                <!-- <mat-icon>visibility</mat-icon> -->
-                <img src="../../../assets/eye.png" alt="">
+                <img src="../../../assets/eye.svg" alt="">
             </button>
         </td>
     </ng-container>
