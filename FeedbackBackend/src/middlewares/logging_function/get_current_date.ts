@@ -1,5 +1,5 @@
 // get current date for logging file creation
-function getCurrentDate() {
+export const getCurrentDate = () => {
     const today = new Date();
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, '0');

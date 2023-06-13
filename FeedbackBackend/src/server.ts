@@ -6,6 +6,7 @@ const server =express();
 import cors from 'cors';
 
 // importing morgan for logging
+import { getCurrentDate } from './middlewares/logging_function/get_current_date';
 import morgan from 'morgan'
 import fs from 'fs'
 import path from 'path'
@@ -41,8 +42,8 @@ const start_server = async() => {
 }
 
 // making access stream for morgan logger (for both access and error )
-// const accessLogStream = fs.createWriteStream(path.join('logs', 'access.log'), { flags: 'a' });
-// const errorLogStream = fs.createWriteStream(path.join('logs', 'error.log'), { flags: 'a' });
+const logFilePath = path.join('logs', `logs_${getCurrentDate()}.log`);
+const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
 
 const server_config = () => {
 
@@ -54,17 +55,10 @@ const server_config = () => {
     server.use(cors());
     
     // setting up morgan
-    // server.use(morgan('combined', 
-    //   {
-    //     stream: accessLogStream,
-    //     skip: (req:express.Request,res:express.Response)  => res.statusCode >= 400
-    //   }));
-      
-    //   server.use(morgan('combined', 
-    //   {
-    //     stream: errorLogStream,
-    //     skip: (req:express.Request,res:express.Response)  => res.statusCode <= 400
-    //   }));
+    server.use(morgan('combined', 
+      {
+        stream: logStream
+      }));
     
     // setting up routin middlewares
     server.use("/api/feedbackTemplate" , feedback_template_router);
