@@ -17,6 +17,11 @@ const express_1 = __importDefault(require("express"));
 const server = (0, express_1.default)();
 // using cors
 const cors_1 = __importDefault(require("cors"));
+// importing morgan for logging
+const get_current_date_1 = require("./middlewares/logging_function/get_current_date");
+const morgan_1 = __importDefault(require("morgan"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 // importing routes
 const feedback_template_route_1 = __importDefault(require("./routes/feedback_template_route"));
 const feedback_route_1 = __importDefault(require("./routes/feedback_route"));
@@ -41,8 +46,8 @@ const start_server = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 // making access stream for morgan logger (for both access and error )
-// const accessLogStream = fs.createWriteStream(path.join('logs', 'access.log'), { flags: 'a' });
-// const errorLogStream = fs.createWriteStream(path.join('logs', 'error.log'), { flags: 'a' });
+const logFilePath = path_1.default.join('logs', `logs_${(0, get_current_date_1.getCurrentDate)()}.log`);
+const logStream = fs_1.default.createWriteStream(logFilePath, { flags: 'a' });
 const server_config = () => {
     // using body parser
     server.use(express_1.default.json());
@@ -50,16 +55,9 @@ const server_config = () => {
     // Access-Control-Allow-Origin: * i.e api accessed from any routes
     server.use((0, cors_1.default)());
     // setting up morgan
-    // server.use(morgan('combined', 
-    //   {
-    //     stream: accessLogStream,
-    //     skip: (req:express.Request,res:express.Response)  => res.statusCode >= 400
-    //   }));
-    //   server.use(morgan('combined', 
-    //   {
-    //     stream: errorLogStream,
-    //     skip: (req:express.Request,res:express.Response)  => res.statusCode <= 400
-    //   }));
+    server.use((0, morgan_1.default)('combined', {
+        stream: logStream
+    }));
     // setting up routin middlewares
     server.use("/api/feedbackTemplate", feedback_template_route_1.default);
     server.use("/api/feedback", feedback_route_1.default);
@@ -86,7 +84,7 @@ const options = {
         },
         servers: [
             {
-                url: "http://localhost:4000",
+                url: "https://feedbackbackend-dev.azurewebsites.net",
             },
         ],
     },
