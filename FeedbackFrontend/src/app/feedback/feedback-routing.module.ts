@@ -4,6 +4,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeedbackListComponent } from './feedback-list/feedback-list.component';
 import { FeedbackDetailComponent } from './feedback-detail/feedback-detail.component';
 import { PageNotFoundComponent } from '../shared/page-not-found/page-not-found.component';
+import { DetailComponent } from './detail/detail.component';
 
 const routes: Routes = [
   {
@@ -21,8 +22,8 @@ const routes: Routes = [
         component:FeedbackListComponent
       },
       {
-        path:"feedbacks/:id",
-        component:PageNotFoundComponent
+        path:"feedbacks/feedback/:id",
+        component:DetailComponent
       }
     ]
   }
