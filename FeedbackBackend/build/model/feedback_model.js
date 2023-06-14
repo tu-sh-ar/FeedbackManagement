@@ -15,8 +15,7 @@ const FeedbackSchema = new mongoose_1.Schema({
         ref: 'Client'
     },
     product_id: {
-        type: mongoose_1.Types.ObjectId,
-        ref: 'Product'
+        type: Number
     },
     template_id: {
         type: mongoose_1.Types.ObjectId,

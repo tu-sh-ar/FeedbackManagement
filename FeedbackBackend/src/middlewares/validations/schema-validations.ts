@@ -58,7 +58,7 @@ export  const Validate = {
           },
           product_id: {
             optional:true,
-            isMongoId: true,
+            isNumeric: true,
             errorMessage: 'Invalid product ID'
           },
           template_id: {

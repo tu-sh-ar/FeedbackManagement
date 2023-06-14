@@ -4,7 +4,7 @@ interface IFeedback extends Document {
   user_id: Types.ObjectId;
   deliveryagent_id: Types.ObjectId;
   client_id: Types.ObjectId;
-  product_id: Types.ObjectId;
+  product_id: number;
   template_id: Types.ObjectId;
   rating: number;
   comment: string;
@@ -35,8 +35,7 @@ const FeedbackSchema = new Schema(
     },
     product_id: 
     { 
-      type: Types.ObjectId, 
-      ref: 'Product' 
+      type: Number
     },
     template_id: 
     { 
