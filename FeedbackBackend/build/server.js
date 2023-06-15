@@ -46,7 +46,7 @@ const start_server = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 // making access stream for morgan logger (for both access and error )
-const logFilePath = path_1.default.join('logs', `logs_${(0, get_current_date_1.getCurrentDate)()}.log`);
+const logFilePath = path_1.default.join('app_logs', `${(0, get_current_date_1.getCurrentDate)()}.log`);
 const logStream = fs_1.default.createWriteStream(logFilePath, { flags: 'a' });
 const server_config = () => {
     // using body parser

@@ -42,7 +42,7 @@ const start_server = async() => {
 }
 
 // making access stream for morgan logger (for both access and error )
-const logFilePath = path.join('logs', `logs_${getCurrentDate()}.log`);
+const logFilePath = path.join('app_logs', `${getCurrentDate()}.log`);
 const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
 
 const server_config = () => {
