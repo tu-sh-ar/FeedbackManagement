@@ -60,7 +60,7 @@ export const createFeedback = async( req:Request, res:Response ) => {
 
         // check if the user exists and then make the response 
         const new_feedback_data = {...feedback_data, 
-            client_id:feedback_template?.client_id, 
+            //client_id:feedback_template?.client_id, 
             template_id:feedback_template?._id,
             // user_id:user_id,
             feedback_type:feedback_type.UserToClient

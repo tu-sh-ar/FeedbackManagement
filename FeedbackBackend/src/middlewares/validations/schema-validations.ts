@@ -43,7 +43,7 @@ export  const Validate = {
     checkFeedback:checkSchema({
         user_id: {
             optional:true,
-            isMongoId: true,
+            isMongoId: false,
             errorMessage: 'Invalid user ID'
           },
           deliveryagent_id: {
@@ -53,7 +53,7 @@ export  const Validate = {
           },
           client_id: {
             optional:true,
-            isMongoId: true,
+            isMongoId: false,
             errorMessage: 'Invalid client ID'
           },
           product_id: {

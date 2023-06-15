@@ -20,8 +20,7 @@ const FeedbackSchema = new Schema(
   {
     user_id: 
     { 
-      type: Types.ObjectId, 
-      ref: 'User' 
+      type: String
     },
     deliveryagent_id: 
     { 
@@ -30,8 +29,7 @@ const FeedbackSchema = new Schema(
     },
     client_id: 
     { 
-      type: Types.ObjectId, 
-      ref: 'Client' 
+      type: String
     },
     product_id: 
     { 
