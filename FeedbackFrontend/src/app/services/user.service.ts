@@ -11,7 +11,7 @@ export class UserService {
 
   constructor(private _http: HttpClient) { }
 
-  baseURL:string = environment.baseUrl;
+  baseURL:string = environment.feedbackApiUrl;
 
   //get particular user based on id
   getUser(userId:string):Observable<User>{

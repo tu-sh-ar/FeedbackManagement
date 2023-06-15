@@ -26,7 +26,7 @@ export class FeedbackDetailComponent implements OnInit{
 
   Arr = Array;
   user!: User;
-  product!: Product;
+  product!: any;
   fetchingUser:boolean = true;
   fetchingProduct:boolean = true;
   response!:string;
@@ -50,6 +50,7 @@ export class FeedbackDetailComponent implements OnInit{
 
     this._productService.getProduct(this.data.productId).subscribe((res)=>{
       this.product = res;
+      console.log(this.product);
       this.fetchingProduct = false;
     })
 

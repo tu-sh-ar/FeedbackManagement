@@ -11,7 +11,7 @@ export class FeedbackService {
 
   constructor(private _http: HttpClient) { }
 
-  baseURL:string = environment.baseUrl;
+  baseURL:string = environment.feedbackApiUrl;
 
   //get all the feedbacks
   getAllFeedbacks():Observable<Feedback[]>{

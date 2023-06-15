@@ -1,7 +1,7 @@
 export interface Product {
-    _id:string,
+    id:number,
     name:string,
-    description:string,
-    client_id:string,
-    avg_rating:number
+    rating:number,
+    varients:any,
+    attachments:any
 }

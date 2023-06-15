@@ -11,11 +11,11 @@ export class ProductService {
 
   constructor(private _http: HttpClient) { }
 
-  baseURL:string = environment.baseUrl;
+  baseURL:string = environment.productApiUrl;
 
   //get particular product based on id
   getProduct(productId:string):Observable<Product>{
-    return this._http.get<Product>(`${this.baseURL}product/${productId}`)
+    return this._http.get<Product>(`${this.baseURL}Products/productDetail/${productId}`)
   }
 
 }

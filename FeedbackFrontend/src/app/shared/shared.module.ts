@@ -25,7 +25,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    PageNotFoundComponent
   ]
 })
 export class SharedModule { }

@@ -33,8 +33,6 @@
                     </div>
                     <div *ngIf="!fetchingUser">
                         <b>User</b>
-                        &NonBreakingSpace;
-                        <small class="grey">({{data.userId}})</small>
                         <mat-divider></mat-divider>
                         <p>{{user.name}}</p>
                         <small>{{user.email}}</small>
@@ -46,11 +44,9 @@
                     </div>
                     <div *ngIf="!fetchingProduct">
                         <b>Product</b>
-                        &NonBreakingSpace;
-                        <small class="grey">({{data.productId}})</small>
                         <mat-divider></mat-divider>
-                        <p>{{product.description}}</p>
-                        <small>(Avg. Rating {{product.avg_rating}})</small>
+                        <p>{{product.name}}</p>
+                        <small>(Avg. Rating {{product.rating}})</small>
                     </div>
                 </div>
             </div>

@@ -53,7 +53,6 @@
             >
                 <img src="../../../assets/eye.svg" alt="">
             </button>
-            <button routerLink="feedback/{{element.feedback_id}}">Show</button>
         </td>
     </ng-container>
 
@@ -63,7 +62,7 @@
 
 <mat-paginator [length]="10000"
               [pageSize]="100"
-              [pageSizeOptions]="[1, 100, 250, 500]"
+              [pageSizeOptions]="[5, 50, 100, 250, 500]"
               #paginator
               >
 </mat-paginator>

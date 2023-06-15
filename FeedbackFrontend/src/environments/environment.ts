@@ -1,4 +1,5 @@
 export const environment = {
     production: false,
-    baseUrl: 'https://feedbackbackend-dev.azurewebsites.net/api/'
+    feedbackApiUrl: 'https://feedbackbackend-dev.azurewebsites.net/api/',
+    productApiUrl: 'https://backend-catalogue-dev.azurewebsites.net/api/'
 };
