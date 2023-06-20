@@ -36,7 +36,7 @@ export  const Validate = {
       },
       client_id: {
         optional:true,
-        isMongoId: true,
+        isMongoId: false,
         errorMessage: 'Invalid client ID'
       }
     }),

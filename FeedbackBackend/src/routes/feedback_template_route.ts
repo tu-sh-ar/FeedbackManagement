@@ -20,6 +20,7 @@ router.post(
 //update template
 router.put(
     "/:id",
+    verifyToken,
     Validate.checkFeedbackTemplate, 
     validateSchema,
     updateTemplate

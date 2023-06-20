@@ -8,13 +8,10 @@ import asyncHandler from 'express-async-handler'
 // get feedback templates 
 export const getTemplates =  asyncHandler(async( req:Request , res:Response ) => {
 
-    // const client_id = req.user?.id;
-    
+    const client_id = req.user?.id;
     try {
-        
         // fetching data basis of client Id
-        const templates = await FeedbackTemplate.find()
-
+        const templates = await FeedbackTemplate.find({client_id:client_id})
         if(templates.length)
             res.status(200).send(templates);
         else
@@ -29,24 +26,22 @@ export const getTemplates =  asyncHandler(async( req:Request , res:Response ) =>
 
 // create new feedback template 
 export const createTemplate = asyncHandler(async (req: Request, res: Response) => {
+
     try {
-      // Authorization and authentication
       const client_id = req.user?.id;
       const feedback_template_data = req.body;
   
-      // Check if required fields are present
       if (!client_id || !feedback_template_data) {
         res.status(400).json({ error: 'Bad Request: Missing required fields' });
         return;
       }
-  
-      // Add client_id to the feedback template data
-      const new_data = { ...feedback_template_data, client_id };
-  
-      // Create a new template for feedback
-      const createdTemplate = await FeedbackTemplate.create(new_data);
-  
-      res.status(200).json(createdTemplate);
+      if(req.user?.role === "admin"){
+        const new_data = { ...feedback_template_data, client_id };
+        // Create a new template for feedback
+        const createdTemplate = await FeedbackTemplate.create(new_data);
+        res.status(200).json(createdTemplate);
+      }
+
     } catch (error) {
       res.status(500).json({ error: `Error in creating template: ${error}` });
     }
@@ -55,17 +50,20 @@ export const createTemplate = asyncHandler(async (req: Request, res: Response) =
 // update template 
 export const updateTemplate = asyncHandler(async( req:Request , res:Response) => {
     const template_id = req.params.id;
+    const template_data = req.body;
+
+    if(template_data.client_id){
+        res.status(401).json({error:"client id cannot be updated"});
+    }
 
     try {
 
-        await FeedbackTemplate.findByIdAndUpdate(template_id, req.body)
+        await FeedbackTemplate.findByIdAndUpdate(template_id, template_data)
         .then(data => res.status(200).send(data))
         .catch(err => res.status(404).json({error:"No feedback template found"}))
         
     } catch (error) {
-
         res.status(500).send({error:"Error occured in updating the template"})
-
     }
 
 })
@@ -123,23 +121,3 @@ export const deleteTemplate = asyncHandler(async(req:Request, res:Response) => {
 //          "Q3": "What improvements would you suggest for our services?"
 //         }
 //   }
-
-  
-//   {
-//     "type": 3,
-//     "fields": {
-//       "venue": "string",
-//       "organization": "string"
-//     },
-//     "requiredFields": {
-//       "rating": true,
-//       "feedback_type": false,
-//       "feedback_language": false
-//     },
-//     "qas": {
-//       "Q1": "Were the event activities well-organized?",
-//        "Q2": "Did the event meet your expectations?",
-//        "Q3": "How likely are you to attend future events organized by us?"
-//     }
-//   }
-  
