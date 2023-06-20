@@ -3,16 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const FeedbackSchema = new mongoose_1.Schema({
     user_id: {
-        type: mongoose_1.Types.ObjectId,
-        ref: 'User'
+        type: String
     },
     deliveryagent_id: {
         type: mongoose_1.Types.ObjectId,
         ref: 'DeliveryAgent'
     },
     client_id: {
-        type: mongoose_1.Types.ObjectId,
-        ref: 'Client'
+        type: String
     },
     product_id: {
         type: Number

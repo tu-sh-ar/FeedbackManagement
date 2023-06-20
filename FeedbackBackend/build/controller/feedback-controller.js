@@ -61,7 +61,9 @@ const createFeedback = (req, res) => __awaiter(void 0, void 0, void 0, function*
         //searhing for an existing template for the given template type
         const feedback_template = yield feedback_template_model_1.default.findOne({ type: template_type });
         // check if the user exists and then make the response 
-        const new_feedback_data = Object.assign(Object.assign({}, feedback_data), { client_id: feedback_template === null || feedback_template === void 0 ? void 0 : feedback_template.client_id, template_id: feedback_template === null || feedback_template === void 0 ? void 0 : feedback_template._id, 
+        const new_feedback_data = Object.assign(Object.assign({}, feedback_data), { 
+            //client_id:feedback_template?.client_id, 
+            template_id: feedback_template === null || feedback_template === void 0 ? void 0 : feedback_template._id, 
             // user_id:user_id,
             feedback_type: feedback_type_enum_1.feedback_type.UserToClient });
         yield feedback_model_1.default.create(new_feedback_data)

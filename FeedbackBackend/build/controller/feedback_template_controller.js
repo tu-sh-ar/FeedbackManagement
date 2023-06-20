@@ -17,10 +17,11 @@ const feedback_template_model_1 = __importDefault(require("../model/feedback_tem
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 // get feedback templates 
 exports.getTemplates = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // const client_id = req.user?.id;
+    var _a;
+    const client_id = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
     try {
         // fetching data basis of client Id
-        const templates = yield feedback_template_model_1.default.find();
+        const templates = yield feedback_template_model_1.default.find({ client_id: client_id });
         if (templates.length)
             res.status(200).send(templates);
         else
@@ -32,21 +33,20 @@ exports.getTemplates = (0, express_async_handler_1.default)((req, res) => __awai
 }));
 // create new feedback template 
 exports.createTemplate = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+    var _b, _c;
     try {
-        // Authorization and authentication
-        const client_id = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const client_id = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
         const feedback_template_data = req.body;
-        // Check if required fields are present
         if (!client_id || !feedback_template_data) {
             res.status(400).json({ error: 'Bad Request: Missing required fields' });
             return;
         }
-        // Add client_id to the feedback template data
-        const new_data = Object.assign(Object.assign({}, feedback_template_data), { client_id });
-        // Create a new template for feedback
-        const createdTemplate = yield feedback_template_model_1.default.create(new_data);
-        res.status(200).json(createdTemplate);
+        if (((_c = req.user) === null || _c === void 0 ? void 0 : _c.role) === "admin") {
+            const new_data = Object.assign(Object.assign({}, feedback_template_data), { client_id });
+            // Create a new template for feedback
+            const createdTemplate = yield feedback_template_model_1.default.create(new_data);
+            res.status(200).json(createdTemplate);
+        }
     }
     catch (error) {
         res.status(500).json({ error: `Error in creating template: ${error}` });
@@ -55,8 +55,12 @@ exports.createTemplate = (0, express_async_handler_1.default)((req, res) => __aw
 // update template 
 exports.updateTemplate = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const template_id = req.params.id;
+    const template_data = req.body;
+    if (template_data.client_id) {
+        res.status(401).json({ error: "client id cannot be updated" });
+    }
     try {
-        yield feedback_template_model_1.default.findByIdAndUpdate(template_id, req.body)
+        yield feedback_template_model_1.default.findByIdAndUpdate(template_id, template_data)
             .then(data => res.status(200).send(data))
             .catch(err => res.status(404).json({ error: "No feedback template found" }));
     }
@@ -109,21 +113,4 @@ exports.deleteTemplate = (0, express_async_handler_1.default)((req, res) => __aw
 //          "Q2": "Did our customer support team resolve your issue effectively?",
 //          "Q3": "What improvements would you suggest for our services?"
 //         }
-//   }
-//   {
-//     "type": 3,
-//     "fields": {
-//       "venue": "string",
-//       "organization": "string"
-//     },
-//     "requiredFields": {
-//       "rating": true,
-//       "feedback_type": false,
-//       "feedback_language": false
-//     },
-//     "qas": {
-//       "Q1": "Were the event activities well-organized?",
-//        "Q2": "Did the event meet your expectations?",
-//        "Q3": "How likely are you to attend future events organized by us?"
-//     }
 //   }

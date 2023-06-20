@@ -35,14 +35,14 @@ exports.Validate = {
         },
         client_id: {
             optional: true,
-            isMongoId: true,
+            isMongoId: false,
             errorMessage: 'Invalid client ID'
         }
     }),
     checkFeedback: (0, express_validator_1.checkSchema)({
         user_id: {
             optional: true,
-            isMongoId: true,
+            isMongoId: false,
             errorMessage: 'Invalid user ID'
         },
         deliveryagent_id: {
@@ -52,7 +52,7 @@ exports.Validate = {
         },
         client_id: {
             optional: true,
-            isMongoId: true,
+            isMongoId: false,
             errorMessage: 'Invalid client ID'
         },
         product_id: {

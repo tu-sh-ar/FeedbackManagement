@@ -12,6 +12,6 @@ router.get("/", feedback_template_controller_1.getTemplates);
 // new template
 router.post("/", jwt_auth_1.verifyToken, schema_validations_1.Validate.checkFeedbackTemplate, schema_validations_1.validateSchema, feedback_template_controller_1.createTemplate);
 //update template
-router.put("/:id", schema_validations_1.Validate.checkFeedbackTemplate, schema_validations_1.validateSchema, feedback_template_controller_1.updateTemplate);
+router.put("/:id", jwt_auth_1.verifyToken, schema_validations_1.Validate.checkFeedbackTemplate, schema_validations_1.validateSchema, feedback_template_controller_1.updateTemplate);
 router.delete("/:id", jwt_auth_1.verifyToken, feedback_template_controller_1.deleteTemplate);
 exports.default = router;

@@ -43,11 +43,11 @@ const verifyToken = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             const decodedToken = jsonwebtoken_1.default.verify(token, 'my-32-character-ultra-secure-and-ultra-long-secret');
             if (decodedToken) {
                 // Access the token claims
-                const nameIdentifier = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+                const id = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
                 const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
                 // Storing the extracted information for later use or pass it to the next middleware
                 req.user = {
-                    nameIdentifier,
+                    id,
                     role,
                 };
                 next();
@@ -61,7 +61,7 @@ const verifyToken = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                 res.status(401).send('Token has expired');
             }
             else {
-                res.status(401).send('Invalid Token');
+                res.status(401).send(error);
             }
         }
     }

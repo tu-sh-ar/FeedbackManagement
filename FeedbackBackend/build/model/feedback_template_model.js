@@ -42,8 +42,7 @@ const FeedbackTemplateSchema = new mongoose_1.Schema({
         of: String
     },
     client_id: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Client',
+        type: String,
         required: true
     },
     user_id: {
