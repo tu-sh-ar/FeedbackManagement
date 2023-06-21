@@ -29,7 +29,7 @@ jobs:
           
         
       - name: Zip artifact for deployment
-        working-directory: FeedbackFrontend/build
+        working-directory: FeedbackFrontend/dist
         run: zip release.zip ./* -r
         
               
