@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Feedback } from 'src/app/interfaces/feedback';
 import { FeedbackService } from 'src/app/services/feedback.service';
-import { FeedbackDetailComponent } from '../feedback-detail/feedback-detail.component';
+import { ReplyCardComponent } from '../reply-card/reply-card.component';
 
 @Component({
   selector: 'app-feedback-list',
@@ -17,7 +17,7 @@ export class FeedbackListComponent implements OnInit{
   @ViewChild(MatSort) sort!: MatSort;
   feedbacks!: Feedback[];
   dataSource!: MatTableDataSource<Feedback>;
-  displayFeedbackColumns: string[] = ['feedback_id', 'rating', 'comment', 'created_at', 'action'];
+  displayFeedbackColumns: string[] = ['feedback_id', 'product_id', 'rating', 'comment', 'created_at', 'action'];
   
   constructor(
     private _feedbackService: FeedbackService,
@@ -33,16 +33,12 @@ export class FeedbackListComponent implements OnInit{
     })
   }
 
-  openFeedbackDetailDialogue(feedbackId:string, feedbackCreationDate:string, rating:string, comment:string,  userId:string, productId:string): void {
-    this._dialog.open(FeedbackDetailComponent,
+  openFeedbackDetailDialogue(feedbackId:string, feedbackCreationDate:string): void {
+    this._dialog.open(ReplyCardComponent,
       {data:
         {
           feedbackId:feedbackId,
-          feedbackCreationDate:feedbackCreationDate,
-          rating:rating,
-          comment:comment,
-          userId:userId,
-          productId:productId
+          feedbackCreationDate:feedbackCreationDate
         }
       });
   }

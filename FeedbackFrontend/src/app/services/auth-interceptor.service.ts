@@ -18,7 +18,11 @@ export class AuthInterceptorService implements HttpInterceptor{
       let tokenObject = JSON.parse(tokenString);
 
       request = request.clone({
-        setHeaders:{'Authorization': `Bearer ${tokenObject.jwtToken}`}
+        setHeaders:{
+          'Authorization': `Bearer ${tokenObject.jwtToken}`,
+          'Client': 'd1bb78ca-d9e1-4f72-b4d7-677e8ecb3172',
+          'Access-Control-Allow-Origin': '*'
+        }
       });
     }
 

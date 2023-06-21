@@ -1,0 +1,32 @@
+.card{
+    width: 700px;
+    padding: 10px;
+    .example-full-width{
+        width: 100%;
+    }
+    img{
+        height: 20px;
+    }
+    .comment-wrapper{
+        padding: 10px;
+        border: 1px solid rgb(230, 230, 230);
+        border-radius: 10px;
+        max-height: 70px;
+        overflow-y:scroll;
+        font-size: 0.90em;
+    }
+    
+    textarea{
+        resize: none;
+    }
+
+    button{
+        border-radius: 5px;
+        padding-inline: 100px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+.grey{
+    color: rgb(150, 150, 150);
+}

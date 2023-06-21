@@ -1,0 +1,66 @@
+<h3>Feedback Details</h3>
+
+<mat-card>
+    <mat-card-content>
+        <div class="wrapper">
+            <div class="detail-element">
+                Feedback ID:
+                <span class="spacer"></span>
+                <b>{{feedback.feedback_id}}</b>
+            </div>
+            <div class="detail-element">
+                Product ID:
+                <span class="spacer"></span>
+                <b>{{product.id}}</b>
+            </div>
+            <div class="detail-element">
+                Product Name:
+                <span class="spacer"></span>
+                <b>{{product.name}}</b>
+            </div>
+            <div class="detail-element">
+                Customer Name:
+                <span class="spacer"></span>
+                <b>{{user.name}}</b>
+            </div>
+            <div class="detail-element">
+                Customer Email:
+                <span class="spacer"></span>
+                <b>{{user.email}}</b>
+            </div>
+            <div class="detail-element">
+                Rating:
+                <span class="spacer"></span>
+                <img src="../../../assets/star.svg" alt="star" class="icons">
+                <b>{{feedback.rating}}</b>
+            </div>
+        </div>
+
+        <div class="detail-element">
+            <span>
+                Review:
+                <span class="spacer"></span>
+                {{feedback.comment.length? feedback.comment : "Not Available"}}
+            </span>
+        </div>
+        <mat-divider></mat-divider>
+        <br>
+        <mat-form-field class="example-full-width">
+            <mat-label>Your Reply:</mat-label>
+            <textarea [(ngModel)]="response" matInput [disabled]="responseAvailable"></textarea>
+        </mat-form-field>
+    </mat-card-content>
+
+    <mat-card-actions>
+        <button mat-flat-button *ngIf="enableReply" (click)="replyToFeedback()">
+            <img src="../../../assets/black-reply.svg" alt="reply">
+            Reply
+        </button>
+        <button mat-icon-button matTooltip="Edit Reply" *ngIf="responseAvailable">
+            <img src="../../../assets/edit.svg" alt="edit">
+        </button>
+        <button mat-icon-button matTooltip="Delete Reply" *ngIf="responseAvailable">
+            <img src="../../../assets/delete.svg" alt="delete">
+        </button>
+    </mat-card-actions>
+</mat-card>

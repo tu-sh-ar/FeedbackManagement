@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeedbackListComponent } from './feedback-list/feedback-list.component';
+import { FeedbackDetailsComponent } from './feedback-details/feedback-details.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
       {
         path:"feedbacks",
         component:FeedbackListComponent
+      },
+      {
+        path:"feedbacks/feedback/:id",
+        component:FeedbackDetailsComponent
       }
     ]
   }

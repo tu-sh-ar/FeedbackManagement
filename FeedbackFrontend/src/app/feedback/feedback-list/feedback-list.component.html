@@ -3,10 +3,18 @@
 
     <ng-container matColumnDef="feedback_id">
         <th mat-header-cell *matHeaderCellDef>
-            <b>Id</b>
+            <b>Feedback ID</b>
         </th>
         <td mat-cell *matCellDef="let element">
             {{element.feedback_id}}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="product_id">
+        <th mat-header-cell *matHeaderCellDef>
+            <b>Product ID</b>
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{element.product_id}}
         </td>
     </ng-container>
     <ng-container matColumnDef="rating">
@@ -14,6 +22,7 @@
             <b>Rating</b>
         </th>
         <td mat-cell *matCellDef="let element">
+            <img src="../../../assets/star.svg" alt="star">
             {{element.rating}}
         </td>
     </ng-container>
@@ -38,20 +47,19 @@
             <b>Details</b>
         </th>
         <td mat-cell *matCellDef="let element">
+            <button mat-icon-button color="primary" matTooltip="Details" routerLink="feedback/{{element.feedback_id}}">
+                <img src="../../../assets/eye.svg" alt="details">
+            </button>
             <button 
             mat-icon-button
-            color="primary"
+            color="warn"
             (click)="openFeedbackDetailDialogue(
                 element.feedback_id,
-                element.created_at,
-                element.rating,
-                element.comment,
-                element.user_id,
-                element.product_id
+                element.created_at
             )"
-            matTooltip="Review and Reply"
+            matTooltip="Reply"
             >
-                <img src="../../../assets/eye.svg" alt="">
+                <img src="../../../assets/reply.svg" alt="reply">
             </button>
         </td>
     </ng-container>

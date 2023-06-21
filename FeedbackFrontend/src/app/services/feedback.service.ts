@@ -18,7 +18,7 @@ export class FeedbackService {
     return this._http.get<Feedback[]>(`${this.baseURL}feedback`);
   }
 
-  //gets particular feedback based on id
+  //gets particular feedback based on feedback id
   getFeedbackById(feedbackId:string):Observable<Feedback>{
     return this._http.get<Feedback>(`${this.baseURL}feedback/${feedbackId}`)
   }
@@ -29,9 +29,12 @@ export class FeedbackService {
     return this._http.post<any>(`${this.baseURL}response`, JSON.stringify(feedbackResponseData), {'headers':headers});
   }
 
-  //get response for particular feedback based on id
+  //get response for particular feedback based on feedback id
   getResponse(feedbackId:string):Observable<GetFeedbackResponse>{
     return this._http.get<GetFeedbackResponse>(`${this.baseURL}response?feedback_id=${feedbackId}`)
   }
+
+  //get feedbacks for particular product based on product id
+  getProductFeedbacks(){}
 
 }
