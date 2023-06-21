@@ -11,8 +11,8 @@ export interface Feedback {
 }
 
 export interface PostFeedbackResponse {
-    feedback_id: string;
-    response: string;
+    feedback_id:string;
+    response:string;
 }
 
 export interface GetFeedbackResponse {
@@ -20,4 +20,10 @@ export interface GetFeedbackResponse {
     feedback_id:string;
     response:string;
     timestamp:string;
+}
+
+export interface UpdateResponse {
+    _id:string;
+    feedback_id:string;
+    response:string;
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Feedback, PostFeedbackResponse, GetFeedbackResponse } from '../interfaces/feedback';
+import { Feedback, PostFeedbackResponse, GetFeedbackResponse, UpdateResponse } from '../interfaces/feedback';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -34,7 +34,14 @@ export class FeedbackService {
     return this._http.get<GetFeedbackResponse>(`${this.baseURL}response?feedback_id=${feedbackId}`)
   }
 
-  //get feedbacks for particular product based on product id
-  getProductFeedbacks(){}
+  //delete a response
+  deleteResponse(responseId:string):Observable<Object> {
+    return this._http.delete<Object>(`${this.baseURL}response/${responseId}`)
+  }
+
+  //update a response
+  updateResponse(responseId:string, data:UpdateResponse):Observable<UpdateResponse>{
+    return this._http.put<UpdateResponse>(`${this.baseURL}response/${responseId}`, data)
+  }
 
 }

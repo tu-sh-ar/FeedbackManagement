@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from 'src/app/interfaces/user';
 import { Product } from 'src/app/interfaces/product';
-import { Feedback, GetFeedbackResponse, PostFeedbackResponse } from 'src/app/interfaces/feedback';
+import { Feedback, GetFeedbackResponse, PostFeedbackResponse, UpdateResponse } from 'src/app/interfaces/feedback';
 import { UserService } from 'src/app/services/user.service';
 import { ProductService } from 'src/app/services/product.service';
 import { FeedbackService } from 'src/app/services/feedback.service';
@@ -25,6 +25,7 @@ export class FeedbackDetailsComponent implements OnInit{
   enableField!:boolean;
   response!:string;
   responseId!:string;
+  showSave:boolean = false;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -66,13 +67,30 @@ export class FeedbackDetailsComponent implements OnInit{
     const responseObject:PostFeedbackResponse = {feedback_id:this.feedbackId, response:this.response};
     this._feedbackService.postResponse(responseObject).subscribe((res)=>{
       this._snackbar.open("Response recorded.", "OK");
+      window.location.reload();
     }, (err)=>{
       this._snackbar.open("Failed to record the response.", "Dismiss");
+      window.location.reload();
     })
   }
 
-  updateReply():void{}
+  enableTextareaAndSaveButton():void{
+    this.responseAvailable = false;
+    this.showSave = true;
+  }
 
-  deleteReply():void{}
+  updateReply():void{
+    console.log(this.responseId);
+    let dataObject =  {_id:this.responseId, feedback_id:this.feedbackId, response:this.response};
+    this._feedbackService.updateResponse(this.responseId, dataObject).subscribe((res)=>{
+      window.location.reload();
+    })
+  }
+
+  deleteReply():void{
+    this._feedbackService.deleteResponse(this.responseId).subscribe((res:Object)=>{
+      window.location.reload();
+    })
+  }
 
 }
