@@ -61,8 +61,9 @@
         <button mat-icon-button matTooltip="Delete Reply" *ngIf="responseAvailable" (click)="deleteReply()">
             <img src="../../../assets/delete.svg" alt="delete">
         </button>
-        <button mat-icon-button color="accent" (click)="updateReply()" matTooltip="Save edited reply" *ngIf="showSave">
+        <button mat-flat-button color="accent" (click)="updateReply()" *ngIf="showSave">
             <mat-icon>save</mat-icon>
+            Save
         </button>
     </mat-card-actions>
 </mat-card>
