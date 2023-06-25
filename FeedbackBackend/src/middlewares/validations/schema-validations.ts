@@ -82,12 +82,12 @@ export  const Validate = {
           feedback_type: {
             optional: true,
             isNumeric: true,
-            errorMessage: 'Feedback type should be a string'
+            errorMessage: 'Feedback type should be a number'
           },
           feedback_language: {
             optional: true,
             isNumeric: true,
-            errorMessage: 'Feedback language should be a string'
+            errorMessage: 'Feedback language should be a number'
           },
           additional_fields: {
             optional: true,
@@ -99,6 +99,21 @@ export  const Validate = {
             isObject: true,
             errorMessage: 'QAs should be an object'
           }
+    }),
+    checkResponse:checkSchema({
+        feedback_id:{
+          optional:false,
+          isMongoId:true,
+          errorMessage: 'Please Provide Valid feedback_id'
+        },
+        response:{
+          optional:false,
+          isString:true,
+          isLength:{
+            options: {min:5, max:100}
+          },
+          errorMessage: 'Provide a valid response '
+        }
     })
   };
 

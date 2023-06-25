@@ -12,7 +12,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/FeedbackResponse'
+                  $ref: '#/components/schemas/FeedbackSchema'
         500:
           description: Internal Server Error
         404:
@@ -44,39 +44,57 @@ paths:
           description: Invalid request body
         '500':
           description: Internal Server Error
-  /api/feedback/product:
+  /api/feedback/product/{product_id}:
     get:
-      summary: Get Feedbacks for specific Product 
+      summary: Get feedbacks based on product ID
       tags:
         - Feedback
       security:
         - JWTAuth: []
       parameters:
-        - in: query
+        - in: path
           name: product_id
           required: true
           schema:
             type: string
           description: ID of the product to retrieve feedbacks for
+        - in: query
+          name: range
+          schema:
+            type: string
+          description: Number of months to consider for feedbacks
       responses:
         '200':
-          description: OK
+          description: Successful response with feedbacks
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    feedback_id:
-                      type: string
-                      description: ID of the feedback
-                    comment:
-                      type: string
-                      description: Comment for the feedback
-                    rating:
-                      type: number
-                      description: Rating for the feedback
+                type: object
+                properties:
+                  product_id:
+                    type: string
+                  AvgRating:
+                    type: number
+                  feedbacks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        feedback_id:
+                          type: string
+                        comment:
+                          type: string
+                        rating:
+                          type: number
+        '400':
+          description: Invalid range or bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '404':
           description: No feedbacks found for the product
           content:
@@ -86,9 +104,8 @@ paths:
                 properties:
                   error:
                     type: string
-                    description: Error message
         '500':
-          description: Internal Server Error
+          description: Internal server error
           content:
             application/json:
               schema:
@@ -96,7 +113,6 @@ paths:
                 properties:
                   error:
                     type: string
-                    description: Error message
   /api/feedback/{id}:
     put:
       summary: Update a feedback
@@ -153,6 +169,47 @@ paths:
             description: Internal Server Error
           404:
             description: No record found
+  /api/feedback/getFeedbacksByDate:
+    post:
+      summary: Get feedbacks within a specified date range
+      tags:
+        - Feedback
+      security:
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                start:
+                  type: string
+                  format: date-time
+                  description: Start date for the feedbacks (in ISO 8601 format)
+                end:
+                  type: string
+                  format: date-time
+                  description: End date for the feedbacks (in ISO 8601 format)
+              example:
+                start: "2023-06-15T06:28:00.000Z"
+                end: "2023-06-22T18:30:00.000Z"
+      responses:
+        '200':
+          description: Successful response with feedbacks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackSchema'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
 components:
   schemas:
     FeedbackSchema:
@@ -181,7 +238,7 @@ components:
         rating:
           type: number
           description: Numeric rating given in the feedback.
-          example: 4.5
+          example: 4
         comment:
           type: string
           description: Optional comment given in the feedback.
@@ -210,73 +267,17 @@ components:
         - user_id
         - rating
       example:
-        user_id: 612f45d5fa301d5f77e5d5af
-        deliveryagent_id: 613f54d5fa301d5f77e5d5af
-        client_id: 611f44d5fa301d5f77e5d5af
+        feedback_id: 612f45d5fa301d5f77e5d5af
         product_id: 614f45d5fa301d5f77e5d5af
-        template_id: 615f45d5fa301d5f77e5d5af
-        rating: 4.5
+        user_id: 615f45d5fa301d5f77e5d5af
+        rating: 4
         comment: "The delivery was fast and efficient."
-        feedback_type: 1
-        feedback_language: 1
-        additional_fields:
+        review:
           field1: "value1"
           field2: "value2"
         qas:
           Q1: "A1"
           Q2: "A2"
-    FeedbackResponse:
-      type: object
-      properties:
-        feedback_id:
-          type: string
-          description: The ID of the feedback.
-        user_id:
-          type: string
-          description: The ID of the user.
-        product:
-          type: string
-          description: The ID of the product.
-        rating:
-          type: number
-          description: The rating given in the feedback.
-        Comment:
-          type: string
-          description: The comment provided in the feedback.
-        review:
-          type: object
-          properties:
-            property1:
-              type: string
-              description: Property 1 of the review.
-            property2:
-              type: number
-              description: Property 2 of the review.
-            # Add additional properties as needed
-          example:
-            property1: Value 1
-            property2: 5
-        QA:
-          type: object
-          properties:
-            question1:
-              type: string
-              description: Question 1 of the QA.
-            question2:
-              type: string
-              description: Question 2 of the QA.
-            # Add additional questions as needed
-          example:
-            question1: Answer 1
-            question2: Answer 2
-        created_at:
-          type: string
-          format: date-time
-          description: The timestamp when the feedback was created.
-        updated_at:
-          type: string
-          format: date-time
-          description: The timestamp when the feedback was last updated.
   securitySchemes:
     JWTAuth:
       type: http

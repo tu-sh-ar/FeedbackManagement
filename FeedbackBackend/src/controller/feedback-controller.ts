@@ -139,10 +139,22 @@ export const get_feedback = async(req:Request, res:Response) => {
 // get feedbacks based on product id
 export const getPoductFeedbacks = async(req:Request, res:Response) => {
      
-    const product_id = req.query.product_id as string;
+    const product_id = req.params.product_id as string;
+    const range = req.query.range as string;
+    const month_range = parseInt(range);
+    const current_date = new Date();
+    current_date.setMonth(current_date.getMonth() - month_range);
+
+    if(!range || month_range<1 ){
+        res.status(400).json({error:"Invalid range, Bad Request"})
+        return;
+    }
 
     try {
-        const feedbacks = await FeedbackModel.find({product_id:product_id});
+        const feedbacks = await FeedbackModel.find({
+            product_id:product_id,
+            createdAt: { $gte: current_date },
+        });
 
         if(feedbacks.length){
             const updated_feedbacks = feedbacks.map(feedback => {
@@ -152,11 +164,56 @@ export const getPoductFeedbacks = async(req:Request, res:Response) => {
                     rating:feedback.rating
                 }
             })
-            res.status(200).send(updated_feedbacks)
+
+            // find average ratings 
+            const ratings = feedbacks.map((feedback) => feedback.rating);
+            const sum = ratings.reduce((acc, rating) => acc + rating, 0);
+            const average_rating = sum / ratings.length;
+
+            res.status(200).json({
+                product_id:product_id,
+                AvgRating:average_rating,
+                feedbacks:updated_feedbacks
+            })
         } else {
             res.status(404).json({error:"No feedbacks found for the product"})
         }
     } catch (error) {
-        res.status(500).json({error:"Internal Server Error"})
+        res.status(500).json({error:"Feedbacks for product id not exist"})
+    }
+}
+
+// filter api according to date 
+
+export const getFeedbacksByDate = async(req:Request, res:Response) => {
+    const date = { "start": "2023-06-15T06:28:00.000Z", "end": "2023-06-22T18:30:00.000Z" }
+    let updated_feedback:Array<object>=[];
+    try {
+        const feedbacks = await FeedbackModel.find({
+            createdAt:{
+                $gte:new Date(date.start),
+                $lte:new Date(date.end)
+            }
+        })
+        
+        feedbacks.forEach(feedback => {
+            const new_feedback:object = {
+                feedback_id: feedback._id,
+                user_id: feedback.user_id,
+                product_id:feedback?.product_id,
+                rating:feedback.rating,
+                comment:feedback?.comment,
+                review:feedback?.additional_fields,
+                QA:feedback?.qas,
+                created_at:feedback.createdAt,
+                updated_at:feedback.updatedAt
+            }
+            
+            updated_feedback.push(new_feedback);
+        })
+        res.send(updated_feedback)
+            
+    } catch (error) {
+        res.status(500).json({error:"Feedbacks not fetched"})
     }
 }

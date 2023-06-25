@@ -93,6 +93,9 @@ const options = {
       {
         url: "https://feedbackbackend-dev.azurewebsites.net",
       },
+      {
+        url: "http://localhost:4000",
+      },
     ],
   },
   apis: ["./routes/*.ts" , "./src/documentation/*.yaml"],

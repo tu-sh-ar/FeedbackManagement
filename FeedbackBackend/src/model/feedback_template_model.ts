@@ -6,7 +6,6 @@ interface IFeedbackTemplate extends Document {
   requiredFields: Record<string, boolean>;
   qas: Record<string, string>;
   client_id: string;
-  user_id: string;
 }
 
 const FeedbackTemplateSchema: Schema = new Schema(
@@ -36,11 +35,6 @@ const FeedbackTemplateSchema: Schema = new Schema(
         type: String,
         required:true
     },
-    user_id: 
-    { 
-        type: Schema.Types.ObjectId, 
-        ref: 'User' 
-    }
   },
   { timestamps: true, versionKey:false }
 );

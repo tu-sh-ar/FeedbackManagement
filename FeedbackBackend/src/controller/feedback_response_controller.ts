@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { Request, Response, response } from 'express'
 import FeedbackResponse from '../model/feedback_response_model'
 import FeedbackModel from '../model/feedback_model';
 
@@ -31,14 +31,14 @@ export const create_Response = async (req: Request, res: Response) => {
 // Delete Response
 export const deleteResponse = async (req: Request, res: Response) => {
     try {
-      const feedback_id = req.params.id;
+      const response_id = req.params.id;
   
-      if (!feedback_id) {
+      if (!response_id) {
         res.status(400).json({ error: 'Bad Request: Missing feedback ID' });
         return;
       }
   
-      const response = await FeedbackResponse.findByIdAndDelete(feedback_id);
+      const response = await FeedbackResponse.findByIdAndDelete(response_id);
       if (!response) {
         res.status(404).json({ error: 'Response not found' });
         return;
@@ -46,7 +46,7 @@ export const deleteResponse = async (req: Request, res: Response) => {
   
       res.status(200).json({ message: 'Deleted successfully' });
     } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(404).json({ error: 'Invalid Response Id , Bad request ' });
     }
   };
   
@@ -68,7 +68,7 @@ export const deleteResponse = async (req: Request, res: Response) => {
   
       res.status(200).json(response_data);
     } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(404).json({ error: 'No Feedback Response data found' });
     }
   };
 
@@ -103,3 +103,14 @@ export const deleteResponse = async (req: Request, res: Response) => {
     }
   };
   
+//update feedback response 
+  export const updateResponse = async(req:Request,res:Response) => {
+    const response_data = req.body;
+    const response_id = req.params.id;
+    try {
+      const data = await  FeedbackResponse.findByIdAndUpdate(response_id,response_data);
+      res.status(200).send(data)
+    } catch (error) {
+      res.status(400).json({error:"Invalid response Id , Update Failed"})
+    }
+  }
