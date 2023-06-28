@@ -186,7 +186,10 @@ export const getPoductFeedbacks = async(req:Request, res:Response) => {
 // filter api according to date 
 
 export const getFeedbacksByDate = async(req:Request, res:Response) => {
-    const date = { "start": "2023-06-15T06:28:00.000Z", "end": "2023-06-22T18:30:00.000Z" }
+    const date = { 
+         start:req.query.start as string ,
+         end:req.query.end as string
+        };
     let updated_feedback:Array<object>=[];
     try {
         const feedbacks = await FeedbackModel.find({

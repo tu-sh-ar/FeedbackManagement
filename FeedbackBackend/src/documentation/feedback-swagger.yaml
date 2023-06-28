@@ -170,30 +170,27 @@ paths:
           404:
             description: No record found
   /api/feedback/getFeedbacksByDate:
-    post:
+    get:
       summary: Get feedbacks within a specified date range
       tags:
         - Feedback
       security:
         - JWTAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                start:
-                  type: string
-                  format: date-time
-                  description: Start date for the feedbacks (in ISO 8601 format)
-                end:
-                  type: string
-                  format: date-time
-                  description: End date for the feedbacks (in ISO 8601 format)
-              example:
-                start: "2023-06-15T06:28:00.000Z"
-                end: "2023-06-22T18:30:00.000Z"
+      parameters:
+        - in: query
+          name: start
+          schema:
+            type: string
+            format: date-time
+            description: Start date for the feedbacks (in ISO 8601 format)
+          required: true
+        - in: query
+          name: end
+          schema:
+            type: string
+            format: date-time
+            description: End date for the feedbacks (in ISO 8601 format)
+          required: true
       responses:
         '200':
           description: Successful response with feedbacks
@@ -276,8 +273,8 @@ components:
           field1: "value1"
           field2: "value2"
         qas:
-          Q1: "A1"
-          Q2: "A2"
+          Q1: "Answer to the question 1 "
+          Q2: "Answer to the question 2 "
   securitySchemes:
     JWTAuth:
       type: http

@@ -6,8 +6,8 @@ import { Validate, validateSchema }  from "../middlewares/validations/schema-val
 import { verifyToken } from "../middlewares/auth/jwt_auth";
 
 // router.use(verifyToken);
+router.get("/getFeedbacksByDate", getFeedbacksByDate);
 router.get("/product/:product_id", getPoductFeedbacks);
-router.post("/getFeedbacksByDate", getFeedbacksByDate);
 router.get("/", getFeedbacks);
 router.get("/:id", get_feedback);
 

@@ -1,3 +1,4 @@
+
 paths:
   /api/feedbackTemplate:
     get:
@@ -128,9 +129,14 @@ components:
         qas:
           type: object
           additionalProperties:
-            type: string
-            description: The question associated with each field in the feedback template.
-          description: The questions and answers associated with each field in the feedback template.
+            type: object
+            properties:
+              question:
+                type: string
+                description: The question associated with each field in the feedback template.
+              answerFormat:
+                type: string
+                description: The answer format  associated with each question in the feedback template.
         client_id:
           type: string
           description: The unique identifier for the client associated with the feedback template.
@@ -152,8 +158,15 @@ components:
           rating: true
           comment: false
         qas:
-          Q1: What do you think about the quality of the product?
-          Q2: How was your experience with the delivery of the product?
+          Q1:
+            question: "What do you think about the quality of the product?"
+            answerFormat: "rating (1-5)"
+          Q2:
+            question: "How was your experience with the delivery of the product?"
+            answerFormat: "textbox"
+          Q3:
+            question: "Would you recommend our product to others ?"
+            answerFormat: "radio"
         clientId: 617f814ef139c17f53e4e1c5
         createdAt: '2022-05-11T10:35:20.543Z'
         updatedAt: '2022-05-11T10:35:20.543Z'
