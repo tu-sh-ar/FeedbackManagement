@@ -11,7 +11,7 @@ router.get("/", verifyToken, getTemplates);
 // new template
 router.post(
     "/",
-    verifyToken,
+   // verifyToken,
     Validate.checkFeedbackTemplate,
     validateSchema,
     createTemplate

@@ -1,24 +1,51 @@
+
 paths:
   /api/feedback:
     get:
-      summary: Retrieves all feedbacks
+      summary: Retrieves feedbacks with pagination
       tags:
         - Feedback
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: size
+          in: query
+          description: Number of feedbacks per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
       responses:
-        200:
+        '200':
           description: Successful response
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/FeedbackSchema'
-        500:
+                type: object
+                properties:
+                  feedbacks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FeedbackSchema'
+                  currentPage:
+                    type: integer
+                  totalPages:
+                    type: integer
+                  totalFeedbacks:
+                    type: integer
+        '500':
           description: Internal Server Error
-        404:
+        '404':
           description: No record found
-        401:
-          description: User un-authorized
+        '401':
+          description: User unauthorized
       security:
         - JWTAuth: []
     post:
@@ -113,7 +140,83 @@ paths:
                 properties:
                   error:
                     type: string
+  /api/feedback/getFeedbacksByDate:
+    get:
+      summary: Get feedbacks within a specified date range
+      tags:
+        - Feedback
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: query
+          name: start
+          schema:
+            type: string
+            format: date-time
+            description: Start date for the feedbacks (in ISO 8601 format)
+          required: true
+        - in: query
+          name: end
+          schema:
+            type: string
+            format: date-time
+            description: End date for the feedbacks (in ISO 8601 format)
+          required: true
+      responses:
+        '200':
+          description: Successful response with feedbacks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackSchema'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   /api/feedback/{id}:
+    get:
+      summary: Get feedback by ID
+      tags:
+        - Feedback
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Feedback ID
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackSchema'
+        '404':
+          description: Feedback not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
     put:
       summary: Update a feedback
       tags:
@@ -169,44 +272,6 @@ paths:
             description: Internal Server Error
           404:
             description: No record found
-  /api/feedback/getFeedbacksByDate:
-    get:
-      summary: Get feedbacks within a specified date range
-      tags:
-        - Feedback
-      security:
-        - JWTAuth: []
-      parameters:
-        - in: query
-          name: start
-          schema:
-            type: string
-            format: date-time
-            description: Start date for the feedbacks (in ISO 8601 format)
-          required: true
-        - in: query
-          name: end
-          schema:
-            type: string
-            format: date-time
-            description: End date for the feedbacks (in ISO 8601 format)
-          required: true
-      responses:
-        '200':
-          description: Successful response with feedbacks
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FeedbackSchema'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
 components:
   schemas:
     FeedbackSchema:

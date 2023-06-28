@@ -9,35 +9,48 @@ import FeedbackTemplate from '../model/feedback_template_model'
 // create a feedback
 export const getFeedbacks = async( req:Request, res:Response ) => {
 
-    let updated_feedback:Array<object>=[];
+    const page = parseInt(req.query.page as string) || 1; // Default to page 1 if not provided
+    const size = parseInt(req.query.size as  string) || 10; // Default to 10 feedbacks per page if not provided
 
-    try {
-        // getting feedback using the client id 
-        await FeedbackModel.find()
-        .then(data => {
-            data.forEach(feedback => {
-                const new_feedback:object = {
-                    feedback_id: feedback._id,
-                    user_id: feedback.user_id,
-                    product_id:feedback?.product_id,
-                    rating:feedback.rating,
-                    comment:feedback?.comment,
-                    review:feedback?.additional_fields,
-                    QA:feedback?.qas,
-                    created_at:feedback.createdAt,
-                    updated_at:feedback.updatedAt
-                }
-                
-                updated_feedback.push(new_feedback);
-            })
-            res.status(200).send(updated_feedback);
-        })
-        .catch(err => res.status(404).send(err))
+  try {
+    // Count total feedbacks
+    const totalCount = await FeedbackModel.countDocuments();
 
-    } catch (error) {
-        res.status(500).send("internal Server error")
-    }
-}
+    // Calculate pagination values
+    const totalPages = Math.ceil(totalCount / size);
+    const skip = (page - 1) * size;
+
+    // Get feedbacks based on pagination parameters
+    await FeedbackModel.find()
+      .skip(skip)
+      .limit(size)
+      .then((data) => {
+        const updated_feedback: Array<object> = data.map((feedback) => ({
+          feedback_id: feedback._id,
+          user_id: feedback.user_id,
+          product_id: feedback?.product_id,
+          rating: feedback.rating,
+          comment: feedback?.comment,
+          review: feedback?.additional_fields,
+          QA: feedback?.qas,
+          created_at: feedback.createdAt,
+          updated_at: feedback.updatedAt,
+        }));
+
+        const response = {
+          feedbacks: updated_feedback,
+          currentPage: page,
+          totalPages: totalPages,
+          totalFeedbacks: totalCount,
+        };
+
+        res.status(200).send(response);
+      })
+      .catch((err) => res.status(404).send(err));
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+};
 
 // create a feedback
 export const createFeedback = async( req:Request, res:Response ) => {
