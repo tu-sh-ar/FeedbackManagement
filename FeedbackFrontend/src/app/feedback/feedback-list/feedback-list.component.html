@@ -1,4 +1,4 @@
-<div class="wrapper">
+<!-- <div class="wrapper">
     <h3>Customer Feedbacks</h3>
 
     <div class="filter-wrapper">
@@ -18,7 +18,8 @@
             <img src="../../../assets/filter.svg" alt="filer">
         </button>
     </div>
-</div>
+</div> -->
+<h3>Customer Feedbacks</h3>
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 feedback-table" matSort>
     <ng-container matColumnDef="feedback_id">
@@ -83,5 +84,5 @@
     <tr mat-row *matRowDef="let row; columns: displayFeedbackColumns;"></tr>
 </table>
 
-<mat-paginator [length]="10000" [pageSize]="100" #paginator>
+<mat-paginator [length]="10000" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 50, 100, 250]" #paginator>
 </mat-paginator>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Feedback, PostFeedbackResponse, GetFeedbackResponse, UpdateResponse } from '../interfaces/feedback';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -24,8 +24,11 @@ export class FeedbackService {
   }
 
   //get feedbacks received on that particular date
-  getFeedbacksByDate(){
-    
+  getFeedbacksByDate(startDate:string, endDate:string):Observable<Feedback[]>{
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append("start",startDate);
+    queryParams = queryParams.append("end",endDate);
+    return this._http.get<Feedback[]>(`${this.baseURL}feedback/getFeedbacksByDate`, {params:queryParams});
   }
 
   //gets particular feedback based on feedback id

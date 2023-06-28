@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,6 +22,7 @@ export class FeedbackListComponent implements OnInit{
   dataSource!: MatTableDataSource<Feedback>;
   displayFeedbackColumns: string[] = ['feedback_id', 'product_id', 'rating', 'comment', 'created_at', 'action'];
   todayDate:Date = new Date();
+  pageSize:number = 25;
 
   range = new FormGroup({
     start: new FormControl<Date | null>(this.todayDate),
@@ -34,6 +35,14 @@ export class FeedbackListComponent implements OnInit{
     ){}
 
   ngOnInit(): void {
+    // this._feedbackService.getFeedbacksByDate(new Date().toISOString(), new Date().toISOString()).subscribe((res)=>{
+    //   console.log(res);
+    //   this.feedbacks = res;
+    //   this.dataSource = new MatTableDataSource(this.feedbacks);
+    //   this.dataSource.paginator = this.paginator;
+    //   this.dataSource.sort = this.sort;
+    // })
+
     this._feedbackService.getAllFeedbacks().subscribe((res)=>{
       this.feedbacks = res;
       this.dataSource = new MatTableDataSource(this.feedbacks);
@@ -53,7 +62,14 @@ export class FeedbackListComponent implements OnInit{
   }
 
   applyDateFilter():void{
-    console.log(this.range.value);
+    console.log(this.range.value.start?.toISOString());
+    console.log(this.range.value.end?.toISOString());
+    this._feedbackService.getFeedbacksByDate(this.range.value.start?.toISOString()!, this.range.value.start?.toISOString()!).subscribe((res)=>{
+      this.feedbacks = res;
+      // this.dataSource = new MatTableDataSource(this.feedbacks);
+      // this.dataSource.paginator = this.paginator;
+      // this.dataSource.sort = this.sort;
+    })
   }
 
 }
