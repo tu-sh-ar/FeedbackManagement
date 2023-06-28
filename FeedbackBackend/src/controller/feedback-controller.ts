@@ -11,7 +11,6 @@ export const getFeedbacks = async( req:Request, res:Response ) => {
 
     const page = parseInt(req.query.page as string) || 1; // Default to page 1 if not provided
     const size = parseInt(req.query.size as  string) || 10; // Default to 10 feedbacks per page if not provided
-
   try {
     // Count total feedbacks
     const totalCount = await FeedbackModel.countDocuments();
