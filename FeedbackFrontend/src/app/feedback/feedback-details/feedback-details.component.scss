@@ -5,6 +5,7 @@
 }
 .detail-element{
     margin: 20px 20px;
+    min-width: 30%;
 }
 .spacer{
     padding: 0px 5px;
@@ -21,4 +22,7 @@ textarea{
 }
 .example-full-width{
     width: 100%;
+}
+mat-spinner{
+    margin: 20px auto 0 auto;
 }

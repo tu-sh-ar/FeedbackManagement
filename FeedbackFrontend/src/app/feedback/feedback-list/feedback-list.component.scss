@@ -7,10 +7,6 @@ th{
     background-color: #F1F3F6 !important;
     font-weight: 500 !important;
 }
-mat-form-field{
-    width: 40%;
-    padding-inline: 20px;
-}
 mat-paginator{
     width: 100%;
     margin-block: 5px;
@@ -21,4 +17,16 @@ mat-spinner{
 }
 img{
     height: 0.75em;
+}
+.wrapper{
+    padding-block: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.filter-wrapper{
+    font-size: 0.9em;
+}
+mat-form-field{
+    padding: 0 !important;
+    margin: 0 !important;
 }

@@ -1,5 +1,8 @@
 <h3>Feedback Details</h3>
-<mat-card>
+<div *ngIf="!isLoaded">
+    <mat-spinner></mat-spinner>
+</div>
+<mat-card *ngIf="isLoaded">
     <mat-card-content *ngIf="feedback && product && user">
         <div class="wrapper">
             <div class="detail-element">

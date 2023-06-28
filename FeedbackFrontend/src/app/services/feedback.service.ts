@@ -4,6 +4,11 @@ import { Feedback, PostFeedbackResponse, GetFeedbackResponse, UpdateResponse } f
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
+export interface DateRange {
+  start:string;
+  end:string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +21,11 @@ export class FeedbackService {
   //get all the feedbacks
   getAllFeedbacks():Observable<Feedback[]>{
     return this._http.get<Feedback[]>(`${this.baseURL}feedback`);
+  }
+
+  //get feedbacks received on that particular date
+  getFeedbacksByDate(){
+    
   }
 
   //gets particular feedback based on feedback id

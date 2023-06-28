@@ -6,6 +6,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Feedback } from 'src/app/interfaces/feedback';
 import { FeedbackService } from 'src/app/services/feedback.service';
 import { ReplyCardComponent } from '../reply-card/reply-card.component';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { FormControl, FormGroup } from '@angular/forms';
+
 
 @Component({
   selector: 'app-feedback-list',
@@ -18,6 +21,12 @@ export class FeedbackListComponent implements OnInit{
   feedbacks!: Feedback[];
   dataSource!: MatTableDataSource<Feedback>;
   displayFeedbackColumns: string[] = ['feedback_id', 'product_id', 'rating', 'comment', 'created_at', 'action'];
+  todayDate:Date = new Date();
+
+  range = new FormGroup({
+    start: new FormControl<Date | null>(this.todayDate),
+    end: new FormControl<Date | null>(this.todayDate),
+  });
   
   constructor(
     private _feedbackService: FeedbackService,
@@ -41,6 +50,10 @@ export class FeedbackListComponent implements OnInit{
           feedbackCreationDate:feedbackCreationDate
         }
       });
+  }
+
+  applyDateFilter():void{
+    console.log(this.range.value);
   }
 
 }

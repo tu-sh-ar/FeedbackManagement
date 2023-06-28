@@ -26,6 +26,7 @@ export class FeedbackDetailsComponent implements OnInit{
   response!:string;
   responseId!:string;
   showSave:boolean = false;
+  isLoaded:boolean = false;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -50,6 +51,8 @@ export class FeedbackDetailsComponent implements OnInit{
       this._productService.getProduct(this.productId!).subscribe((res)=>{
         this.product = res;
       })
+
+      this.isLoaded = true;
     })
 
     this._feedbackService.getResponse(this.feedbackId).subscribe((res)=>{

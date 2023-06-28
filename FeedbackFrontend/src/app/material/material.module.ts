@@ -24,7 +24,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 
 @NgModule({
@@ -53,7 +55,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatTabsModule,
     MatTreeModule,
     MatTooltipModule,
-    MatChipsModule
+    MatChipsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    ScrollingModule
   ],
   exports: [
     MatRippleModule,
@@ -78,7 +83,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatTabsModule,
     MatTreeModule,
     MatTooltipModule,
-    MatChipsModule
+    MatChipsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    ScrollingModule
   ]
 })
 export class MaterialModule { }
