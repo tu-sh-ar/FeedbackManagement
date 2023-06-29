@@ -21,6 +21,7 @@ export const getFeedbacks = async( req:Request, res:Response ) => {
 
     // Get feedbacks based on pagination parameters
     await FeedbackModel.find()
+      .sort({ createdAt: -1 }) // Sort by createdAt field in descending order
       .skip(skip)
       .limit(size)
       .then((data) => {
