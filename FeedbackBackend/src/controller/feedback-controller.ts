@@ -233,3 +233,30 @@ export const getFeedbacksByDate = async(req:Request, res:Response) => {
         res.status(500).json({error:"Feedbacks not fetched"})
     }
 }
+
+
+//testing purpose 
+export const getAllFeedbacks = async(req:Request, res:Response) => {
+    let updated_feedback:Array<object>=[];
+    try {
+        const feedbacks = await FeedbackModel.find().sort({createdAt:-1})
+        feedbacks.forEach(feedback => {
+            const new_feedback:object = {
+                feedback_id: feedback._id,
+                user_id: feedback.user_id,
+                product_id:feedback?.product_id,
+                rating:feedback.rating,
+                comment:feedback?.comment,
+                review:feedback?.additional_fields,
+                QA:feedback?.qas,
+                created_at:feedback.createdAt,
+                updated_at:feedback.updatedAt
+            }
+
+            updated_feedback.push(new_feedback);
+        })
+        res.status(200).send(updated_feedback);
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
