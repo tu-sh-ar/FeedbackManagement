@@ -1,17 +1,35 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
+interface IFeedbackQuestion {
+  question: string;
+  answerFormat: string;
+}
+
 interface IFeedbackTemplate extends Document {
   type: string;
   fields: Record<string, string>;
   requiredFields: Record<string, boolean>;
-  qas: Record<string, { question: string; answer: string; answerFormat: string }>;
+  qas: IFeedbackQuestion[];
   client_id: string;
 }
+
+const FeedbackQuestionSchema: Schema = new Schema({
+  question: {
+    type: String,
+    required: true,
+  },
+  answerFormat: {
+    type: String,
+    required: true,
+  },
+},
+{_id:false}
+);
 
 const FeedbackTemplateSchema: Schema = new Schema(
   {
     type: {
-      type: Number,
+      type: String,
       required: true,
     },
     fields: {
@@ -23,20 +41,8 @@ const FeedbackTemplateSchema: Schema = new Schema(
       of: Boolean,
     },
     qas: {
-      type: Map,
-      of: new Schema(
-        {
-          question: {
-            type: String,
-            required: true,
-          },
-          answerFormat: {
-            type: String,
-            required: true,
-          },
-        },
-        { _id: false }
-      ),
+      type: [FeedbackQuestionSchema],
+      default: [],
     },
     client_id: {
       type: String,

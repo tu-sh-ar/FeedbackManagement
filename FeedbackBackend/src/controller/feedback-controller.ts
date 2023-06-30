@@ -5,6 +5,8 @@ import FeedbackModel from '../model/feedback_model'
 import DeliveryAgent from '../model/delivery_agent_model'
 import { feedback_type } from '../middlewares/enums/feedback_type_enum' 
 import FeedbackTemplate from '../model/feedback_template_model'
+import DeliveryAgentFeedback from '../model/delivery_agent_model'
+import { escape } from 'querystring'
 
 // create a feedback
 export const getFeedbacks = async( req:Request, res:Response ) => {
@@ -75,8 +77,7 @@ export const createFeedback = async( req:Request, res:Response ) => {
         const new_feedback_data = {...feedback_data, 
             //client_id:feedback_template?.client_id, 
             template_id:feedback_template?._id,
-            // user_id:user_id,
-            feedback_type:feedback_type.UserToClient
+            // user_id:user_id
         }
         
         await FeedbackModel.create(new_feedback_data)
@@ -96,7 +97,7 @@ export const updateFeedback = async( req:Request, res:Response ) => {
 
         FeedbackModel.findByIdAndUpdate(id , feedback_data)
         .then(data => res.status(200).send("Feedback Updated Successfully"))
-        .catch(err => res.status(404).send("No Feedback Found with the given id "))
+        .catch(err => res.status(404).send(err))
 
     } catch (error) {
         res.status(500).send(`Internal Server Error : ${error}`)
@@ -256,6 +257,34 @@ export const getAllFeedbacks = async(req:Request, res:Response) => {
             updated_feedback.push(new_feedback);
         })
         res.status(200).send(updated_feedback);
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+// delivery agent feedback apis 
+export const getDeliveryAgentFeedbacks = async(req:Request, res:Response ) => {
+    const agent_id = parseInt(req.params.agent_id);
+    try {
+        const feedback = await DeliveryAgentFeedback.findOne({deliveryagent_id:agent_id})
+        const updated_feedback ={ 
+            agent_id:agent_id,
+            rating:feedback?.rating,
+            comment:feedback?.comment,
+        }
+            res.status(200).send(updated_feedback);
+        
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const createDeliveryAgentFeedbacks = async(req:Request, res:Response ) => {
+    const data = req.body;
+    try {
+        const feedback = await DeliveryAgentFeedback.create(data)
+            res.status(200).send(feedback);
+        
     } catch (error) {
         res.status(500).send(error)
     }

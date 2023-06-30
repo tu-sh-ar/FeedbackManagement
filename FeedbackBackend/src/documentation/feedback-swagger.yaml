@@ -272,6 +272,74 @@ paths:
             description: Internal Server Error
           404:
             description: No record found
+  /api/feedback/deliveryAgentFeedback/{agent_id}:
+    get:
+      summary: Get delivery agent feedback
+      tags:
+          - Feedback 
+      security:
+        - JWTAuth: []
+      description: Retrieves feedback for a specific delivery agent.
+      parameters:
+        - in: path
+          name: agent_id
+          schema:
+            type: integer
+          required: true
+          description: ID of the delivery agent
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  agent_id:
+                    type: integer
+                  rating:
+                    type: number
+                  comment:
+                    type: string
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/feedback/deliveryFeedback:
+    post:
+      summary: Create delivery agent feedback
+      tags:
+          - Feedback 
+      security:
+        - JWTAuth: []
+      description: Creates a new delivery agent feedback.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryAgentFeedback'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryAgentFeedback'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
 components:
   schemas:
     FeedbackSchema:
@@ -340,6 +408,31 @@ components:
         qas:
           Q1: "Answer to the question 1 "
           Q2: "Answer to the question 2 "
+    DeliveryAgentFeedback:
+      type: object
+      properties:
+        deliveryagent_id:
+          type: number
+        user_id:
+          type: string
+        product_id:
+          type: number
+        rating:
+          type: number
+        comment:
+          type: string
+        feedback_language:
+          type: number
+        feedback_type:
+          type: number
+      example:
+        deliveryagent_id: 1
+        user_id: "abc123"
+        product_id: 9
+        rating: 4
+        comment: "Great delivery!"
+        feedback_language: 1
+        feedback_type: 1
   securitySchemes:
     JWTAuth:
       type: http

@@ -8,10 +8,12 @@ import asyncHandler from 'express-async-handler'
 // get feedback templates 
 export const getTemplates =  asyncHandler(async( req:Request , res:Response ) => {
 
-    const client_id = req.user?.id;
+    //const client_id = req.user?.id;
     try {
         // fetching data basis of client Id
-        const templates = await FeedbackTemplate.find({client_id:client_id})
+        const templates = await FeedbackTemplate.find({
+            //client_id:client_id
+        })
         if(templates.length)
             res.status(200).send(templates);
         else
@@ -63,7 +65,7 @@ export const updateTemplate = asyncHandler(async( req:Request , res:Response) =>
 
         await FeedbackTemplate.findByIdAndUpdate(template_id, template_data)
         .then(data => res.status(200).send(data))
-        .catch(err => res.status(404).json({error:"No feedback template found"}))
+        .catch(err => res.status(404).json({error:err}))
         
     } catch (error) {
         res.status(500).send({error:"Error in updating the template"})
@@ -86,8 +88,6 @@ export const deleteTemplate = asyncHandler(async(req:Request, res:Response) => {
         res.status(500).json({error:`Template not deleted`})
     }
 })
-
-
 // {
 //     "type": 1,
 //     "fields": {

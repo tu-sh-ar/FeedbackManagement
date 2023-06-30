@@ -31,8 +31,8 @@ export  const Validate = {
         errorMessage: 'Required fields should be an object'
       },
       qas: {
-        isObject: true,
-        errorMessage: 'QAs should be an object'
+        isArray: true,
+        errorMessage: 'QAs should be an array'
       },
       client_id: {
         optional:true,
@@ -48,7 +48,7 @@ export  const Validate = {
           },
           deliveryagent_id: {
             optional:true,
-            isMongoId: true,
+            isNumeric: true,
             errorMessage: 'Invalid delivery agent ID'
           },
           client_id: {
@@ -96,8 +96,8 @@ export  const Validate = {
           },
           qas: {
             optional: true,
-            isObject: true,
-            errorMessage: 'QAs should be an object'
+            isArray: true,
+            errorMessage: 'QAs should be an array'
           }
     }),
     checkResponse:checkSchema({
@@ -114,6 +114,45 @@ export  const Validate = {
           },
           errorMessage: 'Provide a valid response '
         }
+    }),
+    checkDeliveryFeedback:checkSchema({
+      user_id: {
+        optional:false,
+        errorMessage: 'Invalid user ID'
+      },
+      deliveryagent_id: {
+        optional:false,
+        isNumeric: true,
+        errorMessage: 'Invalid delivery agent ID'
+      },
+      product_id: {
+        optional:false,
+        isNumeric: true,
+        errorMessage: 'Invalid product ID'
+      },
+      rating: {
+        isNumeric: true,
+        isInt: {
+          options: { min: 1, max: 5 },
+          errorMessage: 'Rating should be between 1 and 5'
+        },
+        errorMessage: 'Invalid rating'
+      },
+      comment: {
+        optional: true,
+        isString: true,
+        errorMessage: 'Comment should be a string'
+      },
+      feedback_type: {
+        optional: true,
+        isNumeric: true,
+        errorMessage: 'Feedback type should be a number'
+      },
+      feedback_language: {
+        optional: true,
+        isNumeric: true,
+        errorMessage: 'Feedback language should be a number'
+      }
     })
   };
 

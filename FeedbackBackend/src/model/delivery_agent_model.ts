@@ -1,23 +1,29 @@
 import { Document, Schema, model } from 'mongoose';
+import { type } from 'os';
 
 interface IDeliveryAgent extends Document {
-    email: string;
-    password: string;
-    client_id: Schema.Types.ObjectId;
-    user_id: Schema.Types.ObjectId;
-    product_id: Schema.Types.ObjectId;
+  user_id: string;
+  deliveryagent_id: number;
+  product_id: number;
+  rating: number;
+  comment: string;
+  feedback_type:number,
+  feedback_language:number
   }
   
   // Delivery Agent schema
-  const deliveryAgentSchema = new Schema<IDeliveryAgent>({
-    email: { type: String, required: true },
-    password: { type: String, required: true },
-    client_id: { type: Schema.Types.ObjectId, ref: 'Client', required: true },
-    user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    product_id: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
-  });
+  const deliveryAgentFeedbackSchema = new Schema<IDeliveryAgent>({
+    deliveryagent_id: {type:Number} ,
+    user_id: { type: String},
+    product_id: { type:Number},
+    rating:{type:Number, required:true},
+    comment:{type:String, required:true},
+    feedback_language:{type:Number},
+    feedback_type:{type:Number}
+  },
+  {timestamps:true, versionKey:false});
   
   // Delivery Agent model
-  const DeliveryAgent = model<IDeliveryAgent>('DeliveryAgent', deliveryAgentSchema);
+  const DeliveryAgentFeedback = model<IDeliveryAgent>('DeliveryAgentFeedbacks', deliveryAgentFeedbackSchema);
 
-  export default DeliveryAgent
+  export default DeliveryAgentFeedback

@@ -6,7 +6,10 @@ import { Validate , validateSchema }  from "../middlewares/validations/schema-va
 import { verifyToken } from "../middlewares/auth/jwt_auth";
 
 
-router.get("/", verifyToken, getTemplates);
+router.get("/",
+    //verifyToken,
+     getTemplates
+     );
 
 // new template
 router.post(
@@ -20,7 +23,7 @@ router.post(
 //update template
 router.put(
     "/:id",
-    verifyToken,
+    //verifyToken,
     Validate.checkFeedbackTemplate, 
     validateSchema,
     updateTemplate
