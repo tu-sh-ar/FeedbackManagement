@@ -12,14 +12,10 @@ on:
 
  
 
- 
-
 env:
   AZURE_WEBAPP_NAME: feedbackBackend-dev   
-  AZURE_WEBAPP_PACKAGE_PATH: ./FeedbackBackend     
+  AZURE_WEBAPP_PACKAGE_PATH: 'FeedbackBackend'      
   NODE_VERSION: '18.x'                
-
- 
 
  
 
@@ -28,8 +24,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-
- 
 
  
 
@@ -42,21 +36,17 @@ jobs:
 
  
 
- 
-
     - name: npm install, build, and test
-      working-directory: cd FeedbackBackend
+      working-directory: FeedbackBackend
       run: |
         npm install
         npm run build --if-present
         npm run test --if-present
-    #- name: Upload artifact for deployment job
-     # uses: actions/upload-artifact@v3
-     # with:
-      #  name: node-app
-      #  path: FeedbackBackend/build
-
- 
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v3
+      with:
+        name: node-app
+        path: .
 
  
 
@@ -69,17 +59,11 @@ jobs:
 
  
 
- 
-
     steps:
-    #- name: Download artifact from build job
-     # uses: actions/download-artifact@v3
-     # with:
-        #name: node-app
-
-    
-
- 
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v3
+      with:
+        name: node-app
 
  
 
