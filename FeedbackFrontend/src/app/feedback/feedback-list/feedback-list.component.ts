@@ -1,14 +1,11 @@
-import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { Component, OnInit, ViewChild} from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { Feedback } from 'src/app/interfaces/feedback';
+import { Feedback, PaginatedFeedbackResponse } from 'src/app/interfaces/feedback';
 import { FeedbackService } from 'src/app/services/feedback.service';
 import { ReplyCardComponent } from '../reply-card/reply-card.component';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { FormControl, FormGroup } from '@angular/forms';
-
 
 @Component({
   selector: 'app-feedback-list',
@@ -18,37 +15,39 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class FeedbackListComponent implements OnInit{
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  feedbacks!: Feedback[];
+  paginatedFeedbacks!: PaginatedFeedbackResponse;
+  feedbacks!:Feedback[];
   dataSource!: MatTableDataSource<Feedback>;
-  displayFeedbackColumns: string[] = ['feedback_id', 'product_id', 'rating', 'comment', 'created_at', 'action'];
+  displayFeedbackColumns: string[] = ['feedback_id', 'product_id', 'rating', 'created_at', 'action'];
   todayDate:Date = new Date();
-  pageSize:number = 25;
+  pageIndex:number = 0;
+  pageSize:number = 100;
+  totalData!:number;
 
-  range = new FormGroup({
-    start: new FormControl<Date | null>(this.todayDate),
-    end: new FormControl<Date | null>(this.todayDate),
-  });
-  
   constructor(
     private _feedbackService: FeedbackService,
     public _dialog: MatDialog,
     ){}
 
   ngOnInit(): void {
-    // this._feedbackService.getFeedbacksByDate(new Date().toISOString(), new Date().toISOString()).subscribe((res)=>{
-    //   console.log(res);
-    //   this.feedbacks = res;
-    //   this.dataSource = new MatTableDataSource(this.feedbacks);
-    //   this.dataSource.paginator = this.paginator;
-    //   this.dataSource.sort = this.sort;
-    // })
+    this.pageIndex = 0;
+    this.pageSize = 100;
+    this.getFeedbacks();
+  }
 
-    this._feedbackService.getAllFeedbacks().subscribe((res)=>{
-      this.feedbacks = res;
-      this.dataSource = new MatTableDataSource(this.feedbacks);
-      this.dataSource.paginator = this.paginator;
+  getFeedbacks(){
+    this._feedbackService.getPaginatedFeedbacks(this.pageIndex+1, this.pageSize).subscribe((res)=>{
+      this.paginatedFeedbacks = res;
+      this.dataSource = new MatTableDataSource(this.paginatedFeedbacks.feedbacks);
+      this.totalData = this.paginatedFeedbacks.totalFeedbacks;
       this.dataSource.sort = this.sort;
     })
+  }
+
+  handlePageEvent(e:PageEvent){
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.getFeedbacks();
   }
 
   openFeedbackDetailDialogue(feedbackId:string, feedbackCreationDate:string): void {
@@ -59,17 +58,6 @@ export class FeedbackListComponent implements OnInit{
           feedbackCreationDate:feedbackCreationDate
         }
       });
-  }
-
-  applyDateFilter():void{
-    console.log(this.range.value.start?.toISOString());
-    console.log(this.range.value.end?.toISOString());
-    this._feedbackService.getFeedbacksByDate(this.range.value.start?.toISOString()!, this.range.value.start?.toISOString()!).subscribe((res)=>{
-      this.feedbacks = res;
-      // this.dataSource = new MatTableDataSource(this.feedbacks);
-      // this.dataSource.paginator = this.paginator;
-      // this.dataSource.sort = this.sort;
-    })
   }
 
 }

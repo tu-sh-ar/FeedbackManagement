@@ -1,10 +1,20 @@
 <mat-sidenav-container>
     <mat-sidenav #sidenav opened="true" mode="side" class="sidenav">
         <mat-nav-list>
-            <h3 class="white">business logo</h3>
+            <h3 class="white logo">feedback</h3>
             <a mat-list-item routerLink="feedbacks" routerLinkActive="active">
                 <button mat-flat-button class="white nav-btn">
                     <mat-icon>feedback</mat-icon><p>Feedback</p>
+                </button>
+            </a>
+            <a mat-list-item routerLink="feedback-templates" routerLinkActive="active">
+                <button mat-flat-button class="white nav-btn">
+                    <mat-icon>format_size</mat-icon><p>Templates</p>
+                </button>
+            </a>
+            <a mat-list-item routerLink="profile" routerLinkActive="active">
+                <button mat-flat-button class="white nav-btn">
+                    <mat-icon>person_outline</mat-icon><p>Profile</p>
                 </button>
             </a>
         </mat-nav-list>
@@ -22,7 +32,7 @@
                     <mat-icon>person</mat-icon>
                 </button>
                 <mat-menu #profile="matMenu">
-                    <button mat-menu-item>Profile</button>
+                    <!-- <button mat-menu-item routerLink="profile">Profile</button> -->
                     <button (click)="logout()" mat-menu-item>Logout</button>
                 </mat-menu>
             </mat-toolbar-row>

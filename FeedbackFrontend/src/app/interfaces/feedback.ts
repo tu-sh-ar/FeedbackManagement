@@ -4,10 +4,17 @@ export interface Feedback {
     product_id:string;
     rating:number;
     comment:string;
-    review:{};
-    QA:{};
+    review:[];
+    QA:[];
     created_at:string;
     updated_at:string;
+}
+
+export interface PaginatedFeedbackResponse {
+    feedbacks: Feedback[];
+    currentPage:number;
+    totalPages:number;
+    totalFeedbacks:number;
 }
 
 export interface PostFeedbackResponse {

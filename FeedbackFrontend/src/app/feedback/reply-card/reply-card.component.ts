@@ -42,7 +42,7 @@ export class ReplyCardComponent implements OnInit{
     const responseObject:PostFeedbackResponse = {feedback_id:this.data.feedbackId, response:this.response};
     this._feedbackService.postResponse(responseObject).subscribe((res)=>{
       this.dialogRef.close();
-      this._snackbar.open("Response recorded.", "OK");
+      this._snackbar.open("Reply to the feedback successfully recorded.", "OK");
     }, (err)=>{
       this._snackbar.open("Failed to record the response.", "Dismiss");
     })

@@ -4,7 +4,6 @@ import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { SharedModule } from '../shared/shared.module';
 
 
-
 @NgModule({
   declarations: [
     AdminLoginComponent

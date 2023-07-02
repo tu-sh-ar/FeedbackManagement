@@ -69,11 +69,12 @@ export class FeedbackDetailsComponent implements OnInit{
   replyToFeedback():void{
     const responseObject:PostFeedbackResponse = {feedback_id:this.feedbackId, response:this.response};
     this._feedbackService.postResponse(responseObject).subscribe((res)=>{
-      this._snackbar.open("Response recorded.", "OK");
-      window.location.reload();
+      this._snackbar.open("Reply to the feedback successfully recorded.", "OK");
+      setTimeout(()=>{
+        window.location.reload();
+      }, 2000)
     }, (err)=>{
       this._snackbar.open("Failed to record the response.", "Dismiss");
-      window.location.reload();
     })
   }
 

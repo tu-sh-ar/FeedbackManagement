@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeedbackListComponent } from './feedback-list/feedback-list.component';
 import { FeedbackDetailsComponent } from './feedback-details/feedback-details.component';
+import { PageNotFoundComponent } from '../shared/page-not-found/page-not-found.component';
+import { ProfileComponent } from './profile/profile.component';
+import { FeedbackTemplatesComponent } from './feedback-templates/feedback-templates.component';
 
 const routes: Routes = [
   {
@@ -22,6 +25,18 @@ const routes: Routes = [
       {
         path:"feedbacks/feedback/:id",
         component:FeedbackDetailsComponent
+      },
+      {
+        path:"feedback-templates",
+        component:FeedbackTemplatesComponent
+      },
+      {
+        path:"profile",
+        component:ProfileComponent
+      },
+      {
+        path:"**",
+        component:PageNotFoundComponent
       }
     ]
   }
