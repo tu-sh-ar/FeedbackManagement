@@ -17,6 +17,14 @@
             {{element.product_id}}
         </td>
     </ng-container>
+    <ng-container matColumnDef="user_name">
+        <th mat-header-cell *matHeaderCellDef>
+            <b>Customer Name</b>
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{element.user_name}}
+        </td>
+    </ng-container>
     <ng-container matColumnDef="rating">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
             <b>User Rating</b>

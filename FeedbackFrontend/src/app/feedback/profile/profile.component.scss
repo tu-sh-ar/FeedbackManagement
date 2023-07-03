@@ -1,4 +1,29 @@
-.example-header-image {
-    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-    background-size: cover;
-  }
+.profile-card{
+  border-radius: 10px;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1em;
+  box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
+}
+.top-panel{
+  text-align: center;
+  width: 50%;
+  margin: 0 auto 1em auto
+}
+.image-wrapper{
+  img{
+    height: 6em;
+    width: 6em;
+  };
+}
+.spacer{
+  padding: 0px 5px;
+}
+
+.grey{
+  color: rgb(100, 100, 100);
+}
+.bold{
+  font-weight: bold;
+}

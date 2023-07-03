@@ -18,10 +18,10 @@ export class FeedbackListComponent implements OnInit{
   paginatedFeedbacks!: PaginatedFeedbackResponse;
   feedbacks!:Feedback[];
   dataSource!: MatTableDataSource<Feedback>;
-  displayFeedbackColumns: string[] = ['feedback_id', 'product_id', 'rating', 'created_at', 'action'];
+  displayFeedbackColumns: string[] = ['feedback_id', 'product_id', 'user_name', 'rating', 'created_at', 'action'];
   todayDate:Date = new Date();
   pageIndex:number = 0;
-  pageSize:number = 100;
+  pageSize:number = 20;
   totalData!:number;
 
   constructor(
@@ -31,7 +31,7 @@ export class FeedbackListComponent implements OnInit{
 
   ngOnInit(): void {
     this.pageIndex = 0;
-    this.pageSize = 100;
+    this.pageSize = 20;
     this.getFeedbacks();
   }
 

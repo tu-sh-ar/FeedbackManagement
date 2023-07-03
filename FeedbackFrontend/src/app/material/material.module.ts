@@ -26,6 +26,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
+import {MatSelectModule} from '@angular/material/select';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatTooltipModule,
     MatChipsModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSelectModule
   ],
   exports: [
     MatRippleModule,
@@ -83,7 +85,8 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatTooltipModule,
     MatChipsModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSelectModule
   ]
 })
 export class MaterialModule { }

@@ -1,11 +1,23 @@
 export interface Feedback {
     feedback_id:string;
     user_id:string;
+    user_name:string;
     product_id:string;
     rating:number;
     comment:string;
     review:[];
-    QA:[];
+    QA:{question:string; answer?:string}[];
+    created_at:string;
+    updated_at:string;
+}
+
+export interface FeedbackTemplate {
+    _id:string;
+    type:string;
+    fields:{quantity:string; missing_item:string};
+    requiredFields:{rating:boolean; comment:boolean};
+    qas:{question:string; answerFormat:string;}[];
+    client_id:string;
     created_at:string;
     updated_at:string;
 }

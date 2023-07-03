@@ -50,9 +50,9 @@ export class FeedbackDetailsComponent implements OnInit{
   
       this._productService.getProduct(this.productId!).subscribe((res)=>{
         this.product = res;
+        this.isLoaded = true;
       })
 
-      this.isLoaded = true;
     })
 
     this._feedbackService.getResponse(this.feedbackId).subscribe((res)=>{
@@ -92,9 +92,11 @@ export class FeedbackDetailsComponent implements OnInit{
   }
 
   deleteReply():void{
-    this._feedbackService.deleteResponse(this.responseId).subscribe((res:Object)=>{
-      window.location.reload();
-    })
+    if(confirm("Do you want to delete your response for this feedback?")){
+      this._feedbackService.deleteResponse(this.responseId).subscribe((res:Object)=>{
+        window.location.reload();
+      })
+    } 
   }
 
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Feedback, PostFeedbackResponse, GetFeedbackResponse, UpdateResponse, PaginatedFeedbackResponse } from '../interfaces/feedback';
+import { Feedback, PostFeedbackResponse, GetFeedbackResponse, UpdateResponse, PaginatedFeedbackResponse, FeedbackTemplate } from '../interfaces/feedback';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -65,8 +65,13 @@ export class FeedbackService {
   }
 
   //get active feedback template
-  getFeedbackTemplate(): Observable<any>{
-    return this._http.get<any>(`${this.baseURL}feedbackTemplate`);
+  getFeedbackTemplate(): Observable<FeedbackTemplate[]>{
+    return this._http.get<FeedbackTemplate[]>(`${this.baseURL}feedbackTemplate`);
+  }
+
+  //update feedback template
+  updateFeedbackTemplate(id:string, data: FeedbackTemplate): Observable<FeedbackTemplate>{
+    return this._http.put<FeedbackTemplate>(`${this.baseURL}feedbackTemplate/${id}`, data);
   }
 
 }

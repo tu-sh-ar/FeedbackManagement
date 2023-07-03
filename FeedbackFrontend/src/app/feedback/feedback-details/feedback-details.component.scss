@@ -4,8 +4,8 @@
     justify-content: space-between;
 }
 .detail-element{
-    margin: 20px 20px;
-    min-width: 30%;
+    margin: 1em 1em;
+    min-width: 40%;
 }
 .spacer{
     padding: 0px 5px;
@@ -17,6 +17,11 @@ mat-card{
     color: rgb(100, 100, 100);
     padding: 10px;
 }
+.user-feedback-img{
+    height: 4em;
+    width: 4em;
+    margin: 0.5em;
+}
 textarea{
     resize: none;
 }
@@ -25,4 +30,7 @@ textarea{
 }
 mat-spinner{
     margin: 20px auto 0 auto;
+}
+.bold{
+    font-weight: bold;
 }
