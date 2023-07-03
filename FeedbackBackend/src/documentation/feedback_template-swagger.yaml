@@ -5,6 +5,13 @@ paths:
       summary: Retrieves all feedback templates
       tags:
         - Feedback Template
+      parameters:
+        - in: header
+          name: client
+          required: true
+          schema:
+            type: string
+          description: The client ID
       responses:
         200:
           description: Successful response
@@ -103,6 +110,17 @@ paths:
             description: No record found
 components:
   schemas:
+    FeedbackQuestion:
+      type: object
+      properties:
+        question:
+          type: string
+          description: The question for the feedback template.
+          example: "How would you rate the overall experience?"
+        answerFormat:
+          type: string
+          description: The format of the answer for the question.
+          example: "number"
     FeedbackTemplate:
       type: object
       required:
@@ -127,16 +145,10 @@ components:
             description: Whether each field in the feedback template is required.
           description: The required fields in the feedback template.
         qas:
-          type: object
-          additionalProperties:
-            type: object
-            properties:
-              question:
-                type: string
-                description: The question associated with each field in the feedback template.
-              answerFormat:
-                type: string
-                description: The answer format  associated with each question in the feedback template.
+          type: array
+          description: Questions and answer formats for the feedback template.
+          items:
+            $ref: "#/components/schemas/FeedbackQuestion"
         client_id:
           type: string
           description: The unique identifier for the client associated with the feedback template.

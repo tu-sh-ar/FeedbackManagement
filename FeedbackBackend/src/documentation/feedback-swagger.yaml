@@ -388,26 +388,48 @@ components:
             field1: "value1"
             field2: "value2"
         qas:
-          type: object
+          type: array
           description: Questions and answers given in the feedback.
+          items:
+            type: object
+            properties:
+              question:
+                type: string
+              answer:
+                type: string
           example:
-            Q1: "A1"
-            Q2: "A2"
+            - question: "Q1"
+              answer: "A1"
+            - question: "Q2"
+              answer: "A2"
       required:
         - user_id
+        - deliveryagent_id
+        - client_id
+        - product_id
+        - template_id
         - rating
+        - feedback_type
+        - feedback_language
       example:
-        feedback_id: 612f45d5fa301d5f77e5d5af
+        user_id: 612f45d5fa301d5f77e5d5af
+        user_name: Vikash
+        deliveryagent_id: 613f54d5fa301d5f77e5d5af
+        client_id: 611f44d5fa301d5f77e5d5af
         product_id: 614f45d5fa301d5f77e5d5af
-        user_id: 615f45d5fa301d5f77e5d5af
+        template_id: 615f45d5fa301d5f77e5d5af
         rating: 4
         comment: "The delivery was fast and efficient."
-        review:
+        feedback_type: 1
+        feedback_language: 1
+        additional_fields:
           field1: "value1"
           field2: "value2"
         qas:
-          Q1: "Answer to the question 1 "
-          Q2: "Answer to the question 2 "
+          - question: "Q1"
+            answer: "A1"
+          - question: "Q2"
+            answer: "A2"
     DeliveryAgentFeedback:
       type: object
       properties:

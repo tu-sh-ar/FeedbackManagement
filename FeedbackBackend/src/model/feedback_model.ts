@@ -32,7 +32,8 @@ const QASchema = new Schema(
 const FeedbackSchema = new Schema(
   {
     user_id: {
-      type: String
+      type: String,
+      ref: 'User'
     },
     deliveryagent_id: {
       type: Number

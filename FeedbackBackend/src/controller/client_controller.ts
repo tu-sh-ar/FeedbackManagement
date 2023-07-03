@@ -23,7 +23,7 @@ export const client_login = async(req:Request, res:Response) => {
                 email:data?.email,
                 id:data?._id
             }
-            },'secret',{expiresIn:"100m"});
+            },'secret',{expiresIn:"28d"});
 
             // res.cookie('jwtToken', token, {
             //     httpOnly: true,

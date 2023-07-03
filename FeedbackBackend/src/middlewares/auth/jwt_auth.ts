@@ -1,5 +1,6 @@
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
+import User from '../../model/user_model';
 
 export const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   let token: string;
@@ -10,19 +11,24 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
     token = authHeader.toString().split(' ')[1];
 
     try {
-      const decodedToken = jwt.verify(token, 'my-32-character-ultra-secure-and-ultra-long-secret') as {
-        [key: string]: string;
-      };
+      const decodedToken = jwt.verify(token, 'secret') as {
+        user: {
+          email: string;
+          id: string;
+      }
+    };
+
+      console.log(decodedToken)
 
       if (decodedToken) {
         // Access the token claims
-        const id = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-        const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-
+        const email = decodedToken.user.email;
+        const id = decodedToken.user.id;
+        console.log(email, id )
         // Storing the extracted information for later use or pass it to the next middleware
         req.user = {
           id,
-          role,
+          email,
         };
 
         next();

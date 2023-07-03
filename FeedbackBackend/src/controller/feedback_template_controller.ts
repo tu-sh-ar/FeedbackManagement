@@ -8,11 +8,11 @@ import asyncHandler from 'express-async-handler'
 // get feedback templates 
 export const getTemplates =  asyncHandler(async( req:Request , res:Response ) => {
 
-    //const client_id = req.user?.id;
+    const client_id = req.headers.client as String;
     try {
         // fetching data basis of client Id
         const templates = await FeedbackTemplate.find({
-            //client_id:client_id
+            client_id:client_id
         })
         if(templates.length)
             res.status(200).send(templates);
@@ -30,17 +30,17 @@ export const getTemplates =  asyncHandler(async( req:Request , res:Response ) =>
 export const createTemplate = asyncHandler(async (req: Request, res: Response) => {
 
     try {
-      //const client_id = req.user?.id;
+      const client_id = req.headers.client;
       const feedback_template_data = req.body;
   
-    //   if (!client_id || !feedback_template_data) {
-    //     res.status(400).json({ error: 'Bad Request: Missing required fields' });
-    //     return;
-    //  }
+      if (!client_id || !feedback_template_data) {
+        res.status(400).json({ error: 'Bad Request: Missing required fields' });
+        return;
+     }
       //if(req.user?.role === "admin"){
         const new_data = {
              ...feedback_template_data,
-             // client_id 
+              client_id 
             };
         // Create a new template for feedback
         const createdTemplate = await FeedbackTemplate.create(new_data);
