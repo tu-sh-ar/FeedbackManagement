@@ -11,14 +11,14 @@
         </div>
         <div class="wrapper">
             <div class="detail-element">
-                Product ID:
-                <span class="spacer"></span>
-                <span class="bold">{{product.id}}</span>
-            </div>
-            <div class="detail-element">
                 Product Name:
                 <span class="spacer"></span>
                 <span class="bold">{{product.name}}</span>
+            </div>
+            <div class="detail-element">
+                Product ID:
+                <span class="spacer"></span>
+                <span class="bold">{{product.id}}</span>
             </div>
             <div class="detail-element">
                 Customer Name:
@@ -35,17 +35,19 @@
         <div class="detail-element">
             User Rating:
             <span class="spacer"></span>
-            <img src="../../../assets/star.svg" alt="star" class="icons">
-            <span class="bold">{{feedback.rating}}</span>
+            <span *ngFor="let star of Arr(feedback.rating)">
+                <img src="../../../assets/star.svg" alt="star" class="icons">
+            </span>
+            <span>({{feedback.rating}})</span>
         </div>
 
         <div class="detail-element">
-            <div style="float: left;">
+            <div>
                 Customer Review:
                 &NonBreakingSpace;
                 &NonBreakingSpace;
             </div>
-            <div style="float: none; overflow: hidden;">
+            <div class="grey-box">
                 <span>{{feedback.comment.length? feedback.comment : "Not Available"}}</span>
                 <br>
                 <img class="user-feedback-img"
@@ -58,14 +60,16 @@
                     src="https://www.highsnobiety.com/static-assets/thumbor/OfhXzCQ2riWKX9N-gdhx242CWaU=/1600x1067/www.highsnobiety.com/static-assets/wp-content/uploads/2019/05/11151803/148.jpg"
                     alt="">
             </div>
-            <div>Q/A:</div>
-                <div *ngFor="let qa of feedback.QA" class="detail-element">
-                    <span *ngIf="qa.answer">
-                        <span>{{qa.question}}</span>
-                        <span class="spacer"></span>
-                        <span class="bold">{{qa.answer}}</span>
-                    </span>
+            <br>
+            <div>User Feedback:</div>
+            <div *ngFor="let qa of feedback.QA">
+                <div *ngIf="qa.answer" class="grey-box">
+                    <span>Que: {{qa.question}}</span>
+                    <span class="spacer"></span>
+                    <br>
+                    <span class="bold">Ans: {{qa.answer}}</span>
                 </div>
+            </div>
         </div>
 
         <mat-divider></mat-divider>

@@ -13,7 +13,6 @@ export class AuthInterceptorService implements HttpInterceptor{
   intercept(request:HttpRequest<any>, next:HttpHandler):Observable<HttpEvent<any>>{
 
     const tokenString = localStorage.getItem("user");
-
     if(tokenString){
       let tokenObject = JSON.parse(tokenString);
 

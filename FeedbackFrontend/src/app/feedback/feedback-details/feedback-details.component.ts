@@ -27,6 +27,7 @@ export class FeedbackDetailsComponent implements OnInit{
   responseId!:string;
   showSave:boolean = false;
   isLoaded:boolean = false;
+  Arr = Array;
 
   constructor(
     private _activatedRoute: ActivatedRoute,

@@ -18,7 +18,7 @@ export class FeedbackListComponent implements OnInit{
   paginatedFeedbacks!: PaginatedFeedbackResponse;
   feedbacks!:Feedback[];
   dataSource!: MatTableDataSource<Feedback>;
-  displayFeedbackColumns: string[] = ['feedback_id', 'product_id', 'user_name', 'rating', 'created_at', 'action'];
+  displayFeedbackColumns: string[] = ['user_name', 'product_id', 'feedback_id', 'rating', 'created_at', 'action'];
   todayDate:Date = new Date();
   pageIndex:number = 0;
   pageSize:number = 20;

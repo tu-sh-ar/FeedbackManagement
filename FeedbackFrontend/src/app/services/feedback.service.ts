@@ -70,8 +70,8 @@ export class FeedbackService {
   }
 
   //update feedback template
-  updateFeedbackTemplate(id:string, data: FeedbackTemplate): Observable<FeedbackTemplate>{
-    return this._http.put<FeedbackTemplate>(`${this.baseURL}feedbackTemplate/${id}`, data);
+  updateFeedbackTemplate(templateId:string, data: FeedbackTemplate): Observable<FeedbackTemplate>{
+    return this._http.put<FeedbackTemplate>(`${this.baseURL}feedbackTemplate/${templateId}`, data);
   }
 
 }

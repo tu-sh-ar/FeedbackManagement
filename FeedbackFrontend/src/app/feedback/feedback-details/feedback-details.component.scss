@@ -12,6 +12,7 @@
 }
 .icons{
     height: 0.75em;
+    margin-inline: 0.25em;
 }
 mat-card{
     color: rgb(100, 100, 100);
@@ -33,4 +34,10 @@ mat-spinner{
 }
 .bold{
     font-weight: bold;
+}
+.grey-box{
+    border: 1px solid gainsboro;
+    border-radius: 1em;
+    padding: 0.5em 1em;
+    margin-block: 0.5em;
 }

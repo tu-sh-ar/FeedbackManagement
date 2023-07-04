@@ -23,7 +23,6 @@ export class FeedbackTemplatesComponent implements OnInit{
 
   ngOnInit(): void {
     this._feedbackService.getFeedbackTemplate().subscribe((res)=>{
-      console.log(res);
       this.activeFeedbackTemplate = res;
       this.activatedTemplateId = this.activeFeedbackTemplate[0]._id;
       this.currentQA = this.activeFeedbackTemplate[0].qas;
@@ -33,7 +32,6 @@ export class FeedbackTemplatesComponent implements OnInit{
   removeQAField(i:number): void{
     if(confirm("Do you want to remove the QA?")) {
       this.currentQA.splice(i,1);
-      console.log(this.currentQA);
     }
   }
 
@@ -52,12 +50,10 @@ export class FeedbackTemplatesComponent implements OnInit{
 
   updateQuesInNewQA(e:any, idx:number) {
     this.currentQA[idx].question = e.target.value;
-    console.log(this.currentQA);
   }
 
   updateAnsFormatInNewQA(e:any,idx:number):void{
     this.currentQA[idx].answerFormat = e.value;
-    console.log(this.currentQA);
   }
 
   saveQA():void{
@@ -68,7 +64,7 @@ export class FeedbackTemplatesComponent implements OnInit{
       }
     }
     this.activeFeedbackTemplate[0].qas = this.currentQA;
-    console.log(this.activeFeedbackTemplate)
+    console.log(this.activeFeedbackTemplate[0])
     this._feedbackService.updateFeedbackTemplate(this.activatedTemplateId, this.activeFeedbackTemplate[0]).subscribe((res)=>{
       this._snackbar.open("Feedback Template updated!", "OK")
       setTimeout(()=>{
