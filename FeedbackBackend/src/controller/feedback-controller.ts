@@ -1,12 +1,7 @@
 // creating the feedback controller 
-import mongoose from 'mongoose'
 import { Request, Response } from 'express'
-import FeedbackModel from '../model/feedback_model'
-import DeliveryAgent from '../model/delivery_agent_model'
-import { feedback_type } from '../middlewares/enums/feedback_type_enum' 
-import FeedbackTemplate from '../model/feedback_template_model'
+import FeedbackModel from '../model/feedback_model' 
 import DeliveryAgentFeedback from '../model/delivery_agent_model'
-import { escape } from 'querystring'
 import User from '../model/user_model'
 
 // create a feedback

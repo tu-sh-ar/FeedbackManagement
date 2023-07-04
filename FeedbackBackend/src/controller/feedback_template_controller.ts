@@ -1,7 +1,6 @@
 // feedback template controller 
 import { Request , Response , NextFunction } from 'express';
 import FeedbackTemplate from "../model/feedback_template_model";
-
 import asyncHandler from 'express-async-handler'
 
 
@@ -20,9 +19,7 @@ export const getTemplates =  asyncHandler(async( req:Request , res:Response ) =>
             res.status(404).json({ error: 'No feedback templates found' });
 
     } catch (error) {
-
         res.status(500).json({ error: `Error in fetching templates: ${error}` });
-
     }                      
 })
 
@@ -56,30 +53,23 @@ export const createTemplate = asyncHandler(async (req: Request, res: Response) =
 export const updateTemplate = asyncHandler(async( req:Request , res:Response) => {
     const template_id = req.params.id;
     const template_data = req.body;
-
     try {
-
         await FeedbackTemplate.findByIdAndUpdate(template_id, template_data)
         .then(data => res.status(200).send(data))
         .catch(err => res.status(404).json({error:err}))
-        
     } catch (error) {
         res.status(500).send({error:"Error in updating the template"})
     }
 
 })
 
-
 // delete a template 
 export const deleteTemplate = asyncHandler(async(req:Request, res:Response) => {
-
     const template_id = req.params.id;
     try {
-        
         FeedbackTemplate.findByIdAndDelete(template_id)
         .then(data => res.status(200).send(data))
         .catch(err => res.status(404).json({error:"No template exist with the given id"}))
-
     } catch (error) {
         res.status(500).json({error:`Template not deleted`})
     }
