@@ -412,15 +412,14 @@ components:
         - feedback_type
         - feedback_language
       example:
-        user_id: 612f45d5fa301d5f77e5d5af
+        user_id: e1ac6adc-388c-477e-912b-60d503c7892a
         user_name: Vikash
-        deliveryagent_id: 613f54d5fa301d5f77e5d5af
-        client_id: 611f44d5fa301d5f77e5d5af
-        product_id: 614f45d5fa301d5f77e5d5af
-        template_id: 615f45d5fa301d5f77e5d5af
+        client_id: d1bb78ca-d9e1-4f72-b4d7-677e8ecb3172
+        product_id: 9
+        template_id: 649bf704ed52f29061348bb5
         rating: 4
-        comment: "The delivery was fast and efficient."
-        feedback_type: 1
+        comment: "Good Product"
+        feedback_type: 4
         feedback_language: 1
         additional_fields:
           field1: "value1"
@@ -448,11 +447,11 @@ components:
         feedback_type:
           type: number
       example:
-        deliveryagent_id: 1
-        user_id: "abc123"
+        deliveryagent_id: 7
+        user_id: "e1ac6adc-388c-477e-912b-60d503c7892a"
         product_id: 9
         rating: 4
-        comment: "Great delivery!"
+        comment: "On Time delivery!"
         feedback_language: 1
         feedback_type: 1
   securitySchemes:

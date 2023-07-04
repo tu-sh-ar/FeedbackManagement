@@ -57,10 +57,6 @@ export const updateTemplate = asyncHandler(async( req:Request , res:Response) =>
     const template_id = req.params.id;
     const template_data = req.body;
 
-    if(template_data.client_id){
-        res.status(401).json({error:"client id cannot be updated"});
-    }
-
     try {
 
         await FeedbackTemplate.findByIdAndUpdate(template_id, template_data)
