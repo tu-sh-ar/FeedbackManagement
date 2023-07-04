@@ -41,18 +41,22 @@ export class FeedbackDetailsComponent implements OnInit{
     this.feedbackId = this._activatedRoute.snapshot.paramMap.get('id')!;
 
     this._feedbackService.getFeedbackById(this.feedbackId).subscribe((res)=>{
+      console.log("feedback - ",res);
       this.feedback = res;
       this.userId = this.feedback.user_id;
       this.productId = this.feedback.product_id;
 
-      this._userService.getUser(this.userId!).subscribe((res)=>{
+      this._userService.getUser(this.userId).subscribe((res)=>{
+        console.log("user - ",res);
         this.user = res;
       })
   
-      this._productService.getProduct(this.productId!).subscribe((res)=>{
+      this._productService.getProduct(this.productId).subscribe((res)=>{
+        console.log("product - ",res);
         this.product = res;
-        this.isLoaded = true;
       })
+
+      this.isLoaded = true;
 
     })
 

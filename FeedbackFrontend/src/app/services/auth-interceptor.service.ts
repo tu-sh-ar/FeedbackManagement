@@ -18,7 +18,8 @@ export class AuthInterceptorService implements HttpInterceptor{
 
       request = request.clone({
         setHeaders:{
-          'Authorization': `Bearer ${tokenObject.jwtToken}`,
+          // 'Authorization': `Bearer ${tokenObject.jwtToken}`,
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImFkbWluIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiYWRtaW4iLCJ0ZW5hbnRJZCI6IlQxIiwiZXhwIjoxNjkxMTM2NTkwLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MTM3IiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzEzNyJ9.mcNjnnKYGjq7iqbLgUQ8bwKQfp-oZ7dpFnFVrgChniQ`,
           'Client': 'd1bb78ca-d9e1-4f72-b4d7-677e8ecb3172',
           'Access-Control-Allow-Origin': '*'
         }
