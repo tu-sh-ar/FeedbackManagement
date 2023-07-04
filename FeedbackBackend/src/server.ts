@@ -19,7 +19,6 @@ import feedbackResponse_router from './routes/feedback_response_route';
 //importing test routes
 import user_routes from './routes/user_routes'
 import client_routes from './routes/client_routes'
-import product_routes from './routes/product_routes'
 
 // importing the  db config 
 import connect_db from './db/db-connect';
@@ -68,13 +67,11 @@ const server_config = () => {
     // test routes
     server.use("/api/user", user_routes);
     server.use("/api/client" , client_routes);
-    server.use("/api/product" , product_routes)
 
     const port = process.env.PORT || 4000
     server.listen(port, () => {
         console.log(`Server running at ${port}`);
     })
-    
 }
 
 // start the server 
