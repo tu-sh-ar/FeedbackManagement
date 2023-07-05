@@ -2,7 +2,7 @@
 import { Request , Response , NextFunction } from 'express';
 import FeedbackTemplate from "../model/feedback_template_model";
 import asyncHandler from 'express-async-handler'
-
+import { status_codes } from '../constants/constants';
 
 // get feedback templates 
 export const getTemplates =  asyncHandler(async( req:Request , res:Response ) => {
@@ -16,10 +16,10 @@ export const getTemplates =  asyncHandler(async( req:Request , res:Response ) =>
         if(templates.length)
             res.status(200).send(templates);
         else
-            res.status(404).json({ error: 'No feedback templates found' });
+            res.status(404).json({ error: status_codes[404] });
 
     } catch (error) {
-        res.status(500).json({ error: `Error in fetching templates: ${error}` });
+        res.status(500).json({ error: status_codes[500] });
     }                      
 })
 
@@ -31,7 +31,7 @@ export const createTemplate = asyncHandler(async (req: Request, res: Response) =
       const feedback_template_data = req.body;
   
       if (!client_id || !feedback_template_data) {
-        res.status(400).json({ error: 'Bad Request: Missing required fields' });
+        res.status(400).json({ error: status_codes[400] });
         return;
      }
       //if(req.user?.role === "admin"){
@@ -45,7 +45,7 @@ export const createTemplate = asyncHandler(async (req: Request, res: Response) =
       //}
 
     } catch (error) {
-      res.status(500).json({ error: `Error in creating template: ${error}` });
+      res.status(500).json({ error: status_codes[500] });
     }
   });
 
@@ -56,9 +56,9 @@ export const updateTemplate = asyncHandler(async( req:Request , res:Response) =>
     try {
         await FeedbackTemplate.findByIdAndUpdate(template_id, template_data)
         .then(data => res.status(200).send(data))
-        .catch(err => res.status(404).json({error:err}))
+        .catch(err => res.status(404).json({error: status_codes[404]}))
     } catch (error) {
-        res.status(500).send({error:"Error in updating the template"})
+        res.status(500).send({error: status_codes[500]})
     }
 
 })
@@ -67,11 +67,11 @@ export const updateTemplate = asyncHandler(async( req:Request , res:Response) =>
 export const deleteTemplate = asyncHandler(async(req:Request, res:Response) => {
     const template_id = req.params.id;
     try {
-        FeedbackTemplate.findByIdAndDelete(template_id)
+        await FeedbackTemplate.findByIdAndDelete(template_id)
         .then(data => res.status(200).send(data))
-        .catch(err => res.status(404).json({error:"No template exist with the given id"}))
+        .catch(err => res.status(404).json({error: status_codes[404]}))
     } catch (error) {
-        res.status(500).json({error:`Template not deleted`})
+        res.status(500).json({error: status_codes[500]})
     }
 })
 // {

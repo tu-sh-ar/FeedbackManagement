@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import FeedbackModel from '../model/feedback_model' 
 import DeliveryAgentFeedback from '../model/delivery_agent_model'
 import User from '../model/user_model'
+import { status_codes } from '../constants/constants'
 
 // create a feedback
 export const getFeedbacks = async (req:Request, res:Response) => {
@@ -10,7 +11,7 @@ export const getFeedbacks = async (req:Request, res:Response) => {
     const size = parseInt(req.query.size as string) || 10;
 
     if(page<1 || size>25 || size<1){
-        res.status(400).json({error:"Invalid , page and size"});
+        res.status(400).json({error: status_codes[500]});
     }
     try {
       const totalCount = await FeedbackModel.countDocuments();
@@ -49,7 +50,7 @@ export const getFeedbacks = async (req:Request, res:Response) => {
   
       res.status(200).send(response);
     } catch (error) {
-        res.status(404).json({error:`Feedback not fetched : ${error}`});
+        res.status(404).json({error: status_codes[404]});
     }
   };
 
@@ -81,10 +82,10 @@ export const createFeedback = async( req:Request, res:Response ) => {
         
         await FeedbackModel.create(new_feedback_data)
         .then(data => res.status(201).send(data))
-        .catch(err => res.status(400).send(err))
+        .catch(err => res.status(400).json({error: status_codes[400]}))
 
     } catch (error) {
-        res.status(500).json({error:`Feedback not ceated : ${error}`});
+        res.status(500).json({error: status_codes[500]});
     }
 }
 
@@ -95,11 +96,11 @@ export const updateFeedback = async( req:Request, res:Response ) => {
     try {
 
         FeedbackModel.findByIdAndUpdate(id , feedback_data)
-        .then(data => res.status(200).send("Feedback Updated Successfully"))
+        .then(data => res.status(200).send(status_codes[200]))
         .catch(err => res.status(404).send(err))
 
     } catch (error) {
-        res.status(500).json({error:`Feedback not updated : ${error}`});
+        res.status(500).json({error: status_codes[500]});
     }
 }
 
@@ -110,11 +111,11 @@ export const deleteFeedback = async( req:Request, res:Response ) => {
     try {
         
         FeedbackModel.findByIdAndDelete(feedback_id)
-        .then(data => res.status(200).send("Deleted Feedback"))
-        .catch(err => res.status(404).send("No Feedback Found"))
+        .then(data => res.status(200).send( status_codes[200]))
+        .catch(err => res.status(404).json({error: status_codes[404]}))
 
     } catch (error) {
-        res.status(500).json({error:`Feedback not deleted : ${error}`});
+        res.status(500).json({error: status_codes[500]});
         
     }
 }
@@ -142,10 +143,10 @@ export const get_feedback = async(req:Request, res:Response) => {
         if(Object.keys(new_feedback).length !=0){
             res.status(200).send(new_feedback)
         }else{
-            res.status(404).json({error:"No Feedback Found"});
+            res.status(404).json({error: status_codes[404]});
         }
     } catch (error) {
-        res.status(500).json({error:`Request failed : ${error}`});
+        res.status(500).json({error: status_codes[500]});
     }
 }
 
@@ -159,7 +160,7 @@ export const getPoductFeedbacks = async(req:Request, res:Response) => {
     current_date.setMonth(current_date.getMonth() - month_range);
 
     if(!range || month_range<1 ){
-        res.status(400).json({error:"Invalid range, Bad Request"})
+        res.status(400).json({error: status_codes[400]})
         return;
     }
 
@@ -189,10 +190,10 @@ export const getPoductFeedbacks = async(req:Request, res:Response) => {
                 feedbacks:updated_feedbacks
             })
         } else {
-            res.status(404).json({error:"No feedbacks found for the product"})
+            res.status(404).json({error: status_codes[404]})
         }
     } catch (error) {
-        res.status(500).json({error:"Feedbacks for product id not exist"})
+        res.status(500).json({error: status_codes[500]})
     }
 }
 
@@ -232,7 +233,7 @@ export const getFeedbacksByDate = async(req:Request, res:Response) => {
         res.send(updated_feedback)
             
     } catch (error) {
-        res.status(500).json({error:`Feedback not fetched : ${error}`});
+        res.status(500).json({error: status_codes[500]});
     }
 }
 
@@ -262,7 +263,7 @@ export const getAllFeedbacks = async(req:Request, res:Response) => {
         }
         res.status(200).send(updated_feedback);
       } catch (error) {
-        res.status(500).json({error:`Feedback not fetched : ${error}`});
+        res.status(500).json({error: status_codes[500]});
       }
     };
 
@@ -279,7 +280,7 @@ export const getDeliveryAgentFeedbacks = async(req:Request, res:Response ) => {
             res.status(200).send(updated_feedback);
         
     } catch (error) {
-        res.status(404).json({error:`Feedbacks not found for the agent : ${error}`});
+        res.status(404).json({error: status_codes[404]});
     }
 }
 
@@ -290,6 +291,6 @@ export const createDeliveryAgentFeedbacks = async(req:Request, res:Response ) =>
             res.status(200).send(feedback);
         
     } catch (error) {
-        res.status(500).json({error:`Feedback not ceated : ${error}`});
+        res.status(500).json({error: status_codes[500]});
     }
 }

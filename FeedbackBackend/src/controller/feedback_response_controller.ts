@@ -1,6 +1,7 @@
 import { Request, Response, response } from 'express'
 import FeedbackResponse from '../model/feedback_response_model'
 import FeedbackModel from '../model/feedback_model';
+import { status_codes, auto_response } from '../constants/constants';
 
 // create response 
 export const create_Response = async (req: Request, res: Response) => {
@@ -8,20 +9,20 @@ export const create_Response = async (req: Request, res: Response) => {
       const { feedback_id, response } = req.body;
       // Check if required fields are present
       if (!feedback_id || !response) {
-        res.status(400).json({ error: 'Bad Request: Missing required fields' });
+        res.status(400).json({ error: status_codes[400] });
         return;
       }
       // Check if feedback exists
       const feedbackExists = await FeedbackModel.exists({ _id: feedback_id });
       if (!feedbackExists) {
-        res.status(404).json({ error: 'Feedback not found' });
+        res.status(404).json({ error: status_codes[404] });
         return;
       }
       // Save the feedback response
       const feedbackResponse = await FeedbackResponse.create({ feedback_id, response });
       res.status(201).json(feedbackResponse);
     } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: status_codes[500] });
     }
   };
 
@@ -30,17 +31,17 @@ export const deleteResponse = async (req: Request, res: Response) => {
     try {
       const response_id = req.params.id;
       if (!response_id) {
-        res.status(400).json({ error: 'Bad Request: Missing feedback ID' });
+        res.status(400).json({ error: status_codes[400] });
         return;
       }
       const response = await FeedbackResponse.findByIdAndDelete(response_id);
       if (!response) {
-        res.status(404).json({ error: 'Response not found' });
+        res.status(404).json({ error: status_codes[404] });
         return;
       }
-      res.status(200).json({ message: 'Deleted successfully' });
+      res.status(200).json({ message: status_codes[200] });
     } catch (error) {
-      res.status(404).json({ error: 'Invalid Response Id , Bad request ' });
+      res.status(404).json({ error: status_codes[404] });
     }
   };
   
@@ -49,17 +50,17 @@ export const deleteResponse = async (req: Request, res: Response) => {
     try {
       const feedback_id = req.query.feedback_id as string;
       if (!feedback_id) {
-        res.status(400).json({ error: 'Bad Request: Missing feedback ID' });
+        res.status(400).json({ error: status_codes[400] });
         return;
       }
       const response_data = await FeedbackResponse.findOne({ feedback_id });
       if (!response_data) {
-        res.status(404).json({ error: 'No response found' });
+        res.status(404).json({ error: status_codes[404] });
         return;
       }
       res.status(200).json(response_data);
     } catch (error) {
-      res.status(404).json({ error: 'No Feedback Response data found' });
+      res.status(404).json({ error: status_codes[404] });
     }
   };
 
@@ -73,9 +74,9 @@ export const deleteResponse = async (req: Request, res: Response) => {
   
         let generatedResponse: string;
         if (feedback.rating > 3) {
-          generatedResponse = "Thank you for your feedback.";
+          generatedResponse = auto_response.good;
         } else {
-          generatedResponse = "Sorry for the inconvenience. We will look into the issue.";
+          generatedResponse = auto_response.inconvinient;
         }
         
         if (!response) {
@@ -87,9 +88,9 @@ export const deleteResponse = async (req: Request, res: Response) => {
           }
         }
       }
-      console.log("Automatic responses generated successfully.");
+      console.log(status_codes[200]);
     } catch (error) {
-      console.error("Error in automatic response generation:", error);
+      console.error(status_codes[500], error);
     }
   };
   
@@ -101,6 +102,6 @@ export const deleteResponse = async (req: Request, res: Response) => {
       const data = await  FeedbackResponse.findByIdAndUpdate(response_id,response_data);
       res.status(200).send(data)
     } catch (error) {
-      res.status(400).json({error:"Invalid response Id , Update Failed"})
+      res.status(400).json({error:status_codes[400]})
     }
   }
