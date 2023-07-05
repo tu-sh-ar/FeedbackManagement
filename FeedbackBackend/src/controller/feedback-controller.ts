@@ -11,7 +11,7 @@ export const getFeedbacks = async (req:Request, res:Response) => {
     const size = parseInt(req.query.size as string) || 10;
 
     if(page<1 || size>25 || size<1){
-        res.status(400).json({error: status_codes[500]});
+        res.status(400).json({error: status_codes[400]});
     }
     try {
       const totalCount = await FeedbackModel.countDocuments();
