@@ -1,0 +1,283 @@
+paths:
+  /api/categoryTemplate:
+    get:
+      summary: Get Template by ID
+      tags:
+          - Category Wise Feedback Templates
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: query
+          name: template_id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackCategoryTemplate'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/categoryTemplate/getFeedbackTemplates:
+    get:
+      summary: Get Feedback Templates on the basis of Business Category
+      tags:
+          - Category Wise Feedback Templates
+      security:
+        - JWTAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackCategoryTemplate'
+        '404':
+          description: Templates Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/categoryTemplate/createFeedbackTemplates:
+    post:
+      summary: Create Feedback Template
+      tags:
+          - Category Wise Feedback Templates
+      security:
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackCategoryTemplateBodyDTO'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackCategoryTemplate'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/categoryTemplate/updateFeedbackTemplate/{template_id}:
+    put:
+      summary: Update Feedback Template
+      tags:
+          - Category Wise Feedback Templates
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: template_id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackCategoryTemplateBodyDTO'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackCategoryTemplate'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/categoryTemplate/deleteFeedbackTemplate/{template_id}:
+    delete:
+      summary: Delete Feedback Template
+      tags:
+          - Category Wise Feedback Templates
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: template_id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+components:
+  schemas:
+    FeedbackQuestion:
+      type: object
+      properties:
+        question:
+          type: string
+        answerFormat:
+          type: string
+    FeedbackCategoryTemplate:
+      type: object
+      properties:
+        _id:
+          type: string
+        category_type:
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+            # Add more enum values if necessary
+        type:
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+            # Add more enum values if necessary
+        requiredFields:
+          type: object
+          additionalProperties:
+            type: boolean
+        qas:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeedbackQuestion'
+      example:
+        _id: "60e72f6a9e8e3633e0142a9b"
+        category_type: 1
+        type: 2
+        requiredFields:
+          field1: true
+          field2: false
+        qas:
+          - question: "How satisfied are you with our service?"
+            answerFormat: "rating"
+          - question: "What suggestions do you have for improvement?"
+            answerFormat: "text"
+    FeedbackCategoryTemplateBodyDTO:
+      type: object
+      properties:
+        category_type:
+          type: String
+          enum:
+            - 1
+            - 2
+            - 3
+            # Add more enum values if necessary
+        type:
+          type: String
+          enum:
+            - 1
+            - 2
+            - 3
+            # Add more enum values if necessary
+        requiredFields:
+          type: object
+          additionalProperties:
+            type: boolean
+        qas:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeedbackQuestion'
+      example:
+        category_type: "1"
+        type: "1"
+        requiredFields:
+          field1: true
+          field2: false
+        qas:
+          - question: "How satisfied are you with our service?"
+            answerFormat: "rating"
+          - question: "What suggestions do you have for improvement?"
+            answerFormat: "text"
+  securitySchemes:
+    JWTAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

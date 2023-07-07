@@ -7,7 +7,7 @@ import { status_codes } from '../constants/constants';
 // get feedback templates 
 export const getTemplates =  asyncHandler(async( req:Request , res:Response ) => {
 
-    const client_id = req.headers.client as String;
+    const client_id = req.user?.id ;
     try {
         // fetching data basis of client Id
         const templates = await FeedbackTemplate.find({
@@ -27,17 +27,19 @@ export const getTemplates =  asyncHandler(async( req:Request , res:Response ) =>
 export const createTemplate = asyncHandler(async (req: Request, res: Response) => {
 
     try {
-      const client_id = req.headers.client;
+      const client_id = req.user?.id;
+      const business_type = req.user?.businessCategory as String;
       const feedback_template_data = req.body;
   
-      if (!client_id || !feedback_template_data) {
+      if (!client_id || !feedback_template_data || !business_type) {
         res.status(400).json({ error: status_codes[400] });
         return;
      }
       //if(req.user?.role === "admin"){
         const new_data = {
              ...feedback_template_data,
-              client_id 
+              client_id ,
+              business_type
             };
         // Create a new template for feedback
         const createdTemplate = await FeedbackTemplate.create(new_data);
@@ -60,7 +62,6 @@ export const updateTemplate = asyncHandler(async( req:Request , res:Response) =>
     } catch (error) {
         res.status(500).send({error: status_codes[500]})
     }
-
 })
 
 // delete a template 
@@ -74,39 +75,3 @@ export const deleteTemplate = asyncHandler(async(req:Request, res:Response) => {
         res.status(500).json({error: status_codes[500]})
     }
 })
-// {
-//     "type": 1,
-//     "fields": {
-//       "quantity": "number",
-//       "missing items": "number"
-//     },
-//     "requiredFields": {
-//       "rating": true,
-//       "feedback_type": false,
-//       "feedback_language": false
-//     },
-//     "qas": {
-//       "Q1": "How was the delivery experience of the product?",
-//       "Q2": "Did the product meet your expectations?",
-//       "Q3": "What improvements would you suggest for the product?"
-//     }
-//   }
-
-
-//   {
-//     "type": 2,
-//     "fields": {
-//       "response time": "number",
-//       "customer support": "string"
-//     },
-//     "requiredFields": {
-//       "rating": true,
-//       "feedback_type": false,
-//       "feedback_language": false
-//     },
-//     "qas": {
-//          "Q1": "How would you rate the professionalism of our staff?",
-//          "Q2": "Did our customer support team resolve your issue effectively?",
-//          "Q3": "What improvements would you suggest for our services?"
-//         }
-//   }

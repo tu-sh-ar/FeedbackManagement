@@ -7,7 +7,7 @@ import { verifyToken } from "../middlewares/auth/jwt_auth";
 
 
 router.get("/",
-     //verifyToken,
+     verifyToken,
      getTemplates
      );
 

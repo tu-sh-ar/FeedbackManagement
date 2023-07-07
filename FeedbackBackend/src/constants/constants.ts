@@ -16,5 +16,5 @@ export const auto_response = {
 
 // auth constants 
 export const auth_constant = {
-    secret:"my-secret-key"
+    secret:"safmdknfsdDKFKN122sdnmkfnsJDKNF23234Sssds"
 }

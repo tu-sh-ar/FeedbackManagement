@@ -1,16 +1,20 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import { CategoryType } from '../middlewares/enums/buisness_category_enum';
+import { TemplateType } from '../middlewares/enums/template_type';
+import { answerFormat } from '../middlewares/enums/answerFormat_enum';
 
 interface IFeedbackQuestion {
   question: string;
-  answerFormat: string;
+  answerFormat: answerFormat;
 }
 
 interface IFeedbackTemplate extends Document {
-  type: string;
-  fields: Record<string, string>;
+  type: TemplateType;
+  businesstype: CategoryType;
   requiredFields: Record<string, boolean>;
   qas: IFeedbackQuestion[];
-  client_id: string;
+  client_id: number;
+  isActive:Boolean;
 }
 
 const FeedbackQuestionSchema: Schema = new Schema({
@@ -21,6 +25,7 @@ const FeedbackQuestionSchema: Schema = new Schema({
   answerFormat: {
     type: String,
     required: true,
+    enum:Object.values(answerFormat)
   },
 },
 {_id:false}
@@ -28,13 +33,15 @@ const FeedbackQuestionSchema: Schema = new Schema({
 
 const FeedbackTemplateSchema: Schema = new Schema(
   {
-    type: {
+    template_type: {
       type: String,
       required: true,
+      enum: Object.values(TemplateType)
     },
-    fields: {
-      type: Map,
-      of: String,
+    business_type: {
+      type: String,
+      required: true,
+      enum: Object.values(CategoryType)
     },
     requiredFields: {
       type: Map,
@@ -45,8 +52,12 @@ const FeedbackTemplateSchema: Schema = new Schema(
       default: [],
     },
     client_id: {
-      type: String,
+      type: Number,
       required: true,
+    },
+    isActive: {
+      type: Boolean,
+      default: false
     },
   },
   { timestamps: true, versionKey: false }

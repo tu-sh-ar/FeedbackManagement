@@ -5,13 +5,6 @@ paths:
       summary: Retrieves all feedback templates
       tags:
         - Feedback Template
-      parameters:
-        - in: header
-          name: client
-          required: true
-          schema:
-            type: string
-          description: The client ID
       responses:
         200:
           description: Successful response
