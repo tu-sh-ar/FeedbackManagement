@@ -1,9 +1,9 @@
 import { Schema, model, Document, Types, Date } from 'mongoose';
 
 interface IFeedback extends Document {
-  user_id: Types.ObjectId;
+  user_id: string;
   deliveryagent_id: Types.ObjectId;
-  client_id: Types.ObjectId;
+  client_id: number;
   product_id: number;
   template_id: Types.ObjectId;
   rating: number;
@@ -39,7 +39,7 @@ const FeedbackSchema = new Schema(
       type: Number
     },
     client_id: {
-      type:String
+      type: Number
     },
     product_id: {
       type: Number,

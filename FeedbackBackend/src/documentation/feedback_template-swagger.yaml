@@ -108,70 +108,71 @@ components:
       properties:
         question:
           type: string
-          description: The question for the feedback template.
-          example: "How would you rate the overall experience?"
         answerFormat:
           type: string
-          description: The format of the answer for the question.
-          example: "number"
+          enum:
+            - enum_value_1
+            - enum_value_2
+            - enum_value_3
+          description: Enum values for answer format
+      required:
+        - question
+        - answerFormat
+
     FeedbackTemplate:
       type: object
-      required:
-        - type
       properties:
-        _id:
+        template_type:
           type: string
-          description: The unique identifier for the feedback template.
-        type:
+          enum:
+            - enum_value_1
+            - enum_value_2
+            - enum_value_3
+          description: Enum values for template type
+        business_type:
           type: string
-          description: The type of feedback template.
-        fields:
-          type: object
-          additionalProperties:
-            type: number
-            description: The value of each field in the feedback template.
-          description: The fields in the feedback template.
+          enum:
+            - enum_value_1
+            - enum_value_2
+            - enum_value_3
+          description: Enum values for business type
         requiredFields:
           type: object
           additionalProperties:
             type: boolean
-            description: Whether each field in the feedback template is required.
-          description: The required fields in the feedback template.
         qas:
           type: array
-          description: Questions and answer formats for the feedback template.
           items:
-            $ref: "#/components/schemas/FeedbackQuestion"
+            $ref: '#/components/schemas/FeedbackQuestion'
         client_id:
-          type: string
-          description: The unique identifier for the client associated with the feedback template.
-        createdAt:
-          type: string
-          format: date-time
-          description: The timestamp of the creation of the feedback template.
-        updatedAt:
-          type: string
-          format: date-time
-          description: The timestamp of the last update of the feedback template.
+          type: number
+        isActive:
+          type: boolean
+      required:
+        - type
+        - businesstype
+        - requiredFields
+        - qas
+        - client_id
+        - isActive
       example:
         _id: 617f814ef139c17f53e4e1c4
-        type: 1
-        fields:
-          quantity: number
-          customer_experience: string
+        template_type: "1"
+        business_type: "1"
         requiredFields:
           rating: true
           comment: false
         qas:
           Q1:
             question: "What do you think about the quality of the product?"
-            answerFormat: "rating (1-5)"
+            answerFormat: "1"
           Q2:
             question: "How was your experience with the delivery of the product?"
-            answerFormat: "textbox"
+            answerFormat: "3"
           Q3:
             question: "Would you recommend our product to others ?"
-            answerFormat: "radio"
+            answerFormat: "2"
+        isActive: true
         clientId: d1bb78ca-d9e1-4f72-b4d7-677e8ecb3172
         createdAt: '2022-05-11T10:35:20.543Z'
         updatedAt: '2022-05-11T10:35:20.543Z'

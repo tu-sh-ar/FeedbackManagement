@@ -1,7 +1,8 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema , Types } from 'mongoose';
 import { CategoryType } from '../middlewares/enums/buisness_category_enum';
 import { TemplateType } from '../middlewares/enums/template_type';
 import { answerFormat } from '../middlewares/enums/answerFormat_enum';
+import { ObjectId } from 'mongodb';
 
 interface IFeedbackQuestion {
   question: string;
@@ -9,8 +10,9 @@ interface IFeedbackQuestion {
 }
 
 interface IFeedbackTemplate extends Document {
-  type: TemplateType;
-  businesstype: CategoryType;
+  template_type: TemplateType;
+  categoryTemplate_id: Types.ObjectId;
+  business_type: CategoryType;
   requiredFields: Record<string, boolean>;
   qas: IFeedbackQuestion[];
   client_id: number;
@@ -37,6 +39,11 @@ const FeedbackTemplateSchema: Schema = new Schema(
       type: String,
       required: true,
       enum: Object.values(TemplateType)
+    },
+    template_id: {
+      type: Types.ObjectId,
+      ref: 'FeedbackCategoryTemplates',
+      required: true,
     },
     business_type: {
       type: String,
