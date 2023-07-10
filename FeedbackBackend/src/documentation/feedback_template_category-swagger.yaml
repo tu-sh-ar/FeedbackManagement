@@ -206,45 +206,54 @@ components:
       properties:
         _id:
           type: string
-        category_type:
-          type: integer
+        business_category_type:
+          type: string
           enum:
-            - 1
-            - 2
-            - 3
+            - "1"
+            - "2"
+            - "3"
             # Add more enum values if necessary
-        type:
-          type: integer
+        template_type:
+          type: string
           enum:
-            - 1
-            - 2
-            - 3
+            - "1"
+            - "2"
+            - "3"
             # Add more enum values if necessary
         requiredFields:
           type: object
           additionalProperties:
             type: boolean
         qas:
-          type: array
-          items:
-            $ref: '#/components/schemas/FeedbackQuestion'
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: "#/components/schemas/FeedbackQuestion"
       example:
         _id: "60e72f6a9e8e3633e0142a9b"
-        category_type: 1
-        type: 2
+        business_category_type: "1"
+        template_type: "1"
         requiredFields:
-          field1: true
-          field2: false
+          rating: true
+          comment: false
         qas:
-          - question: "How satisfied are you with our service?"
-            answerFormat: "rating"
-          - question: "What suggestions do you have for improvement?"
-            answerFormat: "text"
+          product:
+            - question: 'How was the quality of product?'
+              answerFormat: '1'
+            - question: 'Was there any defects in product?'
+              answerFormat: '2'
+          packaging:
+            - question: 'How was the packaging of the product?'
+              answerFormat: '1'
+          delivery:
+            - question: 'Was the delivery on-time?'
+              answerFormat: '2'
     FeedbackCategoryTemplateBodyDTO:
       type: object
       properties:
-        category_type:
-          type: String
+        business_category_type:
+          template_type: String
           enum:
             - 1
             - 2
@@ -262,9 +271,11 @@ components:
           additionalProperties:
             type: boolean
         qas:
-          type: array
-          items:
-            $ref: '#/components/schemas/FeedbackQuestion'
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: "#/components/schemas/FeedbackQuestion"
       example:
         category_type: "1"
         type: "1"
@@ -272,10 +283,17 @@ components:
           field1: true
           field2: false
         qas:
-          - question: "How satisfied are you with our service?"
-            answerFormat: "rating"
-          - question: "What suggestions do you have for improvement?"
-            answerFormat: "text"
+          product:
+            - question: 'How was the quality of product?'
+              answerFormat: '1'
+            - question: 'Was there any defects in product?'
+              answerFormat: '2'
+          packaging:
+            - question: 'How was the packaging of the product?'
+              answerFormat: '1'
+          delivery:
+            - question: 'Was the delivery on-time?'
+              answerFormat: '2'
   securitySchemes:
     JWTAuth:
       type: http

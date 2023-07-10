@@ -74,21 +74,21 @@ export const getTemplateById = async(req:Request,res:Response) => {
         const business = req.user?.businessCategory as String;
         const template = await FeedbackCategoryTemplates.findOne({ _id:template_id, business_category_type:business })
 
-        const mappedTemplate = {
-            _id: template?._id,
-            business_category_type: template?.business_category_type ? CategoryType[template.business_category_type] : null,
-            template_type: template?.template_type ? TemplateType[template.template_type] : null,
-            required_fields: template?.requiredFields,
-            qas: template?.qas.map(qa => ({
-              question: qa.question,
-              answerFormat: qa.answerFormat ? answerFormat[qa.answerFormat] : null,
-            })),
-          };
+        // const mappedTemplate = {
+        //     _id: template?._id,
+        //     business_category_type: template?.business_category_type ? CategoryType[template.business_category_type] : null,
+        //     template_type: template?.template_type ? TemplateType[template.template_type] : null,
+        //     required_fields: template?.requiredFields,
+        //     qas: template?.qas.map(qa => ({
+        //       question: qa.question,
+        //       answerFormat: qa.answerFormat ? answerFormat[qa.answerFormat] : null,
+        //     })),
+        //   };
         
         if (Object.keys(template?template:{}).length === 0) {
             return res.status(404).json({ error: status_codes[404] })
         }
-        res.status(200).send(mappedTemplate);
+        res.status(200).send(template);
     } catch(error){
         res.status(500).json({ error: status_codes[500] })
     }

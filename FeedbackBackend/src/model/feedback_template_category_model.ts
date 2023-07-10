@@ -12,7 +12,7 @@ interface IFeedbackTemplate extends Document {
   business_category_type: CategoryType;
   template_type: TemplateType;
   requiredFields: Record<string, boolean>;
-  qas: IFeedbackQuestion[];
+  qas: Record<string, IFeedbackQuestion[]>;
 }
 
 const FeedbackQuestionSchema: Schema = new Schema(
@@ -47,7 +47,8 @@ const FeedbackCategoryTemplateSchema: Schema = new Schema(
       of: Boolean,
     },
     qas: {
-      type: [FeedbackQuestionSchema],
+      type: Map,
+      of: [FeedbackQuestionSchema]
     },
   },
   { timestamps: true, versionKey: false }
