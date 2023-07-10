@@ -4,12 +4,12 @@
             <h3 class="white logo">feedback</h3>
             <a mat-list-item routerLink="feedbacks" routerLinkActive="active">
                 <button mat-flat-button class="white nav-btn">
-                    <mat-icon>feedback</mat-icon><p>Feedback</p>
+                    <mat-icon>feedback</mat-icon><p>Feedbacks</p>
                 </button>
             </a>
             <a mat-list-item routerLink="feedback-templates" routerLinkActive="active">
                 <button mat-flat-button class="white nav-btn">
-                    <mat-icon>format_size</mat-icon><p>Template</p>
+                    <mat-icon>format_size</mat-icon><p>Templates</p>
                 </button>
             </a>
             <a mat-list-item routerLink="profile" routerLinkActive="active">
@@ -32,7 +32,7 @@
                     <mat-icon>person</mat-icon>
                 </button>
                 <mat-menu #profile="matMenu">
-                    <!-- <button mat-menu-item routerLink="profile">Profile</button> -->
+                    <button mat-menu-item routerLink="profile">Profile</button>
                     <button (click)="logout()" mat-menu-item>Logout</button>
                 </mat-menu>
             </mat-toolbar-row>

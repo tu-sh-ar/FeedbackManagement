@@ -6,6 +6,7 @@ import { FeedbackDetailsComponent } from './feedback-details/feedback-details.co
 import { PageNotFoundComponent } from '../shared/page-not-found/page-not-found.component';
 import { ProfileComponent } from './profile/profile.component';
 import { FeedbackTemplatesComponent } from './feedback-templates/feedback-templates.component';
+import { ExpandedTemplateViewComponent } from './expanded-template-view/expanded-template-view.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
       {
         path:"feedback-templates",
         component:FeedbackTemplatesComponent
+      },
+      {
+        path:"feedback-templates/template/:id",
+        component:ExpandedTemplateViewComponent
       },
       {
         path:"profile",

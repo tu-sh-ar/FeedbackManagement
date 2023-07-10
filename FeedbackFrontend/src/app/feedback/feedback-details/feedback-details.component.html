@@ -3,29 +3,29 @@
     <mat-spinner></mat-spinner>
 </div>
 <mat-card *ngIf="isLoaded">
-    <mat-card-content *ngIf="feedback && user">
+    <mat-card-content *ngIf="feedback">
         <div class="detail-element">
             Feedback ID:
             <span class="spacer"></span>
             <span class="bold">{{feedback.feedback_id}}</span>
         </div>
         <div class="wrapper">
-            <div class="detail-element">
+            <div class="detail-element" *ngIf="product">
                 Product Name:
                 <span class="spacer"></span>
                 <span class="bold">{{product.name}}</span>
             </div>
-            <div class="detail-element">
+            <div class="detail-element" *ngIf="product">
                 Product ID:
                 <span class="spacer"></span>
                 <span class="bold">{{product.id}}</span>
             </div>
-            <div class="detail-element">
+            <div class="detail-element" *ngIf="user">
                 Customer Name:
                 <span class="spacer"></span>
                 <span class="bold">{{user.name}}</span>
             </div>
-            <div class="detail-element">
+            <div class="detail-element" *ngIf="user">
                 Customer Email:
                 <span class="spacer"></span>
                 <span class="bold">{{user.email}}</span>

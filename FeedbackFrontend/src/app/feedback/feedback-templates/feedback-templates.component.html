@@ -1,51 +1,29 @@
-<h3>Feedback Template</h3>
+<h3>Default Templates</h3>
+<mat-divider></mat-divider>
 
-<div class="main-wrapper">
-    <span class="green-badge" style="float: left;">Active</span>
-    <span style="float: right;">
-        <button mat-icon-button color="primary" (click)="addQA()" *ngIf="enableEditing" matTooltip="Add new QA">
-            <mat-icon><mat-icon>add_circle_outline</mat-icon></mat-icon>
-        </button>
-        <button mat-icon-button color="accent" (click)="saveQA()" *ngIf="enableEditing" matTooltip="Save">
-            <mat-icon>save</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="disableEditingFeature();" *ngIf="enableEditing" matTooltip="Cancel">
-            <mat-icon>cancel</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" *ngIf="!enableEditing" (click)="enableEditingFeature()" matTooltip="Edit">
-            <mat-icon>edit</mat-icon>
-        </button>
-    </span>
-    <form>
-        <div *ngFor="let qa of currentQA;let i=index" class="question">
-            <div>
-                <h3>{{i+1}}</h3>
-                <mat-form-field appearance="outline">
-                    <textarea matInput value="{{qa.question}}" placeholder="Enter a question for the customer" (change)="updateQuesInNewQA($event, i)" [disabled]="!enableEditing"></textarea>
-                </mat-form-field>
-                <mat-form-field>
-                    <mat-select value="{{qa.answerFormat}}" (selectionChange)="updateAnsFormatInNewQA($event,i)" [disabled]="!enableEditing">
-                        <mat-option value="">
-                            Select rating method
-                        </mat-option>
-                        <mat-option value="rating (1-5)">
-                            rating (1-5)
-                        </mat-option>
-                        <mat-option value="radio">
-                            radio
-                        </mat-option>
-                        <mat-option value="checkbox">
-                            checkbox
-                        </mat-option>
-                        <mat-option value="textbox">
-                            textbox
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <button mat-icon-button color="warn" (click)="removeQAField(i)" *ngIf="enableEditing">
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </div>
-        </div>
-    </form>
+<div class="category-wrapper">
+    <div>
+        <span class="bold grey">Product Feedback Templates</span>
+    </div>
+    <div class="scroller">
+        <app-feedback-template-preview-card></app-feedback-template-preview-card>
+    </div>
+</div>
+
+<div class="category-wrapper">
+    <div>
+        <span class="bold grey">Service Feedback Templates</span>
+    </div>
+    <div class="scroller">
+        <app-feedback-template-preview-card></app-feedback-template-preview-card>
+    </div>
+</div>
+
+<div class="category-wrapper">
+    <div>
+        <span class="bold grey">Delivery Feedback Templates</span>
+    </div>
+    <div class="scroller">
+        <app-feedback-template-preview-card></app-feedback-template-preview-card>
+    </div>
 </div>

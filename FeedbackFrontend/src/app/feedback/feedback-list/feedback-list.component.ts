@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Feedback, PaginatedFeedbackResponse } from 'src/app/interfaces/feedback';
@@ -14,14 +13,13 @@ import { ReplyCardComponent } from '../reply-card/reply-card.component';
 })
 export class FeedbackListComponent implements OnInit{
   @ViewChild('paginator') paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
   paginatedFeedbacks!: PaginatedFeedbackResponse;
   feedbacks!:Feedback[];
   dataSource!: MatTableDataSource<Feedback>;
   displayFeedbackColumns: string[] = ['user_name', 'product_id', 'feedback_id', 'rating', 'created_at', 'action'];
   todayDate:Date = new Date();
-  pageIndex:number = 0;
-  pageSize:number = 20;
+  pageIndex!:number;
+  pageSize!:number;
   totalData!:number;
 
   constructor(
@@ -36,11 +34,11 @@ export class FeedbackListComponent implements OnInit{
   }
 
   getFeedbacks(){
-    this._feedbackService.getPaginatedFeedbacks(this.pageIndex+1, this.pageSize).subscribe((res)=>{
+    this._feedbackService.getPaginatedFeedbacks(this.pageIndex+1, this.pageSize)
+    .subscribe((res)=>{
       this.paginatedFeedbacks = res;
       this.dataSource = new MatTableDataSource(this.paginatedFeedbacks.feedbacks);
       this.totalData = this.paginatedFeedbacks.totalFeedbacks;
-      this.dataSource.sort = this.sort;
     })
   }
 
