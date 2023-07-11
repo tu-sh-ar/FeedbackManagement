@@ -7,10 +7,12 @@ import { ReactiveFormsModule, FormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ActiveBadgeComponent } from './active-badge/active-badge.component';
 
 @NgModule({
   declarations: [
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ActiveBadgeComponent
   ],
   imports: [
     CommonModule,
@@ -26,7 +28,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     FormsModule,
     HttpClientModule,
     RouterModule,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ActiveBadgeComponent
   ]
 })
 export class SharedModule { }

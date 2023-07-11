@@ -1,32 +1,42 @@
-<h3>Template Ref. 1</h3>
-
+<div class="head">
+    <span class="template-reference bold">
+        Template Ref 1
+        <app-active-badge></app-active-badge>
+    </span>
+    <button mat-flat-button color="primary">
+        Use this template
+    </button>
+</div>
 <div class="main-wrapper">
-    <div>
-        <h4>1. Product</h4>
-        <small>How would you rate our product?</small>
-        <app-dummy-rating-component></app-dummy-rating-component>
-        <small>Please leave a customer review:</small>
-        <app-dummy-textbox-component></app-dummy-textbox-component>
+    <div class="left-box">
+        <div class="left-box-option" (click)="activateProduct()" [ngClass]="{'selected':product}">
+            <span class="bold">Product</span>
+        </div>
+        <div class="left-box-option" (click)="activatePackaging()" [ngClass]="{'selected':packaging}">
+            <span class="bold">Packaging</span>
+        </div>
+        <div class="left-box-option" (click)="activateOverall()" [ngClass]="{'selected':overall}">
+            <span class="bold">Overall Satisfaction</span>
+        </div>
     </div>
-    
-    <div>
-        <h4>2. Packaging</h4>
-        <small>How was the packaging of the shipped order?</small>
-        <app-dummy-rating-component></app-dummy-rating-component>
-        <br>
-        <small>Did the packaging effectively protect the goods during transit?</small>
-        <app-dummy-radio-component></app-dummy-radio-component>
-    </div>
-    
-    <div>
-        <h4>3. Overall Satisfaction</h4>
-        <small>How likely would you recommend this product based on your experience?</small>
-        <app-experience-bar></app-experience-bar>
-    </div>
-    
-    <div>
-        <button mat-flat-button color="primary" style="margin-block: 1em;">
-            Set as active
-        </button>
+    <div class="right-box">
+        <div *ngIf="product">
+            <span class="bold">How would you rate our product?</span>
+            <app-dummy-rating-component></app-dummy-rating-component>
+            <br>
+            <span class="bold">Please leave a customer review:</span>
+            <app-dummy-textbox-component></app-dummy-textbox-component>
+        </div>
+        <div *ngIf="packaging">
+            <span class="bold">How was the packaging of the shipped order?</span>
+            <app-dummy-rating-component></app-dummy-rating-component>
+            <br>
+            <span class="bold">Did the packaging effectively protect the goods during transit?</span>
+            <app-dummy-radio-component></app-dummy-radio-component>
+        </div>
+        <div *ngIf="overall">
+            <span class="bold">How likely would you recommend this product based on your experience?</span>
+            <app-experience-bar></app-experience-bar>
+        </div>
     </div>
 </div>

@@ -1,35 +1,5 @@
-// .green-badge{
-//     color: #355E3B;
-//     background-color: #AFE1AF;
-//     padding: 0.4em;
-//     border-radius: 0.5em;
-// }
-// .question{
-//     border: 1px solid rgb(150, 150, 150);
-//     padding: 0em 1em;
-//     margin-block: 0.5em;
-//     border-radius: 1em;
-// }
-// form{
-//     margin-top: 3em;
-// }
-// .spacer{
-//     padding: 0px 5px;
-// }
-// mat-form-field{
-//     width: 100%;
-// }
-// textarea{
-//     resize: none;
-// }
-// .main-wrapper{
-//   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-//   border-radius: 1em;
-//   padding: 1em;
-// }
-
 .category-wrapper{
-    margin: 1em 0 2em 0;
+    margin: 2em 0 2em 0;
 }
 .scroller{
     margin-top: 0.5em;
@@ -38,4 +8,12 @@
 }
 ::-webkit-scrollbar {
     display: none;
+}
+.head{
+    text-align: end;
+    margin-block: 0.5em;
+}
+.template-reference{
+    font-size: 1.25em;
+    float: left;
 }

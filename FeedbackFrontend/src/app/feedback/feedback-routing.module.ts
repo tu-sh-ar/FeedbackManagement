@@ -36,6 +36,10 @@ const routes: Routes = [
         component:ExpandedTemplateViewComponent
       },
       {
+        path:"feedback-templates/custom",
+        component:ProfileComponent
+      },
+      {
         path:"profile",
         component:ProfileComponent
       },

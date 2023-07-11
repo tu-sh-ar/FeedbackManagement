@@ -2,8 +2,13 @@
 <mat-divider></mat-divider>
 
 <div class="category-wrapper">
-    <div>
-        <span class="bold grey">Product Feedback Templates</span>
+    <div class="head">
+        <span class="template-reference bold">
+            Product Feedback Template
+        </span>
+        <button mat-flat-button color="primary" (click)="openTemplatePrefrenceDialog()">
+            Create custom template
+        </button>
     </div>
     <div class="scroller">
         <app-feedback-template-preview-card></app-feedback-template-preview-card>
@@ -11,8 +16,13 @@
 </div>
 
 <div class="category-wrapper">
-    <div>
-        <span class="bold grey">Service Feedback Templates</span>
+    <div class="head">
+        <span class="template-reference bold">
+            Service Feedback Template
+        </span>
+        <button mat-flat-button color="primary" (click)="openTemplatePrefrenceDialog()">
+            Create custom template
+        </button>
     </div>
     <div class="scroller">
         <app-feedback-template-preview-card></app-feedback-template-preview-card>
@@ -20,8 +30,13 @@
 </div>
 
 <div class="category-wrapper">
-    <div>
-        <span class="bold grey">Delivery Feedback Templates</span>
+    <div class="head">
+        <span class="template-reference bold">
+            Delivery Feedback Template
+        </span>
+        <button mat-flat-button color="primary" (click)="openTemplatePrefrenceDialog()">
+            Create custom template
+        </button>
     </div>
     <div class="scroller">
         <app-feedback-template-preview-card></app-feedback-template-preview-card>

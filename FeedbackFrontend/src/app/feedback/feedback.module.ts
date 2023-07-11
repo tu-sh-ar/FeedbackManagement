@@ -15,6 +15,7 @@ import { DummyRadioComponentComponent } from './dummy-radio-component/dummy-radi
 import { DummyRatingComponentComponent } from './dummy-rating-component/dummy-rating-component.component';
 import { DummyTextboxComponentComponent } from './dummy-textbox-component/dummy-textbox-component.component';
 import { ExperienceBarComponent } from './experience-bar/experience-bar.component';
+import { TemplatePreferencePopupComponent } from './template-preference-popup/template-preference-popup.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ExperienceBarComponent } from './experience-bar/experience-bar.componen
     DummyRadioComponentComponent,
     DummyRatingComponentComponent,
     DummyTextboxComponentComponent,
-    ExperienceBarComponent
+    ExperienceBarComponent,
+    TemplatePreferencePopupComponent
   ],
   imports: [
     CommonModule,

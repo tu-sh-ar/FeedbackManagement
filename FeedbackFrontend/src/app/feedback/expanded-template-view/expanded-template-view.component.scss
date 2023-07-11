@@ -1,3 +1,36 @@
+::-webkit-scrollbar {
+    display: none;
+}
+.head{
+    text-align: end;
+    margin-block: 0.5em;
+}
+.template-reference{
+    font-size: 1.25em;
+    float: left;
+}
+.selected{
+    background-color: white !important;
+    border-left: 5px solid #545BFC;
+}
 .main-wrapper{
-    padding-inline: 1em;
+    display: flex;
+    height: 80%;
+    border: 1px solid rgb(220, 220, 200);
+    border-radius: 1em;
+    overflow: hidden;
+}
+.left-box{
+    background-color: #F1F3F6;
+    width: 20%;
+    overflow-y: scroll;
+}
+.left-box-option{
+    padding: 1.25em 0em 1.25em 1em;
+    cursor: pointer;
+}
+.right-box{
+    width: 80%;
+    overflow-y: scroll;
+    padding: 2em 4em;
 }
