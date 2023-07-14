@@ -43,10 +43,6 @@ const AnswerFormatSchema = new mongoose_1.Schema({
     upperBound: {
         type: Number,
         required: false,
-    },
-    isActive: {
-        type: Boolean,
-        default: true,
     }
 }, { _id: false, minimize: true });
 const QuestionAnswerFormFieldSchema = new mongoose_1.Schema({
@@ -63,7 +59,7 @@ const QuestionAnswerFormFieldSchema = new mongoose_1.Schema({
         required: true,
     },
     answerFormat: {
-        type: [AnswerFormatSchema],
+        type: AnswerFormatSchema,
         required: true
     },
     isActive: {
@@ -84,7 +80,7 @@ const FeedbackFormatSchema = new mongoose_1.Schema({
         type: Number,
         required: true,
     },
-    fields: {
+    questions: {
         type: [QuestionAnswerFormFieldSchema],
         default: [],
     },
@@ -95,9 +91,9 @@ const FeedbackFormatSchema = new mongoose_1.Schema({
     }
 }, { _id: false });
 const FeedbackTemplateSchema = new mongoose_1.Schema({
-    templateType: {
-        type: Number,
-        enum: [answerFormat_enum_1.TemplateType.CUSTOM, answerFormat_enum_1.TemplateType.DEFAULT],
+    feedbackType: {
+        type: mongoose_1.Types.ObjectId,
+        ref: 'FeedbackCategory',
         required: true,
     },
     templateName: {
@@ -108,22 +104,14 @@ const FeedbackTemplateSchema = new mongoose_1.Schema({
         type: Number,
         required: false,
     },
-    businessType: {
-        type: Number,
-        required: true,
-    },
-    formats: {
+    sections: {
         type: [FeedbackFormatSchema],
         default: [],
-    },
-    clientId: {
-        type: Number,
-        required: false,
     },
     isActive: {
         type: Boolean,
         default: false
     },
 }, { timestamps: true, versionKey: false, });
-const FeedbackTemplate = mongoose_1.default.model('FeedbackTemplate', FeedbackTemplateSchema);
-exports.default = FeedbackTemplate;
+const FeedbackDefaultTemplate = mongoose_1.default.model('FeedbackDefaultTemplates', FeedbackTemplateSchema);
+exports.default = FeedbackDefaultTemplate;

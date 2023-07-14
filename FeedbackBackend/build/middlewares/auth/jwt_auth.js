@@ -48,12 +48,32 @@ const verifyToken = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                 const id = decodedToken.id;
                 const role = decodedToken.role;
                 const businessCategory = decodedToken.businessCategory;
+                let parsedRoleId;
+                if (typeof role === 'string') {
+                    parsedRoleId = parseInt(role, 10);
+                    if (isNaN(parsedRoleId)) {
+                        res.status(401).json({ error: 'Unauthorized' });
+                    }
+                }
+                else if (typeof role !== 'number') {
+                    res.status(401).json({ error: 'Unauthorized' });
+                }
+                // Convert clientId to a number if possible
+                let parsedClientId;
+                if (typeof id === 'string') {
+                    parsedClientId = parseInt(id, 10);
+                    if (isNaN(parsedClientId)) {
+                        res.status(400).json({ error: 'User Id should be a number or convertible to a number' });
+                    }
+                }
+                else if (typeof id !== 'number') {
+                    res.status(400).json({ error: 'User Id should be a number or convertible to a number' });
+                }
                 // Storing the extracted information for later use or pass it to the next middleware
                 req.user = {
-                    id,
+                    id: parsedClientId,
                     email,
-                    role,
-                    businessCategory
+                    role: parsedRoleId
                 };
                 next();
             }

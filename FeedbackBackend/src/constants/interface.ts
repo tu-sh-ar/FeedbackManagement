@@ -1,8 +1,8 @@
 export interface FeedbackFormBodySchema {
     businessCategory?: number;
-    businessType: number;
+    feedbackType: number;
     feedbackFormName: string;
-    formats: {
+    sections: {
         title: string;
         order: number;
         fields: {

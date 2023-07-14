@@ -1,19 +1,19 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
 import { FieldTypes, TemplateType } from '../middlewares/enums/answerFormat_enum';
+import { ObjectId } from 'mongodb';
 
 export interface AnswerFormat {
   type: string;
   required: boolean;
   options?: string[];
   upperBound?: number;
-  activeStatus?: boolean;
 }
 
 export interface QuestionAnswerFormField {
   id: number;
   question: string;
   order: number;
-  answerFormat: AnswerFormat[];
+  answerFormat: AnswerFormat;
   activeStatus?: boolean;
 }
 
@@ -21,18 +21,18 @@ export interface FeedbackFormat {
   id: number;
   title: string;
   order: number;
-  fields?: QuestionAnswerFormField[];
+  questions: QuestionAnswerFormField[];
   activeStatus?: boolean;
 }
 
 export interface IFeedbackTemplate extends Document {
-  templateId: number;
   templateName: string;
   templateType: TemplateType;
+  feedbackType: number;
   businessCategory: number;
-  businessType: number;
-  formats: FeedbackFormat[];
+  sections: FeedbackFormat[];
   businessAdminId: number;
+  defaultTemplateId: ObjectId;
   used: number;
   isActive: boolean;
 }
@@ -56,10 +56,6 @@ const AnswerFormatSchema: Schema = new Schema({
   upperBound: {
     type: Number,
     required: false,
-  },
-  isActive: {
-    type: Boolean,
-    default: true,
   }
 }, { _id: false, minimize: true })
 
@@ -78,7 +74,7 @@ const QuestionAnswerFormFieldSchema: Schema = new Schema({
     required: true,
   },
   answerFormat: {
-    type: [AnswerFormatSchema],
+    type: AnswerFormatSchema,
     required: true
   },
   isActive: {
@@ -101,7 +97,7 @@ const FeedbackFormatSchema: Schema = new Schema({
     type: Number,
     required: true,
   },
-  fields: {
+  questions: {
     type: [QuestionAnswerFormFieldSchema],
     default: [],
   },
@@ -120,6 +116,15 @@ const FeedbackTemplateSchema: Schema = new Schema(
       enum: [TemplateType.CUSTOM, TemplateType.DEFAULT],
       required: true,
     },
+    feedbackType: {
+      type: Types.ObjectId,
+      ref: 'FeedbackCategory',
+      required: true,
+    },
+    defaultTemplateId: {
+      type: Types.ObjectId,
+      ref: 'FeedbackDefaultTemplates',
+    },
     templateName: {
       type: String,
       required: true,
@@ -128,11 +133,7 @@ const FeedbackTemplateSchema: Schema = new Schema(
       type: Number,
       required: false,
     },
-    businessType: { // delivery, packing
-      type: Number,
-      required: true,
-    },
-    formats: {
+    sections: {
       type: [FeedbackFormatSchema],
       default: [],
     },
@@ -152,6 +153,6 @@ const FeedbackTemplateSchema: Schema = new Schema(
   { timestamps: true, versionKey: false, }
 );
 
-const FeedbackTemplate = mongoose.model<IFeedbackTemplate>('FeedbackTemplate', FeedbackTemplateSchema);
+const FeedbackTemplate = mongoose.model<IFeedbackTemplate>('FeedbackCustomTemplate', FeedbackTemplateSchema);
 
 export default FeedbackTemplate;

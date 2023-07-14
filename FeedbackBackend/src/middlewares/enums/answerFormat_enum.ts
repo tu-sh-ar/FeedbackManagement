@@ -24,12 +24,16 @@ const FieldTypesMap: Record<
         value: "text",
         isTextType: true,
     },
+    file: {
+        label: "File",
+        value: "file",
+    },
     number: {
         label: "Number",
         value: "number",
         isTextType: true,
     },
-    starrating: {
+    rating: {
         label: "Star Rating",
         value: "number",
         needsUpperBound: true,

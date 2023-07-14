@@ -35,9 +35,9 @@ const ERROR_NON_EMPTY_FORMATS = 'Formats array must not be empty';
 // Schema definition
 const formSchema = yup.object().shape({
     businessCategory: yup.number(),
-    businessType: yup.number().required(),
+    feedbackType: yup.string().required(),
     feedbackFormName: yup.string().max(MAX_QUESTION_LENGTH).required(ERROR_QUESTION_REQUIRED),
-    formats: yup
+    sections: yup
         .array()
         .max(MAX_FORMATS, ERROR_FORMATS_MAX)
         .of(
@@ -52,65 +52,47 @@ const formSchema = yup.object().shape({
                             question: yup.string()
                                 .max(MAX_QUESTION_LENGTH)
                                 .required(ERROR_QUESTION_REQUIRED),
-                            answerFormat: yup
-                                .array()
-                                .max(MAX_OPTIONS, ERROR_OPTIONS_MAX)
-                                .of(
-                                    yup.object().shape({
-                                        type: yup.string().max(20)
-                                            .required(ERROR_ANSWER_FORMAT_REQUIRED),
-                                        options: yup.array().when('type', {
-                                            is: (type: string) =>
-                                                OPTIONS_TYPES.includes(type),
-                                            then: (value) => value
-                                                .of(yup.string().max(MAX_OPTION_LENGTH).required(ERROR_OPTIONS_REQUIRED))
-                                                .min(1, ERROR_OPTIONS_REQUIRED)
-                                                .max(MAX_OPTIONS, ERROR_OPTIONS_MAX)
-                                                .test('unique-options', ERROR_DUPLICATE_OPTIONS, function (options) {
-                                                    if (!options) {
-                                                        return true;
-                                                    }
-                                                    const optionSet = new Set<string>();
-                                                    for (const option of options) {
-                                                        if (optionSet.has(option)) {
-                                                            return false;
-                                                        }
-                                                        optionSet.add(option);
-                                                    }
+                            answerFormat:
+                                yup.object().shape({
+                                    type: yup.string().max(20)
+                                        .required(ERROR_ANSWER_FORMAT_REQUIRED),
+                                    options: yup.array().when('type', {
+                                        is: (type: string) =>
+                                            OPTIONS_TYPES.includes(type),
+                                        then: (value) => value
+                                            .of(yup.string().max(MAX_OPTION_LENGTH).required(ERROR_OPTIONS_REQUIRED))
+                                            .min(1, ERROR_OPTIONS_REQUIRED)
+                                            .max(MAX_OPTIONS, ERROR_OPTIONS_MAX)
+                                            .test('unique-options', ERROR_DUPLICATE_OPTIONS, function (options) {
+                                                if (!options) {
                                                     return true;
-                                                })
-                                                .test('non-empty-options', OPTIONS_REQUIRED, function (options) {
-                                                    return options && options.length > 0;
-                                                }),
-                                        }),
-                                        required: yup.boolean().required(),
-                                        upperBound: yup
-                                            .number()
-                                            .min(0)
-                                            .max(MAX_UPPER_BOUND)
-                                            .when('type', {
-                                                is: (type: string) =>
-                                                    UPPER_BOUND_TYPES.includes(type),
-                                                then: (value) => value
-                                                    .positive()
-                                                    .required(),
+                                                }
+                                                const optionSet = new Set<string>();
+                                                for (const option of options) {
+                                                    if (optionSet.has(option)) {
+                                                        return false;
+                                                    }
+                                                    optionSet.add(option);
+                                                }
+                                                return true;
                                             })
-                                    })
-                                )
-                                .test('unique-type', ERROR_UNIQUE_TYPES, function (answerFormat) {
-                                    if (!answerFormat) {
-                                        return true;
-                                    }
-                                    const typeSet = new Set<string>();
-                                    for (const format of answerFormat) {
-                                        if (typeSet.has(format.type)) {
-                                            return false;
-                                        }
-                                        typeSet.add(format.type);
-                                    }
-                                    return true;
-                                })
-                                .required(),
+                                            .test('non-empty-options', OPTIONS_REQUIRED, function (options) {
+                                                return options && options.length > 0;
+                                            }),
+                                    }),
+                                    required: yup.boolean().required(),
+                                    upperBound: yup
+                                        .number()
+                                        .min(0)
+                                        .max(MAX_UPPER_BOUND)
+                                        .when('type', {
+                                            is: (type: string) =>
+                                                UPPER_BOUND_TYPES.includes(type),
+                                            then: (value) => value
+                                                .positive()
+                                                .required(),
+                                        })
+                                }).required(),
                             order: yup
                                 .number()
                                 .min(0).required(),
@@ -192,37 +174,29 @@ export const validateFormSchema = (data: any) => formSchema.validate(data);
 
 
 const example = {
-    "businessCategory": 1, 
-    "businessType": 1, 
+    "businessCategory": 1,
+    "feedbackType": '64b14fe37d75d86fd1af82c1',
     "feedbackFormName": "E-commerce feedbacks",
-    "formats": [
+    "sections": [
         {
             "title": "product",
             "order": 1,
             "fields": [
                 {
                     "question": "How was the quality of product?",
-                    "answerFormat": [
-                        {
-                            "type": "boolean",
-                            "required": true
-                        },
-                        {
-                            "type": "text",
-                            "required": false
-                        }
-                    ],
+                    "answerFormat": {
+                        "type": "boolean",
+                        "required": true
+                    },
                     "order": 1
                 },
                 {
                     "question": "Was there any defects in product?",
-                    "answerFormat": [
-                        {
-                            "type": "radio",
-                            "options": ["options1", "options2", "options3"],
-                            "required": true
-                        }
-                    ],
+                    "answerFormat": {
+                        "type": "radio",
+                        "options": ["options1", "options2", "options3"],
+                        "required": true
+                    },
                     "order": 2
                 }
             ]
@@ -233,11 +207,11 @@ const example = {
             "fields": [
                 {
                     "question": "How was the packaging of the product?",
-                    "answerFormat": [{
+                    "answerFormat": {
                         "type": "starrating",
                         "upperBound": 10,
                         "required": false
-                    }],
+                    },
                     "order": 1
                 }
             ]
@@ -248,10 +222,10 @@ const example = {
             "fields": [
                 {
                     "question": "Was the delivery on-time?",
-                    "answerFormat": [{
+                    "answerFormat": {
                         "type": "boolean",
                         "required": false
-                    }],
+                    },
                     "order": 1
                 }
             ]
