@@ -24,49 +24,39 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const FeedbackTemplateSchema = new mongoose_1.Schema({
-    type: {
-        type: Number,
-        required: true
+const buisness_category_enum_1 = require("../middlewares/enums/buisness_category_enum");
+const template_type_1 = require("../middlewares/enums/template_type");
+const answerFormat_enum_1 = require("../middlewares/enums/answerFormat_enum");
+const FeedbackQuestionSchema = new mongoose_1.Schema({
+    question: {
+        type: String,
+        required: true,
     },
-    fields: {
-        type: Map,
-        of: String
+    answerFormat: {
+        type: String,
+        required: true,
+        enum: Object.values(answerFormat_enum_1.answerFormat)
+    },
+}, { _id: false });
+const FeedbackCategoryTemplateSchema = new mongoose_1.Schema({
+    business_category_type: {
+        type: String,
+        required: true,
+        enum: Object.values(buisness_category_enum_1.CategoryType),
+    },
+    template_type: {
+        type: String,
+        required: true,
+        enum: Object.values(template_type_1.TemplateType)
     },
     requiredFields: {
         type: Map,
-        of: Boolean
+        of: Boolean,
     },
     qas: {
         type: Map,
-        of: String
+        of: [FeedbackQuestionSchema]
     },
-    client_id: {
-        type: String,
-        required: true
-    },
-    user_id: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'User'
-    }
 }, { timestamps: true, versionKey: false });
-const FeedbackTemplate = mongoose_1.default.model('FeedbackTemplate', FeedbackTemplateSchema);
-exports.default = FeedbackTemplate;
-// {
-//     "name": "Product Feedback Template",
-//     "type": "product",
-//     "fields": {
-//       "quantity": "number",
-//       "delivery_experience": "string",
-//       "customer_support_experience": "string"
-//     },
-//     "requiredFields": {
-//       "rating": true,
-//       "comment": true,
-//       "feedback_type": false,
-//       "feedback_language": false
-//     },
-//     "qas": {
-//       "Q1": "What do you think about the quality of the product?",
-//       "Q2": "How was your experience with the delivery of the product?"
-//     }
+const FeedbackCategoryTemplates = mongoose_1.default.model('FeedbackCategoryTemplates', FeedbackCategoryTemplateSchema);
+exports.default = FeedbackCategoryTemplates;

@@ -10,23 +10,44 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
 
     try {
       const decodedToken = jwt.verify(token, auth_constant.secret) as {
-          email: string;
-          id: string;
-          role: string;
-          businessCategory:string;
-    };
+        email: string;
+        id: string;
+        role: string;
+        businessCategory: string;
+      };
       if (decodedToken) {
         // Access the token claims
         const email = decodedToken.email;
         const id = decodedToken.id;
         const role = decodedToken.role;
         const businessCategory = decodedToken.businessCategory;
+
+        let parsedRoleId: number | undefined;
+        if (typeof role === 'string') {
+          parsedRoleId = parseInt(role, 10);
+          if (isNaN(parsedRoleId)) {
+            res.status(401).json({ error: 'Unauthorized' });
+          }
+        } else if (typeof role !== 'number') {
+          res.status(401).json({ error: 'Unauthorized' });
+        }
+
+        // Convert clientId to a number if possible
+        let parsedClientId: number | undefined;
+        if (typeof id === 'string') {
+          parsedClientId = parseInt(id, 10);
+          if (isNaN(parsedClientId)) {
+            res.status(400).json({ error: 'User Id should be a number or convertible to a number' });
+          }
+        } else if (typeof id !== 'number') {
+          res.status(400).json({ error: 'User Id should be a number or convertible to a number' });
+        }
+
         // Storing the extracted information for later use or pass it to the next middleware
         req.user = {
-          id,
+          id: parsedClientId,
           email,
-          role,
-          businessCategory
+          role: parsedRoleId
         };
         next();
       } else {

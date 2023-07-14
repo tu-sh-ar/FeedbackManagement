@@ -1,6 +1,6 @@
 // creating the server 
 import express from 'express';
-const server =express();
+const server = express();
 
 // using cors
 import cors from 'cors';
@@ -29,16 +29,14 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
 // connect db function 
-const start_server = async() => {
+const start_server = async () => {
+  try {
+    await connect_db();
+    server_config();
 
-    try {
-
-        await connect_db();
-        server_config();
-
-    } catch (error) {
-        console.log("Error in connecting db")    
-    }
+  } catch (error) {
+    console.log("Error in connecting db")
+  }
 }
 
 // making access stream for morgan logger (for both access and error )
@@ -47,33 +45,33 @@ const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
 
 const server_config = () => {
 
-    // using body parser
-    server.use(express.json());
+  // using body parser
+  server.use(express.json());
 
-    // using cross origin resource sharing for all the routes
-    // Access-Control-Allow-Origin: * i.e api accessed from any routes
-    server.use(cors());
-    
-    // setting up morgan
-    server.use(morgan('combined', 
-      {
-        stream: logStream
-      }));
-    
-    // setting up routin middlewares
-    server.use("/api/feedbackTemplate" , feedback_template_router);
-    server.use("/api/feedback" , feedback_router);
-    server.use("/api/response", feedbackResponse_router);
-    server.use("/api/categoryTemplate", category_template_router);
+  // using cross origin resource sharing for all the routes
+  // Access-Control-Allow-Origin: * i.e api accessed from any routes
+  server.use(cors());
 
-    // test routes
-    server.use("/api/user", user_routes);
-    server.use("/api/client" , client_routes);
+  // setting up morgan
+  server.use(morgan('combined',
+    {
+      stream: logStream
+    }));
 
-    const port = process.env.PORT || 4000
-    server.listen(port, () => {
-        console.log(`Server running at ${port}`);
-    })
+  // setting up routin middlewares
+  server.use("/api/feedbackTemplate", feedback_template_router);
+  server.use("/api/feedback", feedback_router);
+  server.use("/api/response", feedbackResponse_router);
+  server.use("/api/categoryTemplate", category_template_router);
+
+  // test routes
+  server.use("/api/user", user_routes);
+  server.use("/api/client", client_routes);
+
+  const port = process.env.PORT || 4000
+  server.listen(port, () => {
+    console.log(`Server running at ${port}`);
+  })
 }
 
 // start the server 
@@ -97,12 +95,12 @@ const options = {
       },
     ],
   },
-  apis: ["./routes/*.ts" , "./src/documentation/*.yaml"],
+  apis: ["./routes/*.ts", "./src/documentation/*.yaml"],
 };
 
 const specs = swaggerJsdoc(options);
 server.use(
-  "/swagger", 
+  "/swagger",
   swaggerUi.serve,
   swaggerUi.setup(specs, { explorer: true })
 );

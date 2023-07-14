@@ -6,6 +6,5 @@ var feedback_type;
 (function (feedback_type) {
     feedback_type[feedback_type["UserToDeliveryAgent"] = 1] = "UserToDeliveryAgent";
     feedback_type[feedback_type["DeliveryAgentToUser"] = 2] = "DeliveryAgentToUser";
-    feedback_type[feedback_type["UserToProduct"] = 3] = "UserToProduct";
     feedback_type[feedback_type["UserToClient"] = 4] = "UserToClient";
 })(feedback_type = exports.feedback_type || (exports.feedback_type = {}));
