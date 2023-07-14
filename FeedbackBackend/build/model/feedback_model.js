@@ -1,65 +1,55 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
+const QASchema = new mongoose_1.Schema({
+    question: {
+        type: String,
+        required: true,
+    },
+    answer: {
+        type: String,
+    },
+}, { _id: false });
 const FeedbackSchema = new mongoose_1.Schema({
     user_id: {
-        type: String
+        type: String,
+        ref: 'User'
     },
     deliveryagent_id: {
-        type: mongoose_1.Types.ObjectId,
-        ref: 'DeliveryAgent'
+        type: Number
     },
     client_id: {
-        type: String
+        type: Number
     },
     product_id: {
-        type: Number
+        type: Number,
+        required: true,
     },
     template_id: {
         type: mongoose_1.Types.ObjectId,
-        ref: 'FeedbackTemplate'
+        ref: 'FeedbackTemplate',
+        required: true,
     },
     rating: {
         type: Number,
-        required: true
+        required: true,
     },
     comment: {
-        type: String
+        type: String,
     },
     feedback_type: {
-        type: Number
+        type: String,
+        required: true,
     },
     feedback_language: {
-        type: Number
+        type: String,
+        required: true,
     },
     additional_fields: {
         type: Map,
-        of: mongoose_1.Schema.Types.Mixed
+        of: mongoose_1.Schema.Types.Mixed,
     },
-    qas: {
-        type: Map,
-        of: mongoose_1.Schema.Types.Mixed
-    },
+    qas: [QASchema],
 }, { timestamps: true, versionKey: false });
 const FeedbackModel = (0, mongoose_1.model)('Feedback', FeedbackSchema);
 exports.default = FeedbackModel;
-// {
-//   "user_id": "123",
-//   "deliveryagent_id": "456",
-//   "client_id": "789",
-//   "product_id": "001",
-//   "template_id": "xyz",
-//   "rating": 4,
-//   "comment": "I really liked the product!",
-//   "feedback_type": "positive",
-//   "feedback_language": "english",
-//   "additional_fields": {
-//     "quantity": 2,
-//     "delivery_experience": "good",
-//     "product_support_experience": "excellent"
-//   },
-//   "qa_answers": {
-//     "Q1": "The quality of the product was excellent!",
-//     "Q2": "The delivery experience was good."
-//   }
-// }

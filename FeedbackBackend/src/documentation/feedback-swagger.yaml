@@ -272,6 +272,74 @@ paths:
             description: Internal Server Error
           404:
             description: No record found
+  /api/feedback/deliveryAgentFeedback/{agent_id}:
+    get:
+      summary: Get delivery agent feedback
+      tags:
+          - Feedback 
+      security:
+        - JWTAuth: []
+      description: Retrieves feedback for a specific delivery agent.
+      parameters:
+        - in: path
+          name: agent_id
+          schema:
+            type: integer
+          required: true
+          description: ID of the delivery agent
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  agent_id:
+                    type: integer
+                  rating:
+                    type: number
+                  comment:
+                    type: string
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/feedback/deliveryFeedback:
+    post:
+      summary: Create delivery agent feedback
+      tags:
+          - Feedback 
+      security:
+        - JWTAuth: []
+      description: Creates a new delivery agent feedback.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryAgentFeedback'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryAgentFeedback'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
 components:
   schemas:
     FeedbackSchema:
@@ -320,26 +388,72 @@ components:
             field1: "value1"
             field2: "value2"
         qas:
-          type: object
+          type: array
           description: Questions and answers given in the feedback.
+          items:
+            type: object
+            properties:
+              question:
+                type: string
+              answer:
+                type: string
           example:
-            Q1: "A1"
-            Q2: "A2"
+            - question: "Q1"
+              answer: "A1"
+            - question: "Q2"
+              answer: "A2"
       required:
         - user_id
+        - deliveryagent_id
+        - client_id
+        - product_id
+        - template_id
         - rating
+        - feedback_type
+        - feedback_language
       example:
-        feedback_id: 612f45d5fa301d5f77e5d5af
-        product_id: 614f45d5fa301d5f77e5d5af
-        user_id: 615f45d5fa301d5f77e5d5af
+        user_id: e1ac6adc-388c-477e-912b-60d503c7892a
+        user_name: Vikash
+        client_id: d1bb78ca-d9e1-4f72-b4d7-677e8ecb3172
+        product_id: 9
+        template_id: 649bf704ed52f29061348bb5
         rating: 4
-        comment: "The delivery was fast and efficient."
-        review:
+        comment: "Good Product"
+        feedback_type: 4
+        feedback_language: 1
+        additional_fields:
           field1: "value1"
           field2: "value2"
         qas:
-          Q1: "Answer to the question 1 "
-          Q2: "Answer to the question 2 "
+          - question: "Q1"
+            answer: "A1"
+          - question: "Q2"
+            answer: "A2"
+    DeliveryAgentFeedback:
+      type: object
+      properties:
+        deliveryagent_id:
+          type: number
+        user_id:
+          type: string
+        product_id:
+          type: number
+        rating:
+          type: number
+        comment:
+          type: string
+        feedback_language:
+          type: number
+        feedback_type:
+          type: number
+      example:
+        deliveryagent_id: 7
+        user_id: "e1ac6adc-388c-477e-912b-60d503c7892a"
+        product_id: 9
+        rating: 4
+        comment: "On Time delivery!"
+        feedback_language: 1
+        feedback_type: 1
   securitySchemes:
     JWTAuth:
       type: http

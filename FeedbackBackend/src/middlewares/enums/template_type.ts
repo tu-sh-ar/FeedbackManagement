@@ -1,5 +1,6 @@
 // type of template that can be created by the vendor
-export enum template_type {
+export enum TemplateType {
     Product = 1,
-    Service = 2,
+    Service,
+    Delivery
 }

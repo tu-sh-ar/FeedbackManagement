@@ -1,31 +1,74 @@
 import express from "express";
 const router = express.Router();
 
-import { createTemplate, getTemplates, updateTemplate, deleteTemplate } from "../controller/feedback_template_controller";
-import { Validate , validateSchema }  from "../middlewares/validations/schema-validations";
+import { createTemplate, updateTemplate, deleteTemplate, getDefaultBusinessCategoryTemplates, allotDefaultTemplatesToBusinessAdmin, getBusinessAdminTemplates, swapQuestions, swapSections, getTemplateById, activateTemplate } from "../controller/feedback_template_controller";
+import { Validate, validateSchema } from "../middlewares/validations/schema-validations";
 import { verifyToken } from "../middlewares/auth/jwt_auth";
 
 
-router.get("/", verifyToken, getTemplates);
+//fetching default templates
+router.get(
+    "/getDefaultBusinessCategoryTemplates/:businessCategoryId",
+    // verifyToken,
+    getDefaultBusinessCategoryTemplates
+);
+
+//allot default templates to business admin
+router.post(
+    "/allotDefaultTemplatesToBusinessAdmin/:businessAdminId/:businessCategoryId",
+    // verifyToken,
+    allotDefaultTemplatesToBusinessAdmin
+);
+
+//fetching business admin templates
+router.get(
+    "/getBusinessAdminTemplates/:businessAdminId",
+    // verifyToken,
+    getBusinessAdminTemplates
+);
+
+//fetch template
+router.get(
+    "/getTemplateById/:templateId",
+    verifyToken,
+    getTemplateById
+);
+
 
 // new template
 router.post(
-    "/",
-   // verifyToken,
-    Validate.checkFeedbackTemplate,
-    validateSchema,
-    createTemplate
-    );
-
-//update template
-router.put(
-    "/:id",
+    "/create",
     verifyToken,
-    Validate.checkFeedbackTemplate, 
-    validateSchema,
-    updateTemplate
-    );
+    createTemplate
+);
 
-router.delete("/:id", verifyToken,  deleteTemplate);
+// update template
+router.put(
+    "/update/:templateId",
+    verifyToken,
+    updateTemplate
+);
+
+//swap sections
+router.put(
+    "/swapSection/:templateId",
+    verifyToken,
+    swapSections
+);
+
+//swap question
+router.put(
+    "/swapQuestion/:templateId/:sectionId",
+    verifyToken,
+    swapQuestions
+);
+
+//activate feedback
+router.put(
+    "/api/feedbackTemplate/activateTemplate/:businessAdminId",
+    verifyToken,
+    activateTemplate
+);
+router.delete("/deleteTemplate/:id", verifyToken, deleteTemplate);
 
 export default router;

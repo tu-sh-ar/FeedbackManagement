@@ -1,55 +1,58 @@
 // creating the feedback controller 
-import mongoose from 'mongoose'
 import { Request, Response } from 'express'
-import FeedbackModel from '../model/feedback_model'
-import DeliveryAgent from '../model/delivery_agent_model'
-import { feedback_type } from '../middlewares/enums/feedback_type_enum' 
-import FeedbackTemplate from '../model/feedback_template_model'
+import FeedbackModel from '../model/feedback_model' 
+import DeliveryAgentFeedback from '../model/delivery_agent_model'
+import User from '../model/user_model'
+import { status_codes } from '../constants/constants'
 
 // create a feedback
-export const getFeedbacks = async( req:Request, res:Response ) => {
+export const getFeedbacks = async (req:Request, res:Response) => {
+    const page = parseInt(req.query.page as string) || 1;
+    const size = parseInt(req.query.size as string) || 10;
 
-    const page = parseInt(req.query.page as string) || 1; // Default to page 1 if not provided
-    const size = parseInt(req.query.size as  string) || 10; // Default to 10 feedbacks per page if not provided
-  try {
-    // Count total feedbacks
-    const totalCount = await FeedbackModel.countDocuments();
-
-    // Calculate pagination values
-    const totalPages = Math.ceil(totalCount / size);
-    const skip = (page - 1) * size;
-
-    // Get feedbacks based on pagination parameters
-    await FeedbackModel.find()
-      .skip(skip)
-      .limit(size)
-      .then((data) => {
-        const updated_feedback: Array<object> = data.map((feedback) => ({
-          feedback_id: feedback._id,
-          user_id: feedback.user_id,
-          product_id: feedback?.product_id,
-          rating: feedback.rating,
-          comment: feedback?.comment,
-          review: feedback?.additional_fields,
-          QA: feedback?.qas,
-          created_at: feedback.createdAt,
-          updated_at: feedback.updatedAt,
-        }));
-
-        const response = {
-          feedbacks: updated_feedback,
-          currentPage: page,
-          totalPages: totalPages,
-          totalFeedbacks: totalCount,
-        };
-
-        res.status(200).send(response);
-      })
-      .catch((err) => res.status(404).send(err));
-  } catch (error) {
-    res.status(500).send("Internal Server Error");
-  }
-};
+    if(page<1 || size>25 || size<1){
+        res.status(400).json({error: status_codes[400]});
+    }
+    try {
+      const totalCount = await FeedbackModel.countDocuments();
+      const totalPages = Math.ceil(totalCount / size);
+      const skip = (page - 1) * size;
+  
+      const feedbacks = await FeedbackModel.find()
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(size);
+  
+      const updated_feedback = await Promise.all(
+        feedbacks.map(async (feedback) => {
+          const user = await User.findOne({ _id: feedback.user_id });
+          return {
+            feedback_id: feedback._id,
+            user_id: feedback.user_id,
+            user_name: user ? user.name : null,
+            product_id: feedback.product_id,
+            rating: feedback.rating,
+            comment: feedback.comment,
+            review: feedback.additional_fields,
+            QA: feedback.qas,
+            created_at: feedback.createdAt,
+            updated_at: feedback.updatedAt,
+          };
+        })
+      );
+  
+      const response = {
+        feedbacks: updated_feedback,
+        currentPage: page,
+        totalPages: totalPages,
+        totalFeedbacks: totalCount,
+      };
+  
+      res.status(200).send(response);
+    } catch (error) {
+        res.status(404).json({error: status_codes[404]});
+    }
+  };
 
 // create a feedback
 export const createFeedback = async( req:Request, res:Response ) => {
@@ -63,27 +66,26 @@ export const createFeedback = async( req:Request, res:Response ) => {
     try {
 
         // getting the user_id from the auth 
-        const user_id = req.user?.id;  // auth token payload 
+        // const user_id = req.user?.id;  // auth token payload 
         // const delivery_agent_data = DeliveryAgent.findOne({user_id:user_id})
         // feedback_data.deliveryagent_id = delivery_agent_data._id;
     
          //searhing for an existing template for the given template type
-        const feedback_template = await FeedbackTemplate.findOne({type:template_type});
+        // const feedback_template = await FeedbackTemplate.findOne({type:template_type});
 
         // check if the user exists and then make the response 
         const new_feedback_data = {...feedback_data, 
-            //client_id:feedback_template?.client_id, 
-            template_id:feedback_template?._id,
-            // user_id:user_id,
-            feedback_type:feedback_type.UserToClient
+            // client_id:feedback_template?.client_id, 
+            // template_id:feedback_template?._id,
+            // user_id:user_id
         }
         
         await FeedbackModel.create(new_feedback_data)
         .then(data => res.status(201).send(data))
-        .catch(err => res.status(400).send(err))
+        .catch(err => res.status(400).json({error: status_codes[400]}))
 
     } catch (error) {
-        res.status(500).send("internal server error")
+        res.status(500).json({error: status_codes[500]});
     }
 }
 
@@ -94,11 +96,11 @@ export const updateFeedback = async( req:Request, res:Response ) => {
     try {
 
         FeedbackModel.findByIdAndUpdate(id , feedback_data)
-        .then(data => res.status(200).send("Feedback Updated Successfully"))
-        .catch(err => res.status(404).send("No Feedback Found with the given id "))
+        .then(data => res.status(200).send(status_codes[200]))
+        .catch(err => res.status(404).send(err))
 
     } catch (error) {
-        res.status(500).send(`Internal Server Error : ${error}`)
+        res.status(500).json({error: status_codes[500]});
     }
 }
 
@@ -109,11 +111,11 @@ export const deleteFeedback = async( req:Request, res:Response ) => {
     try {
         
         FeedbackModel.findByIdAndDelete(feedback_id)
-        .then(data => res.status(200).send("Deleted Feedback"))
-        .catch(err => res.status(404).send("No Feedback Found"))
+        .then(data => res.status(200).send( status_codes[200]))
+        .catch(err => res.status(404).json({error: status_codes[404]}))
 
     } catch (error) {
-        res.status(500).send("Internal Server Error")
+        res.status(500).json({error: status_codes[500]});
         
     }
 }
@@ -141,10 +143,10 @@ export const get_feedback = async(req:Request, res:Response) => {
         if(Object.keys(new_feedback).length !=0){
             res.status(200).send(new_feedback)
         }else{
-            res.status(404).json({error:"No Feedback Found"});
+            res.status(404).json({error: status_codes[404]});
         }
     } catch (error) {
-        res.status(500).json({error:`Internal Server Error: ${error}`})
+        res.status(500).json({error: status_codes[500]});
     }
 }
 
@@ -158,7 +160,7 @@ export const getPoductFeedbacks = async(req:Request, res:Response) => {
     current_date.setMonth(current_date.getMonth() - month_range);
 
     if(!range || month_range<1 ){
-        res.status(400).json({error:"Invalid range, Bad Request"})
+        res.status(400).json({error: status_codes[400]})
         return;
     }
 
@@ -188,10 +190,10 @@ export const getPoductFeedbacks = async(req:Request, res:Response) => {
                 feedbacks:updated_feedbacks
             })
         } else {
-            res.status(404).json({error:"No feedbacks found for the product"})
+            res.status(404).json({error: status_codes[404]})
         }
     } catch (error) {
-        res.status(500).json({error:"Feedbacks for product id not exist"})
+        res.status(500).json({error: status_codes[500]})
     }
 }
 
@@ -211,10 +213,12 @@ export const getFeedbacksByDate = async(req:Request, res:Response) => {
             }
         })
         
-        feedbacks.forEach(feedback => {
+        feedbacks.forEach(async feedback => {
+            const user_data = await User.findById(feedback.user_id);
             const new_feedback:object = {
                 feedback_id: feedback._id,
                 user_id: feedback.user_id,
+                user_name: user_data?.name,
                 product_id:feedback?.product_id,
                 rating:feedback.rating,
                 comment:feedback?.comment,
@@ -229,6 +233,64 @@ export const getFeedbacksByDate = async(req:Request, res:Response) => {
         res.send(updated_feedback)
             
     } catch (error) {
-        res.status(500).json({error:"Feedbacks not fetched"})
+        res.status(500).json({error: status_codes[500]});
+    }
+}
+
+
+//testing purpose 
+export const getAllFeedbacks = async(req:Request, res:Response) => {
+    try {
+        const feedbacks = await FeedbackModel.find().sort({ createdAt: -1 });
+    
+        const updated_feedback: Array<object> = [];
+        for (const feedback of feedbacks) {
+          const user_data = await User.findById(feedback.user_id);
+          const new_feedback: object = {
+            feedback_id: feedback._id,
+            user_id: feedback.user_id,
+            user_name: user_data?.name,
+            product_id: feedback?.product_id,
+            // product_name
+            rating: feedback.rating,
+            comment: feedback?.comment,
+            review: feedback?.additional_fields,
+            QA: feedback?.qas,
+            created_at: feedback.createdAt,
+            updated_at: feedback.updatedAt,
+          };
+          updated_feedback.push(new_feedback);
+        }
+        res.status(200).send(updated_feedback);
+      } catch (error) {
+        res.status(500).json({error: status_codes[500]});
+      }
+    };
+
+// delivery agent feedback apis 
+export const getDeliveryAgentFeedbacks = async(req:Request, res:Response ) => {
+    const agent_id = parseInt(req.params.agent_id);
+    try {
+        const feedback = await DeliveryAgentFeedback.findOne({deliveryagent_id:agent_id})
+        const updated_feedback ={ 
+            agent_id:agent_id,
+            rating:feedback?.rating,
+            comment:feedback?.comment,
+        }
+            res.status(200).send(updated_feedback);
+        
+    } catch (error) {
+        res.status(404).json({error: status_codes[404]});
+    }
+}
+
+export const createDeliveryAgentFeedbacks = async(req:Request, res:Response ) => {
+    const data = req.body;
+    try {
+        const feedback = await DeliveryAgentFeedback.create(data)
+            res.status(200).send(feedback);
+        
+    } catch (error) {
+        res.status(500).json({error: status_codes[500]});
     }
 }

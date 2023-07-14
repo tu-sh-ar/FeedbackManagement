@@ -34,21 +34,46 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyToken = void 0;
 const jsonwebtoken_1 = __importStar(require("jsonwebtoken"));
+const constants_1 = require("../../constants/constants");
 const verifyToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let token;
     let authHeader = req.headers.authorization;
     if (authHeader && authHeader.toString().startsWith('Bearer')) {
         token = authHeader.toString().split(' ')[1];
         try {
-            const decodedToken = jsonwebtoken_1.default.verify(token, 'my-32-character-ultra-secure-and-ultra-long-secret');
+            const decodedToken = jsonwebtoken_1.default.verify(token, constants_1.auth_constant.secret);
             if (decodedToken) {
                 // Access the token claims
-                const id = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-                const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+                const email = decodedToken.email;
+                const id = decodedToken.id;
+                const role = decodedToken.role;
+                const businessCategory = decodedToken.businessCategory;
+                let parsedRoleId;
+                if (typeof role === 'string') {
+                    parsedRoleId = parseInt(role, 10);
+                    if (isNaN(parsedRoleId)) {
+                        res.status(401).json({ error: 'Unauthorized' });
+                    }
+                }
+                else if (typeof role !== 'number') {
+                    res.status(401).json({ error: 'Unauthorized' });
+                }
+                // Convert clientId to a number if possible
+                let parsedClientId;
+                if (typeof id === 'string') {
+                    parsedClientId = parseInt(id, 10);
+                    if (isNaN(parsedClientId)) {
+                        res.status(400).json({ error: 'User Id should be a number or convertible to a number' });
+                    }
+                }
+                else if (typeof id !== 'number') {
+                    res.status(400).json({ error: 'User Id should be a number or convertible to a number' });
+                }
                 // Storing the extracted information for later use or pass it to the next middleware
                 req.user = {
-                    id,
-                    role,
+                    id: parsedClientId,
+                    email,
+                    role: parsedRoleId
                 };
                 next();
             }

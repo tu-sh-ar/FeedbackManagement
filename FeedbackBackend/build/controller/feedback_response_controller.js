@@ -12,22 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createMissingResponse = exports.getResponse = exports.deleteResponse = exports.create_Response = void 0;
+exports.updateResponse = exports.createMissingResponse = exports.getResponse = exports.deleteResponse = exports.create_Response = void 0;
 const feedback_response_model_1 = __importDefault(require("../model/feedback_response_model"));
 const feedback_model_1 = __importDefault(require("../model/feedback_model"));
+const constants_1 = require("../constants/constants");
 // create response 
 const create_Response = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { feedback_id, response } = req.body;
         // Check if required fields are present
         if (!feedback_id || !response) {
-            res.status(400).json({ error: 'Bad Request: Missing required fields' });
+            res.status(400).json({ error: constants_1.status_codes[400] });
             return;
         }
         // Check if feedback exists
         const feedbackExists = yield feedback_model_1.default.exists({ _id: feedback_id });
         if (!feedbackExists) {
-            res.status(404).json({ error: 'Feedback not found' });
+            res.status(404).json({ error: constants_1.status_codes[404] });
             return;
         }
         // Save the feedback response
@@ -35,27 +36,27 @@ const create_Response = (req, res) => __awaiter(void 0, void 0, void 0, function
         res.status(201).json(feedbackResponse);
     }
     catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: constants_1.status_codes[500] });
     }
 });
 exports.create_Response = create_Response;
 // Delete Response
 const deleteResponse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const feedback_id = req.params.id;
-        if (!feedback_id) {
-            res.status(400).json({ error: 'Bad Request: Missing feedback ID' });
+        const response_id = req.params.id;
+        if (!response_id) {
+            res.status(400).json({ error: constants_1.status_codes[400] });
             return;
         }
-        const response = yield feedback_response_model_1.default.findByIdAndDelete(feedback_id);
+        const response = yield feedback_response_model_1.default.findByIdAndDelete(response_id);
         if (!response) {
-            res.status(404).json({ error: 'Response not found' });
+            res.status(404).json({ error: constants_1.status_codes[404] });
             return;
         }
-        res.status(200).json({ message: 'Deleted successfully' });
+        res.status(200).json({ message: constants_1.status_codes[200] });
     }
     catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(404).json({ error: constants_1.status_codes[404] });
     }
 });
 exports.deleteResponse = deleteResponse;
@@ -64,18 +65,18 @@ const getResponse = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const feedback_id = req.query.feedback_id;
         if (!feedback_id) {
-            res.status(400).json({ error: 'Bad Request: Missing feedback ID' });
+            res.status(400).json({ error: constants_1.status_codes[400] });
             return;
         }
         const response_data = yield feedback_response_model_1.default.findOne({ feedback_id });
         if (!response_data) {
-            res.status(404).json({ error: 'No response found' });
+            res.status(404).json({ error: constants_1.status_codes[404] });
             return;
         }
         res.status(200).json(response_data);
     }
     catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(404).json({ error: constants_1.status_codes[404] });
     }
 });
 exports.getResponse = getResponse;
@@ -87,10 +88,10 @@ const createMissingResponse = () => __awaiter(void 0, void 0, void 0, function* 
             const response = yield feedback_response_model_1.default.findOne({ feedback_id: feedback._id });
             let generatedResponse;
             if (feedback.rating > 3) {
-                generatedResponse = "Thank you for your feedback.";
+                generatedResponse = constants_1.auto_response.good;
             }
             else {
-                generatedResponse = "Sorry for the inconvenience. We will look into the issue.";
+                generatedResponse = constants_1.auto_response.inconvinient;
             }
             if (!response) {
                 const sevenDaysAgo = new Date();
@@ -100,10 +101,23 @@ const createMissingResponse = () => __awaiter(void 0, void 0, void 0, function* 
                 }
             }
         }
-        console.log("Automatic responses generated successfully.");
+        console.log(constants_1.status_codes[200]);
     }
     catch (error) {
-        console.error("Error in automatic response generation:", error);
+        console.error(constants_1.status_codes[500], error);
     }
 });
 exports.createMissingResponse = createMissingResponse;
+//update feedback response 
+const updateResponse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const response_data = req.body;
+    const response_id = req.params.id;
+    try {
+        const data = yield feedback_response_model_1.default.findByIdAndUpdate(response_id, response_data);
+        res.status(200).send(data);
+    }
+    catch (error) {
+        res.status(400).json({ error: constants_1.status_codes[400] });
+    }
+});
+exports.updateResponse = updateResponse;

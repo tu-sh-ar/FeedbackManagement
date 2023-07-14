@@ -34,7 +34,7 @@ const client_login = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                     email: data === null || data === void 0 ? void 0 : data.email,
                     id: data === null || data === void 0 ? void 0 : data._id
                 }
-            }, 'secret', { expiresIn: "100m" });
+            }, 'secret', { expiresIn: "28d" });
             // res.cookie('jwtToken', token, {
             //     httpOnly: true,
             //     maxAge: 100 * 60 * 1000    // Expires in 100 minutes

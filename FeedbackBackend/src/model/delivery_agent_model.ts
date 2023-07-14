@@ -1,23 +1,69 @@
-import { Document, Schema, model } from 'mongoose';
+import { Document, Schema, model , Types} from 'mongoose';
+import { answerFormat } from '../middlewares/enums/answerFormat_enum';
+import { ObjectId } from 'mongodb';
+
+interface IFeedbackQuestion {
+  question: string;
+  answerFormat: answerFormat;
+}
+
+const FeedbackQuestionSchema: Schema = new Schema(
+  {
+    question: {
+      type: String,
+      required: true,
+    },
+    answerFormat: {
+      type: String,
+      required: true,
+      enum: Object.values(answerFormat)
+    },
+  },
+  { _id: false }
+);
 
 interface IDeliveryAgent extends Document {
-    email: string;
-    password: string;
-    client_id: Schema.Types.ObjectId;
-    user_id: Schema.Types.ObjectId;
-    product_id: Schema.Types.ObjectId;
+  template_id: ObjectId;
+  user_id: string;
+  deliveryagent_id: number;
+  product_id: number;
+  rating: number;
+  comment: string;
+  qas: IFeedbackQuestion[];
   }
   
   // Delivery Agent schema
-  const deliveryAgentSchema = new Schema<IDeliveryAgent>({
-    email: { type: String, required: true },
-    password: { type: String, required: true },
-    client_id: { type: Schema.Types.ObjectId, ref: 'Client', required: true },
-    user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    product_id: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
-  });
+  const deliveryAgentFeedbackSchema = new Schema<IDeliveryAgent>({
+    template_id: {
+      type: Types.ObjectId,
+      ref: 'FeedbackTemplate',
+      required: true,
+    },
+    deliveryagent_id: {
+      type:Number,
+      required:true
+    },
+    user_id: {
+       type: String,
+       required:true
+      },
+    product_id: { 
+      type:Number
+    },
+    rating:{
+      type:Number, 
+      required:true
+    },
+    comment:{
+      type:String
+    },
+    qas: {
+      type: [FeedbackQuestionSchema],
+    },
+  },
+  {timestamps:true, versionKey:false});
   
   // Delivery Agent model
-  const DeliveryAgent = model<IDeliveryAgent>('DeliveryAgent', deliveryAgentSchema);
+  const DeliveryAgentFeedback = model<IDeliveryAgent>('DeliveryAgentFeedbacks', deliveryAgentFeedbackSchema);
 
-  export default DeliveryAgent
+  export default DeliveryAgentFeedback

@@ -1,9 +1,9 @@
 import { Schema, model, Document, Types, Date } from 'mongoose';
 
 interface IFeedback extends Document {
-  user_id: Types.ObjectId;
+  user_id: string;
   deliveryagent_id: Types.ObjectId;
-  client_id: Types.ObjectId;
+  client_id: number;
   product_id: number;
   template_id: Types.ObjectId;
   rating: number;
@@ -11,89 +11,69 @@ interface IFeedback extends Document {
   feedback_type: string;
   feedback_language: string;
   additional_fields: Record<string, any>;
-  qas: Record<string, any>;
+  qas: { question: string, answer?: string }[];
   createdAt: Date;
-  updatedAt: Date
+  updatedAt: Date;
 }
+
+const QASchema = new Schema(
+  {
+    question: {
+      type: String,
+      required: true,
+    },
+    answer: {
+      type: String,
+    },
+  },
+  { _id: false }
+);
 
 const FeedbackSchema = new Schema(
   {
-    user_id: 
-    { 
-      type: String
+    user_id: {
+      type: String,
+      ref: 'User'
     },
-    deliveryagent_id: 
-    { 
-      type: Types.ObjectId, 
-      ref: 'DeliveryAgent' 
-    },
-    client_id: 
-    { 
-      type: String
-    },
-    product_id: 
-    { 
+    deliveryagent_id: {
       type: Number
     },
-    template_id: 
-    { 
-      type: Types.ObjectId, 
-      ref: 'FeedbackTemplate' 
+    client_id: {
+      type: Number
     },
-    rating: 
-    { 
-      type: Number, 
-      required: true 
+    product_id: {
+      type: Number,
+      required: true,
     },
-    comment: 
-    { 
-      type: String 
+    template_id: {
+      type: Types.ObjectId,
+      ref: 'FeedbackTemplate',
+      required: true,
     },
-    feedback_type: 
-    { 
-      type: Number 
+    rating: {
+      type: Number,
+      required: true,
     },
-    feedback_language: 
-    { 
-      type: Number 
+    comment: {
+      type: String,
     },
-    additional_fields: 
-    { 
-      type: Map, 
-      of: Schema.Types.Mixed 
+    feedback_type: {
+      type: String,
+      required: true,
     },
-    qas: 
-    { 
-      type: Map, 
-      of: Schema.Types.Mixed 
+    feedback_language: {
+      type: String,
+      required: true,
     },
+    additional_fields: {
+      type: Map,
+      of: Schema.Types.Mixed,
+    },
+    qas: [QASchema],
   },
-  { timestamps: true, versionKey:false },
+  { timestamps: true, versionKey: false }
 );
 
 const FeedbackModel = model<IFeedback>('Feedback', FeedbackSchema);
 
 export default FeedbackModel;
-
-
-// {
-//   "user_id": "123",
-//   "deliveryagent_id": "456",
-//   "client_id": "789",
-//   "product_id": "001",
-//   "template_id": "xyz",
-//   "rating": 4,
-//   "comment": "I really liked the product!",
-//   "feedback_type": "positive",
-//   "feedback_language": "english",
-//   "additional_fields": {
-//     "quantity": 2,
-//     "delivery_experience": "good",
-//     "product_support_experience": "excellent"
-//   },
-//   "qa_answers": {
-//     "Q1": "The quality of the product was excellent!",
-//     "Q2": "The delivery experience was good."
-//   }
-// }
-
