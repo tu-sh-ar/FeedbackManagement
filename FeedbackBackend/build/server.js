@@ -26,10 +26,10 @@ const path_1 = __importDefault(require("path"));
 const feedback_template_route_1 = __importDefault(require("./routes/feedback_template_route"));
 const feedback_route_1 = __importDefault(require("./routes/feedback_route"));
 const feedback_response_route_1 = __importDefault(require("./routes/feedback_response_route"));
+const feedback_template_category_route_1 = __importDefault(require("./routes/feedback_template_category_route"));
 //importing test routes
 const user_routes_1 = __importDefault(require("./routes/user_routes"));
 const client_routes_1 = __importDefault(require("./routes/client_routes"));
-const product_routes_1 = __importDefault(require("./routes/product_routes"));
 // importing the  db config 
 const db_connect_1 = __importDefault(require("./db/db-connect"));
 //importing swagger modules for documentation
@@ -62,10 +62,10 @@ const server_config = () => {
     server.use("/api/feedbackTemplate", feedback_template_route_1.default);
     server.use("/api/feedback", feedback_route_1.default);
     server.use("/api/response", feedback_response_route_1.default);
+    server.use("/api/categoryTemplate", feedback_template_category_route_1.default);
     // test routes
     server.use("/api/user", user_routes_1.default);
     server.use("/api/client", client_routes_1.default);
-    server.use("/api/product", product_routes_1.default);
     const port = process.env.PORT || 4000;
     server.listen(port, () => {
         console.log(`Server running at ${port}`);
@@ -85,6 +85,9 @@ const options = {
         servers: [
             {
                 url: "https://feedbackbackend-dev.azurewebsites.net",
+            },
+            {
+                url: "http://localhost:4000",
             },
         ],
     },

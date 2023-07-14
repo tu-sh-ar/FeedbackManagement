@@ -23,7 +23,7 @@ paths:
       security:
         - JWTAuth: []
     post:
-      summary: Create a new feedback template
+      summary: Create a new feedback form template
       tags:
         - Feedback Template
       security:
@@ -33,18 +33,53 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FeedbackTemplate"
+              $ref: '#/components/schemas/FeedbackFormBodySchema'
+            example:
+              businessCategory: 1
+              businessType: 1
+              feedbackFormName: E-commerce feedbacks
+              formats:
+                - title: product
+                  order: 1
+                  fields:
+                    - question: How was the quality of product?
+                      answerFormat:
+                        - type: boolean
+                          required: true
+                        - type: text
+                          required: false
+                      order: 1
+                    - question: Was there any defects in product?
+                      answerFormat:
+                        - type: radio
+                          options:
+                            - options1
+                            - options2
+                            - options3
+                          required: true
+                      order: 2
+                - title: packaging
+                  order: 2
+                  fields:
+                    - question: How was the packaging of the product?
+                      answerFormat:
+                        - type: starrating
+                          upperBound: 10
+                          required: false
+                      order: 1
+                - title: delivery
+                  order: 3
+                  fields:
+                    - question: Was the delivery on-time?
+                      answerFormat:
+                        - type: boolean
+                          required: false
+                      order: 1
       responses:
-        '201':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FeedbackTemplate"
+        '200':
+          description: Feedback form created successfully
         '400':
           description: Invalid request body
-        '500':
-          description: Internal Server Error
   /api/feedbackTemplate/{id}:
     put:
       summary: Update a feedback template
@@ -103,6 +138,100 @@ paths:
             description: No record found
 components:
   schemas:
+    AnswerFormat:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - boolean
+            - text
+            - radio
+            - select
+            - multiselect
+            - checkbox
+            - starrating
+            - numberrating
+            - emojirating
+          description: Type of the answer format
+        required:
+          type: boolean
+          description: Whether the answer format is required
+        options:
+          type: array
+          items:
+            type: string
+          description: List of options for select, multiselect, radio, and checkbox types
+        upperBound:
+          type: number
+          description: Upper bound for starrating, numberrating, and emojirating types
+      required:
+        - type
+        - required
+    QuestionAnswerFormField:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the field
+        question:
+          type: string
+          description: Question for the field
+        order:
+          type: number
+          description: Order of the field
+        answerFormat:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnswerFormat'
+          description: List of answer formats for the field
+      required:
+        - id
+        - question
+        - order
+        - answerFormat
+    FeedbackFormat:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the format
+        title:
+          type: string
+          description: Title of the format
+        order:
+          type: number
+          description: Order of the format
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionAnswerFormField'
+          description: List of fields in the format
+      required:
+        - id
+        - title
+        - order
+    FeedbackFormBodySchema:
+      type: object
+      properties:
+        businessCategory:
+          type: number
+          description: Business category
+        businessType:
+          type: number
+          description: Business type
+        feedbackFormName:
+          type: string
+          description: Name of the feedback form
+        formats:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeedbackFormat'
+          description: List of feedback formats
+      required:
+        - businessType
+        - feedbackFormName
+        - formats
     FeedbackQuestion:
       type: object
       properties:
@@ -118,7 +247,6 @@ components:
       required:
         - question
         - answerFormat
-
     FeedbackTemplate:
       type: object
       properties:

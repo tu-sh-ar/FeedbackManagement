@@ -28,7 +28,8 @@
     "tedious": "^16.0.0",
     "ts-node": "^10.9.1",
     "uuid": "^9.0.0",
-    "validator": "^13.9.0"
+    "validator": "^13.9.0",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",

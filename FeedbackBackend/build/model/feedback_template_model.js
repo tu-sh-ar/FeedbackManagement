@@ -24,49 +24,106 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const FeedbackTemplateSchema = new mongoose_1.Schema({
+const answerFormat_enum_1 = require("../middlewares/enums/answerFormat_enum");
+const AnswerFormatSchema = new mongoose_1.Schema({
     type: {
+        type: String,
+        required: true,
+        enum: answerFormat_enum_1.FieldTypes
+    },
+    required: {
+        type: Boolean,
+        required: true,
+    },
+    options: {
+        type: [String],
+        required: false,
+        default: undefined
+    },
+    upperBound: {
         type: Number,
+        required: false,
+    },
+    isActive: {
+        type: Boolean,
+        default: true,
+    }
+}, { _id: false, minimize: true });
+const QuestionAnswerFormFieldSchema = new mongoose_1.Schema({
+    id: {
+        type: Number,
+        required: true,
+    },
+    question: {
+        type: String,
+        required: true,
+    },
+    order: {
+        type: Number,
+        required: true,
+    },
+    answerFormat: {
+        type: [AnswerFormatSchema],
         required: true
+    },
+    isActive: {
+        type: Boolean,
+        default: true,
+    }
+}, { _id: false });
+const FeedbackFormatSchema = new mongoose_1.Schema({
+    id: {
+        type: Number,
+        required: true,
+    },
+    title: {
+        type: String,
+        required: true,
+    },
+    order: {
+        type: Number,
+        required: true,
     },
     fields: {
-        type: Map,
-        of: String
+        type: [QuestionAnswerFormFieldSchema],
+        default: [],
     },
-    requiredFields: {
-        type: Map,
-        of: Boolean
-    },
-    qas: {
-        type: Map,
-        of: String
-    },
-    client_id: {
-        type: String,
-        required: true
-    },
-    user_id: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'User'
+    isActive: {
+        type: Boolean,
+        default: true,
+        required: true,
     }
-}, { timestamps: true, versionKey: false });
+}, { _id: false });
+const FeedbackTemplateSchema = new mongoose_1.Schema({
+    templateType: {
+        type: Number,
+        enum: [answerFormat_enum_1.TemplateType.CUSTOM, answerFormat_enum_1.TemplateType.DEFAULT],
+        required: true,
+    },
+    templateName: {
+        type: String,
+        required: true,
+    },
+    businessCategory: {
+        type: Number,
+        required: false,
+    },
+    businessType: {
+        type: Number,
+        required: true,
+    },
+    formats: {
+        type: [FeedbackFormatSchema],
+        default: [],
+    },
+    clientId: {
+        type: Number,
+        required: false,
+    },
+    isActive: {
+        type: Boolean,
+        default: false
+    },
+}, { timestamps: true, versionKey: false, });
 const FeedbackTemplate = mongoose_1.default.model('FeedbackTemplate', FeedbackTemplateSchema);
 exports.default = FeedbackTemplate;
-// {
-//     "name": "Product Feedback Template",
-//     "type": "product",
-//     "fields": {
-//       "quantity": "number",
-//       "delivery_experience": "string",
-//       "customer_support_experience": "string"
-//     },
-//     "requiredFields": {
-//       "rating": true,
-//       "comment": true,
-//       "feedback_type": false,
-//       "feedback_language": false
-//     },
-//     "qas": {
-//       "Q1": "What do you think about the quality of the product?",
-//       "Q2": "How was your experience with the delivery of the product?"
-//     }

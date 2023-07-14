@@ -1,73 +1,155 @@
-import mongoose, { Document, Schema , Types } from 'mongoose';
-import { CategoryType } from '../middlewares/enums/buisness_category_enum';
-import { TemplateType } from '../middlewares/enums/template_type';
-import { answerFormat } from '../middlewares/enums/answerFormat_enum';
-import { ObjectId } from 'mongodb';
+import mongoose, { Document, Schema, Types } from 'mongoose';
+import { FieldTypes, TemplateType } from '../middlewares/enums/answerFormat_enum';
 
-interface IFeedbackQuestion {
+export interface AnswerFormat {
+  type: string;
+  required: boolean;
+  options?: string[];
+  upperBound?: number;
+  activeStatus?: boolean;
+}
+
+export interface QuestionAnswerFormField {
+  id: number;
   question: string;
-  answerFormat: answerFormat;
+  order: number;
+  answerFormat: AnswerFormat[];
+  activeStatus?: boolean;
 }
 
-interface IFeedbackTemplate extends Document {
-  template_type: TemplateType;
-  categoryTemplate_id: Types.ObjectId;
-  business_type: CategoryType;
-  requiredFields: Record<string, boolean>;
-  qas: IFeedbackQuestion[];
-  client_id: number;
-  isActive:Boolean;
+export interface FeedbackFormat {
+  id: number;
+  title: string;
+  order: number;
+  fields?: QuestionAnswerFormField[];
+  activeStatus?: boolean;
 }
 
-const FeedbackQuestionSchema: Schema = new Schema({
+export interface IFeedbackTemplate extends Document {
+  templateId: number;
+  templateName: string;
+  templateType: TemplateType;
+  businessCategory: number;
+  businessType: number;
+  formats: FeedbackFormat[];
+  businessAdminId: number;
+  used: number;
+  isActive: boolean;
+}
+
+
+const AnswerFormatSchema: Schema = new Schema({
+  type: {
+    type: String,
+    required: true,
+    enum: FieldTypes
+  },
+  required: {
+    type: Boolean,
+    required: true,
+  },
+  options: {
+    type: [String],
+    required: false,
+    default: undefined
+  },
+  upperBound: {
+    type: Number,
+    required: false,
+  },
+  isActive: {
+    type: Boolean,
+    default: true,
+  }
+}, { _id: false, minimize: true })
+
+
+const QuestionAnswerFormFieldSchema: Schema = new Schema({
+  id: {
+    type: Number,
+    required: true,
+  },
   question: {
     type: String,
     required: true,
   },
+  order: {
+    type: Number,
+    required: true,
+  },
   answerFormat: {
+    type: [AnswerFormatSchema],
+    required: true
+  },
+  isActive: {
+    type: Boolean,
+    default: true,
+  }
+}, { _id: false })
+
+
+const FeedbackFormatSchema: Schema = new Schema({
+  id: {
+    type: Number,
+    required: true,
+  },
+  title: {
     type: String,
     required: true,
-    enum:Object.values(answerFormat)
   },
-},
-{_id:false}
-);
+  order: {
+    type: Number,
+    required: true,
+  },
+  fields: {
+    type: [QuestionAnswerFormFieldSchema],
+    default: [],
+  },
+  isActive: {
+    type: Boolean,
+    default: true,
+    required: true,
+  }
+}, { _id: false });
+
 
 const FeedbackTemplateSchema: Schema = new Schema(
   {
-    template_type: {
+    templateType: {
+      type: Number,
+      enum: [TemplateType.CUSTOM, TemplateType.DEFAULT],
+      required: true,
+    },
+    templateName: {
       type: String,
       required: true,
-      enum: Object.values(TemplateType)
     },
-    template_id: {
-      type: Types.ObjectId,
-      ref: 'FeedbackCategoryTemplates',
-      required: true,
+    businessCategory: { // ecommerce, food
+      type: Number,
+      required: false,
     },
-    business_type: {
-      type: String,
-      required: true,
-      enum: Object.values(CategoryType)
-    },
-    requiredFields: {
-      type: Map,
-      of: Boolean,
-    },
-    qas: {
-      type: [FeedbackQuestionSchema],
-      default: [],
-    },
-    client_id: {
+    businessType: { // delivery, packing
       type: Number,
       required: true,
+    },
+    formats: {
+      type: [FeedbackFormatSchema],
+      default: [],
+    },
+    businessAdminId: {
+      type: Number,
+      required: false,
     },
     isActive: {
       type: Boolean,
       default: false
     },
+    used: {
+      type: Boolean,
+      default: false
+    }
   },
-  { timestamps: true, versionKey: false }
+  { timestamps: true, versionKey: false, }
 );
 
 const FeedbackTemplate = mongoose.model<IFeedbackTemplate>('FeedbackTemplate', FeedbackTemplateSchema);

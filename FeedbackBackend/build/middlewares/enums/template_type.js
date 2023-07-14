@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.template_type = void 0;
+exports.TemplateType = void 0;
 // type of template that can be created by the vendor
-var template_type;
-(function (template_type) {
-    template_type[template_type["Product"] = 1] = "Product";
-    template_type[template_type["Service"] = 2] = "Service";
-})(template_type = exports.template_type || (exports.template_type = {}));
+var TemplateType;
+(function (TemplateType) {
+    TemplateType[TemplateType["Product"] = 1] = "Product";
+    TemplateType[TemplateType["Service"] = 2] = "Service";
+    TemplateType[TemplateType["Delivery"] = 3] = "Delivery";
+})(TemplateType = exports.TemplateType || (exports.TemplateType = {}));

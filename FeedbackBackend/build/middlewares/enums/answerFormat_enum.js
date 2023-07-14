@@ -1,24 +1,18 @@
-export enum answerFormat {
-    Rating = 1,
-    Radio,
-    Textbox
-}
-
-export enum TemplateType {
-    CUSTOM = 1,
-    DEFAULT = 2
-} 
-
-const FieldTypesMap: Record<
-    string,
-    {
-        value: string;
-        label: string;
-        needsOptions?: boolean;
-        isTextType?: boolean;
-        needsUpperBound?: boolean;
-    }
-> = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FieldTypes = exports.TemplateType = exports.answerFormat = void 0;
+var answerFormat;
+(function (answerFormat) {
+    answerFormat[answerFormat["Rating"] = 1] = "Rating";
+    answerFormat[answerFormat["Radio"] = 2] = "Radio";
+    answerFormat[answerFormat["Textbox"] = 3] = "Textbox";
+})(answerFormat = exports.answerFormat || (exports.answerFormat = {}));
+var TemplateType;
+(function (TemplateType) {
+    TemplateType[TemplateType["CUSTOM"] = 1] = "CUSTOM";
+    TemplateType[TemplateType["DEFAULT"] = 2] = "DEFAULT";
+})(TemplateType = exports.TemplateType || (exports.TemplateType = {}));
+const FieldTypesMap = {
     text: {
         label: "Short Text",
         value: "text",
@@ -79,5 +73,4 @@ const FieldTypesMap: Record<
         isTextType: false,
     },
 };
-
-export const FieldTypes = Object.keys(FieldTypesMap);
+exports.FieldTypes = Object.keys(FieldTypesMap);

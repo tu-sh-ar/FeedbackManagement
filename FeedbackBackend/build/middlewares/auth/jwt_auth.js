@@ -34,21 +34,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyToken = void 0;
 const jsonwebtoken_1 = __importStar(require("jsonwebtoken"));
+const constants_1 = require("../../constants/constants");
 const verifyToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let token;
     let authHeader = req.headers.authorization;
     if (authHeader && authHeader.toString().startsWith('Bearer')) {
         token = authHeader.toString().split(' ')[1];
         try {
-            const decodedToken = jsonwebtoken_1.default.verify(token, 'my-32-character-ultra-secure-and-ultra-long-secret');
+            const decodedToken = jsonwebtoken_1.default.verify(token, constants_1.auth_constant.secret);
             if (decodedToken) {
                 // Access the token claims
-                const id = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-                const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+                const email = decodedToken.email;
+                const id = decodedToken.id;
+                const role = decodedToken.role;
+                const businessCategory = decodedToken.businessCategory;
                 // Storing the extracted information for later use or pass it to the next middleware
                 req.user = {
                     id,
+                    email,
                     role,
+                    businessCategory
                 };
                 next();
             }
