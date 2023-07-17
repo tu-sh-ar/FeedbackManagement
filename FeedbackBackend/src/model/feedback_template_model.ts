@@ -1,6 +1,5 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
 import { FieldTypes, TemplateType } from '../middlewares/enums/answerFormat_enum';
-import { ObjectId } from 'mongodb';
 
 export interface AnswerFormat {
   type: string;
@@ -14,7 +13,6 @@ export interface QuestionAnswerFormField {
   question: string;
   order: number;
   answerFormat: AnswerFormat;
-  activeStatus?: boolean;
 }
 
 export interface FeedbackFormat {
@@ -22,7 +20,6 @@ export interface FeedbackFormat {
   title: string;
   order: number;
   questions: QuestionAnswerFormField[];
-  activeStatus?: boolean;
 }
 
 export interface IFeedbackTemplate extends Document {
@@ -32,11 +29,8 @@ export interface IFeedbackTemplate extends Document {
   businessCategory: number;
   sections: FeedbackFormat[];
   businessAdminId: number;
-  defaultTemplateId: ObjectId;
   used: number;
-  isActive: boolean;
 }
-
 
 const AnswerFormatSchema: Schema = new Schema({
   type: {
@@ -77,10 +71,6 @@ const QuestionAnswerFormFieldSchema: Schema = new Schema({
     type: AnswerFormatSchema,
     required: true
   },
-  isActive: {
-    type: Boolean,
-    default: true,
-  }
 }, { _id: false })
 
 
@@ -101,11 +91,6 @@ const FeedbackFormatSchema: Schema = new Schema({
     type: [QuestionAnswerFormFieldSchema],
     default: [],
   },
-  isActive: {
-    type: Boolean,
-    default: true,
-    required: true,
-  }
 }, { _id: false });
 
 
@@ -120,10 +105,6 @@ const FeedbackTemplateSchema: Schema = new Schema(
       type: Types.ObjectId,
       ref: 'FeedbackCategory',
       required: true,
-    },
-    defaultTemplateId: {
-      type: Types.ObjectId,
-      ref: 'FeedbackDefaultTemplates',
     },
     templateName: {
       type: String,
@@ -143,16 +124,16 @@ const FeedbackTemplateSchema: Schema = new Schema(
     },
     isActive: {
       type: Boolean,
-      default: false
+      default: false,
     },
     used: {
       type: Boolean,
-      default: false
+      required: false,
     }
   },
   { timestamps: true, versionKey: false, }
 );
 
-const FeedbackTemplate = mongoose.model<IFeedbackTemplate>('FeedbackCustomTemplate', FeedbackTemplateSchema);
+const FeedbackTemplate = mongoose.model<IFeedbackTemplate>('FeedbackTemplate', FeedbackTemplateSchema);
 
 export default FeedbackTemplate;
