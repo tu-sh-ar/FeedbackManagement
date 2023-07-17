@@ -1,6 +1,6 @@
 // feedback template controller 
 import { Request, Response } from 'express';
-import FeedbackTemplate, { AnswerFormat, FeedbackFormat, IFeedbackTemplate, QuestionAnswerFormField } from "../model/feedback_template_model_custom";
+import FeedbackTemplate, { AnswerFormat, FeedbackFormat, IFeedbackTemplate, QuestionAnswerFormField } from "../model/feedback_template_model";
 import asyncHandler from 'express-async-handler'
 import { status_codes } from '../constants/constants';
 import { validateFormSchema } from '../middlewares/validations/dynamic-feedback-form-validation';
@@ -22,7 +22,7 @@ export const getDefaultBusinessCategoryTemplates = asyncHandler(async (req: Requ
             res.status(400).json({ error: 'Invalid businessCategoryId' });
         }
 
-        const templatesByCategory: Record<string, IFeedbackTemplate[]> = {};
+        const templatesByCategory: any = {};
 
         const aggregateResult: any[] = await FeedbackDefaultTemplate.aggregate([
             {
@@ -51,10 +51,12 @@ export const getDefaultBusinessCategoryTemplates = asyncHandler(async (req: Requ
                             businessCategory: '$businessCategory',
                             sections: '$sections',
                             isActive: '$isActive',
-                            feedbackType: {
-                                id: '$feedbackType._id',
-                                name: '$feedbackType.name'
-                            }
+                        },
+                    },
+                    feedbackType: {
+                        $first: {
+                            id: '$feedbackType._id',
+                            name: '$feedbackType.name'
                         },
                     },
                 },
@@ -62,7 +64,10 @@ export const getDefaultBusinessCategoryTemplates = asyncHandler(async (req: Requ
         ]);
 
         aggregateResult.forEach((result: any) => {
-            templatesByCategory[result._id] = result.templates;
+            templatesByCategory[result._id] = {
+                templates: result.templates,
+                feedbackType: result.feedbackType
+            }
         });
 
         res.status(200).json({ templatesByCategory });
@@ -112,9 +117,17 @@ export const getBusinessAdminTemplates = asyncHandler(async (req: Request, res: 
             res.status(400).json({ error: 'Invalid businessAdminId' });
         }
 
-        const templatesByCategory: Record<string, IFeedbackTemplate[]> = {};
+        const templatesByCategory: any = {};
 
         const aggregateResult: any[] = await FeedbackTemplate.aggregate([
+            {
+                $match: {
+                    $or: [
+                        { businessAdminId: parseInt(businessAdminId, 10) },
+                        { templateType: TemplateType.DEFAULT, feedbackType: { $exists: true } }
+                    ]
+                }
+            },
             {
                 $lookup: {
                     from: 'feedbackcategory',
@@ -127,30 +140,48 @@ export const getBusinessAdminTemplates = asyncHandler(async (req: Request, res: 
                 $unwind: '$feedbackType',
             },
             {
-                $match: {
-                    businessAdminId: parseInt(businessAdminId, 10),
-                },
-            },
-            {
                 $group: {
-                    _id: '$feedbackType.name',
+                    _id: {
+                        feedbackTypeName: '$feedbackType.name',
+                        isDefaultTemplate: { $eq: ['$templateType', TemplateType.DEFAULT] }
+                    },
                     templates: {
                         $push: {
                             id: '$_id',
+                            templateType: '$templateType',
                             templateName: '$templateName',
                             isActive: '$isActive',
-                            feedbackType: {
-                                id: '$feedbackType._id',
-                                name: '$feedbackType.name'
-                            }
                         },
                     },
+                    feedbackType: {
+                        $first: {
+                            id: '$feedbackType._id',
+                            name: '$feedbackType.name'
+                        },
+                    },
+                },
+            },
+            {
+                $sort: { '_id.isDefaultTemplate': -1 },
+            },
+            {
+                $group: {
+                    _id: '$_id.feedbackTypeName',
+                    templates: {
+                        $push: '$templates',
+                    },
+                    feedbackType: {
+                        $first: '$feedbackType'
+                    }
                 },
             },
         ]);
 
         aggregateResult.forEach((result: any) => {
-            templatesByCategory[result._id] = result.templates;
+            templatesByCategory[result._id] = {
+                templates: result.templates.flat(),
+                feedbackType: result.feedbackType
+            }
         });
 
         res.status(200).json({ templatesByCategory });
@@ -339,8 +370,14 @@ const validateAndTransformForm = async (
             if (roleId === 2 && businessAdminId) {
                 feedbackTemplate = {
                     ...feedbackTemplate,
+                    used: false,
                     templateType: TemplateType.CUSTOM,
                     businessAdminId: businessAdminId
+                }
+            } else if (roleId === 1) {
+                feedbackTemplate = {
+                    ...feedbackTemplate,
+                    templateType: TemplateType.DEFAULT,
                 }
             }
             return feedbackTemplate;
@@ -367,11 +404,8 @@ export const createTemplate = asyncHandler(async (req: Request, res: Response) =
 
         console.log(JSON.stringify(data, null, 2))
 
-        if (roleId === 2) {
-            await FeedbackTemplate.create(data);
-        } else if (roleId === 1) {
-            await FeedbackDefaultTemplate.create(data);
-        }
+        await FeedbackTemplate.create(data);
+
         res.status(200).json({ message: 'Feedback form created successfully' });
 
     } catch (error) {

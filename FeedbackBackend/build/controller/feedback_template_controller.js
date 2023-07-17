@@ -47,7 +47,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTemplate = exports.activateTemplate = exports.updateTemplate = exports.createTemplate = exports.swapQuestions = exports.swapSections = exports.getTemplateById = exports.getBusinessAdminTemplates = exports.allotDefaultTemplatesToBusinessAdmin = exports.getDefaultBusinessCategoryTemplates = void 0;
-const feedback_template_model_custom_1 = __importDefault(require("../model/feedback_template_model_custom"));
+const feedback_template_model_1 = __importDefault(require("../model/feedback_template_model"));
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const constants_1 = require("../constants/constants");
 const dynamic_feedback_form_validation_1 = require("../middlewares/validations/dynamic-feedback-form-validation");
@@ -90,17 +90,22 @@ exports.getDefaultBusinessCategoryTemplates = (0, express_async_handler_1.defaul
                             businessCategory: '$businessCategory',
                             sections: '$sections',
                             isActive: '$isActive',
-                            feedbackType: {
-                                id: '$feedbackType._id',
-                                name: '$feedbackType.name'
-                            }
+                        },
+                    },
+                    feedbackType: {
+                        $first: {
+                            id: '$feedbackType._id',
+                            name: '$feedbackType.name'
                         },
                     },
                 },
             },
         ]);
         aggregateResult.forEach((result) => {
-            templatesByCategory[result._id] = result.templates;
+            templatesByCategory[result._id] = {
+                templates: result.templates,
+                feedbackType: result.feedbackType
+            };
         });
         res.status(200).json({ templatesByCategory });
     }
@@ -126,7 +131,7 @@ exports.allotDefaultTemplatesToBusinessAdmin = (0, express_async_handler_1.defau
             used: 0,
             isActive: false,
         }));
-        yield feedback_template_model_custom_1.default.insertMany(templates);
+        yield feedback_template_model_1.default.insertMany(templates);
         res.status(200).json({ message: 'Templates alloted successfully' });
     }
     catch (error) {
@@ -142,7 +147,15 @@ exports.getBusinessAdminTemplates = (0, express_async_handler_1.default)((req, r
             res.status(400).json({ error: 'Invalid businessAdminId' });
         }
         const templatesByCategory = {};
-        const aggregateResult = yield feedback_template_model_custom_1.default.aggregate([
+        const aggregateResult = yield feedback_template_model_1.default.aggregate([
+            {
+                $match: {
+                    $or: [
+                        { businessAdminId: parseInt(businessAdminId, 10) },
+                        { templateType: answerFormat_enum_1.TemplateType.DEFAULT, feedbackType: { $exists: true } }
+                    ]
+                }
+            },
             {
                 $lookup: {
                     from: 'feedbackcategory',
@@ -155,29 +168,47 @@ exports.getBusinessAdminTemplates = (0, express_async_handler_1.default)((req, r
                 $unwind: '$feedbackType',
             },
             {
-                $match: {
-                    businessAdminId: parseInt(businessAdminId, 10),
-                },
-            },
-            {
                 $group: {
-                    _id: '$feedbackType.name',
+                    _id: {
+                        feedbackTypeName: '$feedbackType.name',
+                        isDefaultTemplate: { $eq: ['$templateType', answerFormat_enum_1.TemplateType.DEFAULT] }
+                    },
                     templates: {
                         $push: {
                             id: '$_id',
+                            templateType: '$templateType',
                             templateName: '$templateName',
                             isActive: '$isActive',
-                            feedbackType: {
-                                id: '$feedbackType._id',
-                                name: '$feedbackType.name'
-                            }
+                        },
+                    },
+                    feedbackType: {
+                        $first: {
+                            id: '$feedbackType._id',
+                            name: '$feedbackType.name'
                         },
                     },
                 },
             },
+            {
+                $sort: { '_id.isDefaultTemplate': -1 },
+            },
+            {
+                $group: {
+                    _id: '$_id.feedbackTypeName',
+                    templates: {
+                        $push: '$templates',
+                    },
+                    feedbackType: {
+                        $first: '$feedbackType'
+                    }
+                },
+            },
         ]);
         aggregateResult.forEach((result) => {
-            templatesByCategory[result._id] = result.templates;
+            templatesByCategory[result._id] = {
+                templates: result.templates.flat(),
+                feedbackType: result.feedbackType
+            };
         });
         res.status(200).json({ templatesByCategory });
     }
@@ -190,7 +221,7 @@ exports.getBusinessAdminTemplates = (0, express_async_handler_1.default)((req, r
 exports.getTemplateById = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { templateId } = req.params;
-        const template = yield feedback_template_model_custom_1.default.findById(templateId);
+        const template = yield feedback_template_model_1.default.findById(templateId);
         if (!template) {
             res.status(404).json({ error: 'Template not found' });
             return;
@@ -219,7 +250,7 @@ exports.swapSections = (0, express_async_handler_1.default)((req, res) => __awai
             res.status(400).json({ error: 'Invalid templateId format' });
         }
         // Find the template by ID
-        const template = yield feedback_template_model_custom_1.default.findById(parsedTemplateId);
+        const template = yield feedback_template_model_1.default.findById(parsedTemplateId);
         // Check if the template exists
         if (!template) {
             res.status(404).json({ error: 'Template not found' });
@@ -255,7 +286,7 @@ exports.swapQuestions = (0, express_async_handler_1.default)((req, res) => __awa
         if (isNaN(parsedTemplateId) || isNaN(parsedSectionId)) {
             res.status(400).json({ error: 'Invalid templateId or sectionId format' });
         }
-        const template = yield feedback_template_model_custom_1.default.findById(parsedTemplateId);
+        const template = yield feedback_template_model_1.default.findById(parsedTemplateId);
         let section;
         if (!template) {
             res.status(404).json({ error: 'Template not found' });
@@ -330,7 +361,10 @@ const validateAndTransformForm = (roleId, businessAdminId, formData) => __awaite
                 isActive: false,
             };
             if (roleId === 2 && businessAdminId) {
-                feedbackTemplate = Object.assign(Object.assign({}, feedbackTemplate), { templateType: answerFormat_enum_1.TemplateType.CUSTOM, businessAdminId: businessAdminId });
+                feedbackTemplate = Object.assign(Object.assign({}, feedbackTemplate), { used: false, templateType: answerFormat_enum_1.TemplateType.CUSTOM, businessAdminId: businessAdminId });
+            }
+            else if (roleId === 1) {
+                feedbackTemplate = Object.assign(Object.assign({}, feedbackTemplate), { templateType: answerFormat_enum_1.TemplateType.DEFAULT });
             }
             return feedbackTemplate;
         };
@@ -350,12 +384,7 @@ exports.createTemplate = (0, express_async_handler_1.default)((req, res) => __aw
         const formData = req.body;
         const data = yield validateAndTransformForm(roleId, businessAdminId, formData);
         console.log(JSON.stringify(data, null, 2));
-        if (roleId === 2) {
-            yield feedback_template_model_custom_1.default.create(data);
-        }
-        else if (roleId === 1) {
-            yield feedback_template_model_default_1.default.create(data);
-        }
+        yield feedback_template_model_1.default.create(data);
         res.status(200).json({ message: 'Feedback form created successfully' });
     }
     catch (error) {
@@ -384,7 +413,7 @@ exports.updateTemplate = (0, express_async_handler_1.default)((req, res) => __aw
         if (isNaN(parsedTemplateId)) {
             res.status(400).json({ error: 'Invalid templateId format' });
         }
-        const existingTemplate = yield feedback_template_model_custom_1.default.findById(parsedTemplateId);
+        const existingTemplate = yield feedback_template_model_1.default.findById(parsedTemplateId);
         // Check if the template exists
         if (!existingTemplate) {
             res.status(404).json({ error: 'Template not found' });
@@ -395,7 +424,7 @@ exports.updateTemplate = (0, express_async_handler_1.default)((req, res) => __aw
         }
         const data = yield validateAndTransformForm(roleId, businessAdminId, templateData);
         console.log(JSON.stringify(data, null, 2));
-        yield feedback_template_model_custom_1.default.findByIdAndUpdate(parsedTemplateId, templateData, { new: true });
+        yield feedback_template_model_1.default.findByIdAndUpdate(parsedTemplateId, templateData, { new: true });
         res.status(200).json({ message: 'Feedback form updated successfully' });
     }
     catch (error) {
@@ -427,12 +456,12 @@ exports.activateTemplate = (0, express_async_handler_1.default)((req, res) => __
         const session = yield mongoose_1.default.startSession();
         session.startTransaction();
         try {
-            yield feedback_template_model_custom_1.default.updateMany({
+            yield feedback_template_model_1.default.updateMany({
                 businessAdminId: parsedBusinessAdminId,
                 feedbackType: feedbackType,
                 isActive: true
             }, { isActive: false }, { session });
-            yield feedback_template_model_custom_1.default.findByIdAndUpdate(parsedTemplateId, { isActive: true, used: true }, { session });
+            yield feedback_template_model_1.default.findByIdAndUpdate(parsedTemplateId, { isActive: true, used: true }, { session });
             yield session.commitTransaction();
             session.endSession();
             res.json({ message: 'Template activated successfully' });
@@ -452,7 +481,7 @@ exports.deleteTemplate = (0, express_async_handler_1.default)((req, res) => __aw
     try {
         const { templateId } = req.params;
         const parsedTemplateId = templateId;
-        const existingTemplate = yield feedback_template_model_custom_1.default.findById(parsedTemplateId);
+        const existingTemplate = yield feedback_template_model_1.default.findById(parsedTemplateId);
         if (!existingTemplate) {
             res.status(404).json({ error: 'Template not found' });
         }
@@ -461,7 +490,7 @@ exports.deleteTemplate = (0, express_async_handler_1.default)((req, res) => __aw
             res.status(400).json({ error: 'Cannot delete a template in use' });
         }
         // Delete the template
-        yield feedback_template_model_custom_1.default.findByIdAndDelete(parsedTemplateId);
+        yield feedback_template_model_1.default.findByIdAndDelete(parsedTemplateId);
         res.json({ message: 'Template deleted successfully' });
     }
     catch (error) {

@@ -1,9 +1,10 @@
 const templates = [
         {
             "templateName": "Default Template 1",
-            "isActive": true,
             "feedbackType": "64b14fe37d75d86fd1af82c1",
+            "isActive": true,
             "businessCategory": 1,
+            "templateType": 2,
             "sections": [
                 {
                     "id": 1,
@@ -12,7 +13,7 @@ const templates = [
                     "questions": [
                         {
                             "id": 1,
-                            "question": "How satisfied were you with the product? (Rating)",
+                            "question": "How satisfied were you with the product?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -47,7 +48,7 @@ const templates = [
                     "questions": [
                         {
                             "id": 4,
-                            "question": "How satisfied were you with the quality of the packaging materials used for your order? (Rating)",
+                            "question": "How satisfied were you with the quality of the packaging materials used for your order?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -131,6 +132,7 @@ const templates = [
             "isActive": true,
             "feedbackType": "64b14fe37d75d86fd1af82c1",
             "businessCategory": 1,
+            "templateType": 2,
             "sections": [
                 {
                     "id": 1,
@@ -139,7 +141,7 @@ const templates = [
                     "questions": [
                         {
                             "id": 11,
-                            "question": "How do you rate our product? (Rating)",
+                            "question": "How do you rate our product?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -236,6 +238,7 @@ const templates = [
         {
             "templateName": "Default Template 1",
             "isActive": true,
+            "templateType": 2,
             "feedbackType": "64b155857d75d86fd1af82c3",
             "businessCategory": 1,
             "sections": [
@@ -246,7 +249,7 @@ const templates = [
                     "questions": [
                         {
                             "id": 19,
-                            "question": "How would you rate the professionalism and behavior of the delivery personnel? (Rating)",
+                            "question": "How would you rate the professionalism and behavior of the delivery personnel?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -283,7 +286,7 @@ const templates = [
                     "questions": [
                         {
                             "id": 22,
-                            "question": "How satisfied were you with the timeliness of the delivery service? (Rating)",
+                            "question": "How satisfied were you with the timeliness of the delivery service?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -300,7 +303,7 @@ const templates = [
                     "questions": [
                         {
                             "id": 23,
-                            "question": "How effective was the delivery service in providing timely and accurate updates about your delivery? (Rating)",
+                            "question": "How effective was the delivery service in providing timely and accurate updates about your delivery?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -317,7 +320,7 @@ const templates = [
                     "questions": [
                         {
                             "id": 24,
-                            "question": "How would you rate the overall smoothness and efficiency of the delivery process for your order? (Rating)",
+                            "question": "How would you rate the overall smoothness and efficiency of the delivery process for your order?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -344,7 +347,7 @@ const templates = [
                     "questions": [
                         {
                             "id": 26,
-                            "question": "How satisfied were you with the delivery service? (Rating)",
+                            "question": "How satisfied were you with the delivery service?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -369,6 +372,7 @@ const templates = [
         {
             "templateName": "Default Template 2",
             "isActive": true,
+            "templateType": 2,
             "feedbackType": "64b155857d75d86fd1af82c3",
             "businessCategory": 1,
             "sections": [
@@ -406,7 +410,7 @@ const templates = [
                         },
                         {
                             "id": 30,
-                            "question": "How would you rate their friendliness and courtesy during delivery? (Rating)",
+                            "question": "How would you rate their friendliness and courtesy during delivery?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -485,6 +489,7 @@ const templates = [
         {
             "templateName": "Default Template 1",
             "feedbackType": "64b156357d75d86fd1af82c5",
+            "templateType": 2,
             "businessCategory": 1,
             "isActive": true,
             "sections": [
@@ -525,7 +530,7 @@ const templates = [
                         },
                         {
                             "id": 39,
-                            "question": "How would you rate the friendliness and professionalism of the customer support representatives? (Rating)",
+                            "question": "How would you rate the friendliness and professionalism of the customer support representatives?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -577,6 +582,7 @@ const templates = [
         {
             "templateName": "Default Template 2",
             "feedbackType": "64b156357d75d86fd1af82c5",
+            "templateType": 2,
             "businessCategory": 1,
             "isActive": true,
             "sections": [
@@ -587,7 +593,7 @@ const templates = [
                     "questions": [
                         {
                             "id": 43,
-                            "question": "How satisfied were you with the responsiveness of the customer support team? (Rating)",
+                            "question": "How satisfied were you with the responsiveness of the customer support team?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -607,7 +613,7 @@ const templates = [
                         },
                         {
                             "id": 45,
-                            "question": "How would you rate the overall helpfulness and effectiveness of the customer support team? (Rating)",
+                            "question": "How would you rate the overall helpfulness and effectiveness of the customer support team?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -654,7 +660,7 @@ const templates = [
                     "questions": [
                         {
                             "id": 49,
-                            "question": "Overall, how satisfied were you with the customer support experience provided by the ecommerce platform? (Rating)",
+                            "question": "Overall, how satisfied were you with the customer support experience provided by the ecommerce platform?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": true,
@@ -668,6 +674,7 @@ const templates = [
         },
         {
             "templateName": "Default Template 1",
+            "templateType": 2,
             "feedbackType": "64b1569c7d75d86fd1af82c7",
             "businessCategory": 1,
             "isActive": true,
@@ -679,7 +686,7 @@ const templates = [
                     "questions": [
                         {
                             "id": 50,
-                            "question": "How would you rate the overall shopping experience on the ecommerce platform? (Rating)",
+                            "question": "How would you rate the overall shopping experience on the ecommerce platform?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -719,7 +726,7 @@ const templates = [
                         },
                         {
                             "id": 54,
-                            "question": "How was the product information presented? (Rating)",
+                            "question": "How was the product information presented?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -729,7 +736,7 @@ const templates = [
                         },
                         {
                             "id": 55,
-                            "question": "How would you rate the customer service you received? (Rating)",
+                            "question": "How would you rate the customer service you received?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -780,6 +787,7 @@ const templates = [
         {
             "templateName": "Default Template 2",
             "feedbackType": "64b1569c7d75d86fd1af82c7",
+            "templateType": 2,
             "businessCategory": 1,
             "isActive": true,
             "sections": [
@@ -790,7 +798,7 @@ const templates = [
                     "questions": [
                         {
                             "id": 59,
-                            "question": "What did you think of the overall shopping experience on our platform? (Rating)",
+                            "question": "What did you think of the overall shopping experience on our platform?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,
@@ -860,7 +868,7 @@ const templates = [
                         },
                         {
                             "id": 66,
-                            "question": "How would you rate the packaging and condition of the products upon delivery? (Rating)",
+                            "question": "How would you rate the packaging and condition of the products upon delivery?",
                             "answerFormat": {
                                 "type": "rating",
                                 "required": false,

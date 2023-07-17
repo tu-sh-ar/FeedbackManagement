@@ -163,7 +163,6 @@ paths:
             example:
               businessCategory: 1
               feedbackType: 64b14fe37d75d86fd1af82c1
-              businessAdminId: 1
               feedbackFormName: E-commerce feedbacks
               sections:
                 - title: product
@@ -188,7 +187,7 @@ paths:
                   fields:
                     - question: How was the packaging of the product?
                       answerFormat:
-                          type: starrating
+                          type: rating
                           upperBound: 10
                           required: false
                       order: 1
