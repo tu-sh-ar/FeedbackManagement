@@ -7,7 +7,6 @@ import { validateFormSchema } from '../middlewares/validations/dynamic-feedback-
 import { TemplateType } from '../middlewares/enums/answerFormat_enum';
 import * as yup from 'yup';
 import { FeedbackFormBodySchema } from '../constants/interface';
-import FeedbackCategory, { IFeedbackCaregory } from '../model/feedback_category_model';
 import FeedbackDefaultTemplate from '../model/feedback_template_model_default';
 import mongoose, { Types } from 'mongoose';
 import { buildErrorResponse, buildObjectResponse, buildResponse } from '../utils/responseUtils';
