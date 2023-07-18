@@ -62,10 +62,6 @@ const QuestionAnswerFormFieldSchema = new mongoose_1.Schema({
         type: AnswerFormatSchema,
         required: true
     },
-    isActive: {
-        type: Boolean,
-        default: true,
-    }
 }, { _id: false });
 const FeedbackFormatSchema = new mongoose_1.Schema({
     id: {
@@ -84,11 +80,6 @@ const FeedbackFormatSchema = new mongoose_1.Schema({
         type: [QuestionAnswerFormFieldSchema],
         default: [],
     },
-    isActive: {
-        type: Boolean,
-        default: true,
-        required: true,
-    }
 }, { _id: false });
 const FeedbackTemplateSchema = new mongoose_1.Schema({
     templateType: {
@@ -100,10 +91,6 @@ const FeedbackTemplateSchema = new mongoose_1.Schema({
         type: mongoose_1.Types.ObjectId,
         ref: 'FeedbackCategory',
         required: true,
-    },
-    defaultTemplateId: {
-        type: mongoose_1.Types.ObjectId,
-        ref: 'FeedbackDefaultTemplates',
     },
     templateName: {
         type: String,
@@ -123,12 +110,12 @@ const FeedbackTemplateSchema = new mongoose_1.Schema({
     },
     isActive: {
         type: Boolean,
-        default: false
+        default: false,
     },
     used: {
         type: Boolean,
-        default: false
+        required: false,
     }
 }, { timestamps: true, versionKey: false, });
-const FeedbackTemplate = mongoose_1.default.model('FeedbackCustomTemplate', FeedbackTemplateSchema);
+const FeedbackTemplate = mongoose_1.default.model('FeedbackTemplate', FeedbackTemplateSchema);
 exports.default = FeedbackTemplate;
