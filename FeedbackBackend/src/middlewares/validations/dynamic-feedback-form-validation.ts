@@ -44,7 +44,7 @@ const formSchema = yup.object().shape({
             yup.object().shape({
                 title: yup.string().max(MAX_TITLE_LENGTH).required(ERROR_TITLE_REQUIRED),
                 order: yup.number().positive().required(ERROR_ORDER_CONTIGUOUS),
-                fields: yup
+                questions: yup
                     .array()
                     .max(MAX_FIELDS, ERROR_FIELDS_MAX)
                     .of(

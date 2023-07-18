@@ -1,4 +1,3 @@
-// feedback template controller 
 import { Request, Response } from 'express';
 import FeedbackTemplate, { AnswerFormat, FeedbackFormat, IFeedbackTemplate, QuestionAnswerFormField } from "../model/feedback_template_model";
 import asyncHandler from 'express-async-handler'
@@ -7,7 +6,6 @@ import { validateFormSchema } from '../middlewares/validations/dynamic-feedback-
 import { TemplateType } from '../middlewares/enums/answerFormat_enum';
 import * as yup from 'yup';
 import { FeedbackFormBodySchema } from '../constants/interface';
-import FeedbackCategory, { IFeedbackCaregory } from '../model/feedback_category_model';
 import FeedbackDefaultTemplate from '../model/feedback_template_model_default';
 import mongoose, { Types } from 'mongoose';
 import { buildErrorResponse, buildObjectResponse, buildResponse } from '../utils/responseUtils';
@@ -23,7 +21,7 @@ export const getDefaultBusinessCategoryTemplates = async (req: Request, res: Res
             return buildErrorResponse(res, 'Invalid businessCategoryId', 400);
         }
 
-        const templatesByCategory: any = {};
+        const templatesByCategory: any = [];
 
         const aggregateResult: any[] = await FeedbackDefaultTemplate.aggregate([
             {
@@ -65,10 +63,10 @@ export const getDefaultBusinessCategoryTemplates = async (req: Request, res: Res
         ]);
 
         aggregateResult.forEach((result: any) => {
-            templatesByCategory[result._id] = {
+            templatesByCategory.push({
                 templates: result.templates,
                 feedbackType: result.feedbackType
-            }
+            })
         });
 
         return buildObjectResponse(res, templatesByCategory)
@@ -91,7 +89,7 @@ export const getBusinessAdminTemplates = async (req: Request, res: Response) => 
             return buildErrorResponse(res, 'Invalid businessCategoryId', 400);
         }
 
-        const templatesByCategory: any = {};
+        const templatesByCategory: any = [];
 
         const aggregateResult: any[] = await FeedbackTemplate.aggregate([
             {
@@ -153,10 +151,10 @@ export const getBusinessAdminTemplates = async (req: Request, res: Response) => 
         ]);
 
         aggregateResult.forEach((result: any) => {
-            templatesByCategory[result._id] = {
+            templatesByCategory.push({
                 templates: result.templates.flat(),
                 feedbackType: result.feedbackType
-            }
+            })
         });
 
         return buildObjectResponse(res, templatesByCategory)
@@ -169,7 +167,7 @@ export const getBusinessAdminTemplates = async (req: Request, res: Response) => 
 
 
 // Fetches a single template based on templateId with sorted questions and sections
-export const getTemplateById = asyncHandler(async (req: Request, res: Response) => {
+export const getTemplateById = async (req: Request, res: Response) => {
     try {
         const { templateId } = req.params;
 
@@ -191,7 +189,7 @@ export const getTemplateById = asyncHandler(async (req: Request, res: Response) 
         console.log(error);
         return buildErrorResponse(res, 'Internal Server Error', 500);
     }
-});
+}
 
 
 export const swapSections = async (req: Request, res: Response) => {
@@ -271,7 +269,7 @@ export const swapQuestions = async (req: Request, res: Response) => {
         await template.save();
 
         return buildResponse(res, 'Question order swapped successfully', 200);
-        
+
     } catch (error) {
         console.log(error);
         return buildErrorResponse(res, 'Internal Server Error', 500);
@@ -285,6 +283,8 @@ const validateAndTransformForm = async (
     formData: FeedbackFormBodySchema,) => {
     try {
         await validateFormSchema(formData)
+
+        console.log(111111, roleId)
 
         const convertToAnswerFormat = (answerFormat: any): AnswerFormat => {
             const convertedFormat: AnswerFormat = {
@@ -300,25 +300,25 @@ const validateAndTransformForm = async (
             return convertedFormat;
         };
 
-        const convertToQuestionAnswerFormField = (fields: any[]): QuestionAnswerFormField[] => {
-            return fields.map((field, index) => {
+        const convertToQuestionAnswerFormField = (sections: any[]): QuestionAnswerFormField[] => {
+            return sections.map((section, index) => {
                 const convertedField: QuestionAnswerFormField = {
                     id: index + 1,
-                    question: field.question,
-                    order: field.order,
-                    answerFormat: convertToAnswerFormat(field.answerFormat),
+                    question: section.question,
+                    order: section.order,
+                    answerFormat: convertToAnswerFormat(section.answerFormat),
                 };
                 return convertedField;
             });
         };
 
-        const convertToFeedbackFormat = (formats: any[]): FeedbackFormat[] => {
-            return formats.map((format, index) => {
+        const convertToFeedbackFormat = (sections: any[]): FeedbackFormat[] => {
+            return sections.map((section, index) => {
                 const convertedFormat: FeedbackFormat = {
                     id: index + 1,
-                    title: format.title,
-                    order: format.order,
-                    questions: convertToQuestionAnswerFormField(format.fields),
+                    title: section.title,
+                    order: section.order,
+                    questions: convertToQuestionAnswerFormField(section.questions),
                 };
                 return convertedFormat;
             });
@@ -356,7 +356,7 @@ const validateAndTransformForm = async (
 
 
 // create new feedback template 
-export const createTemplate = asyncHandler(async (req: Request, res: Response) => {
+export const createTemplate = async (req: Request, res: Response) => {
     try {
 
         const businessAdminId: number = req.user?.id;
@@ -370,19 +370,19 @@ export const createTemplate = asyncHandler(async (req: Request, res: Response) =
 
         await FeedbackTemplate.create(data);
 
-        res.status(200).json({ message: 'Feedback form created successfully' });
+        return buildResponse(res, "Feedback form created successfully", 200)
 
     } catch (error) {
         console.log(error)
         if (error instanceof yup.ValidationError && error?.errors) {
             // If there's a validation error, send the error response
             const errorMessage: string = error.errors?.join(', ') || 'Validation Error';
-            res.status(400).json({ error: errorMessage });
+            return buildErrorResponse(res, errorMessage, 400);
         } else {
-            res.status(500).json({ error: status_codes[500] });
+            return buildErrorResponse(res, 'Internal server error', 500);
         }
     }
-});
+};
 
 
 // update template 

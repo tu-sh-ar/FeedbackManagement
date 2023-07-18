@@ -15,28 +15,28 @@ interface SuccessMessageResponse {
     statusCode: number;
 }
 
-function buildErrorResponse(res: Response, message: string, code: number): void {
+function buildErrorResponse(res: Response, message: string, code: number){
     const errorResponse: ErrorResponse = {
         message,
         statusCode: code,
     };
-    res.status(code).send(errorResponse);
+    return res.status(code).send(errorResponse);
 }
 
-function buildObjectResponse<T>(res: Response, object: T): void {
+function buildObjectResponse<T>(res: Response, object: T) {
     const successResponse: SuccessObjectResponse<T> = {
         response: object,
         statusCode: 200,
     };
-    res.status(200).send(successResponse);
+    return res.status(200).send(successResponse);
 }
 
-function buildResponse(res: Response, message: string, code: number): void {
+function buildResponse(res: Response, message: string, code: number){
     const successResponse: SuccessMessageResponse = {
         message,
         statusCode: code,
     };
-    res.status(200).send(successResponse);
+    return res.status(200).send(successResponse);
 }
 
 export { buildErrorResponse, buildObjectResponse, buildResponse };

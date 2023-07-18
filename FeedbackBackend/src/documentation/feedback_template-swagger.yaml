@@ -1,4 +1,3 @@
-
 paths:
   /api/feedbackTemplate/getDefaultBusinessCategoryTemplates/{businessCategoryId}:
     get:
@@ -23,70 +22,69 @@ paths:
               examples:
                 DefaultTemplateExample:
                   value:
-                    templatesByCategory:
-                      Product Feedback from Customers:
-                        - id: "64b161d57d75d86fd1af82d4"
-                          templateName: "Default Template 1"
-                          businessCategory: 1
-                          sections:
-                            - id: 1
-                              title: "Product"
-                              order: 1
-                              questions:
-                                - id: 1
-                                  question: "How satisfied were you with the product? (Rating)"
-                                  answerFormat:
-                                    type: "rating"
-                                    required: false
-                                    upperBound: 5
-                                  order: 1
-                                - id: 2
-                                  question: "Please update photo/video of the product"
-                                  answerFormat:
-                                    type: "file"
-                                    required: true
-                                  order: 2
-                              isActive: true
-                            - id: 2
-                              title: "Packaging"
-                              order: 2
-                              questions:
-                                - id: 4
-                                  question: "How satisfied were you with the quality of the packaging materials used for your order? (Rating)"
-                                  answerFormat:
-                                    type: "rating"
-                                    required: false
-                                    upperBound: 5
-                                  order: 1
-                                - id: 5
-                                  question: "Did the packaging adequately protect the contents of your package?"
-                                  answerFormat:
-                                    type: "radio"
-                                    options:
-                                      - "Yes"
-                                      - "No"
-                                    required: true
-                                  order: 2
-                              isActive: true
-                            - id: 3
-                              title: "Overall Satisfaction"
-                              order: 3
-                              questions:
-                                - id: 9
-                                  question: "Would you recommend the Product to others based on your experience?"
-                                  answerFormat:
-                                    type: "radio"
-                                    options:
-                                      - "Yes"
-                                      - "Maybe"
-                                      - "No"
-                                    required: true
-                                  order: 1
-                              isActive: true
-                          isActive: true
-                          feedbackType:
-                            id: "64b14fe37d75d86fd1af82c1"
-                            name: "Product Feedback from Customers"
+                    - templates:
+                      - id: "64b161d57d75d86fd1af82d4"
+                        templateName: "Default Template 1"
+                        businessCategory: 1
+                        sections:
+                          - id: 1
+                            title: "Product"
+                            order: 1
+                            questions:
+                              - id: 1
+                                question: "How satisfied were you with the product? (Rating)"
+                                answerFormat:
+                                  type: "rating"
+                                  required: false
+                                  upperBound: 5
+                                order: 1
+                              - id: 2
+                                question: "Please update photo/video of the product"
+                                answerFormat:
+                                  type: "file"
+                                  required: true
+                                order: 2
+                            isActive: true
+                          - id: 2
+                            title: "Packaging"
+                            order: 2
+                            questions:
+                              - id: 4
+                                question: "How satisfied were you with the quality of the packaging materials used for your order? (Rating)"
+                                answerFormat:
+                                  type: "rating"
+                                  required: false
+                                  upperBound: 5
+                                order: 1
+                              - id: 5
+                                question: "Did the packaging adequately protect the contents of your package?"
+                                answerFormat:
+                                  type: "radio"
+                                  options:
+                                    - "Yes"
+                                    - "No"
+                                  required: true
+                                order: 2
+                            isActive: true
+                          - id: 3
+                            title: "Overall Satisfaction"
+                            order: 3
+                            questions:
+                              - id: 9
+                                question: "Would you recommend the Product to others based on your experience?"
+                                answerFormat:
+                                  type: "radio"
+                                  options:
+                                    - "Yes"
+                                    - "Maybe"
+                                    - "No"
+                                  required: true
+                                order: 1
+                            isActive: true
+                        isActive: true
+                      feedbackType:
+                        id: "64b14fe37d75d86fd1af82c1"
+                        name: "Product Feedback from Customers"
   /api/feedbackTemplate/getBusinessAdminTemplates/{businessCategory}:
     get:
       summary: Fetches templates based on businessAdminId
@@ -110,17 +108,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ShortTemplateResponse'
               examples:
-                DefaultTemplateExample:
+                TemplateExample:
                   value:
-                    templatesByCategory:
-                      Product Feedback from Customers:
-                        templates:
-                          - id: "64b161d57d75d86fd1af82d4"
-                            templateName: "Default Template 1"              
-                            isActive: true
-                        feedbackType:
-                          id: "64b14fe37d75d86fd1af82c1"
-                          name: "Product Feedback from Customers"
+                    - templates:
+                      - id: "64b161d57d75d86fd1af82d4"
+                        templateName: "Default Template 1"
+                        businessCategory: 1
+                        isActive: true
+                      feedbackType:
+                        id: "64b14fe37d75d86fd1af82c1"
+                        name: "Product Feedback from Customers"
   /api/feedbackTemplate/create:
     post:
       summary: Create a new default/custom feedback form template
@@ -142,7 +139,7 @@ paths:
               sections:
                 - title: product
                   order: 1
-                  fields:
+                  questions:
                     - question: How was the quality of product?
                       answerFormat:
                           type: boolean
@@ -159,7 +156,7 @@ paths:
                       order: 2
                 - title: packaging
                   order: 2
-                  fields:
+                  questions:
                     - question: How was the packaging of the product?
                       answerFormat:
                           type: rating
@@ -168,7 +165,7 @@ paths:
                       order: 1
                 - title: delivery
                   order: 3
-                  fields:
+                  questions:
                     - question: Was the delivery on-time?
                       answerFormat:
                           type: boolean
