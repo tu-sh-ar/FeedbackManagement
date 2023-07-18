@@ -156,7 +156,6 @@ export const Validate = {
   })
 };
 
-
 // passing the errors to the validateSchema function for any user or profile schema 
 export const validateSchema = (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
