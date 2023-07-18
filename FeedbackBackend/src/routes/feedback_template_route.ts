@@ -1,9 +1,10 @@
 import express from "express";
 const router = express.Router();
 
-import { createTemplate, updateTemplate, deleteTemplate, getDefaultBusinessCategoryTemplates, allotDefaultTemplatesToBusinessAdmin, getBusinessAdminTemplates, swapQuestions, swapSections, getTemplateById, activateTemplate } from "../controller/feedback_template_controller";
-import { Validate, validateSchema } from "../middlewares/validations/schema-validations";
+import { createTemplate, updateTemplate, deleteTemplate, getDefaultBusinessCategoryTemplates, 
+    getBusinessAdminTemplates, swapQuestions, swapSections, getTemplateById, activateTemplate } from "../controller/feedback_template_controller";
 import { verifyToken } from "../middlewares/auth/jwt_auth";
+import { validateSectionsMiddleware, validateSwapQuestionsMiddleware } from "../middlewares/validations/request-body-validations";
 
 
 //fetching default templates
@@ -13,17 +14,10 @@ router.get(
     getDefaultBusinessCategoryTemplates
 );
 
-//allot default templates to business admin
-router.post(
-    "/allotDefaultTemplatesToBusinessAdmin/:businessAdminId/:businessCategoryId",
-    // verifyToken,
-    allotDefaultTemplatesToBusinessAdmin
-);
-
 //fetching business admin templates
 router.get(
-    "/getBusinessAdminTemplates/:businessAdminId",
-    // verifyToken,
+    "/getBusinessAdminTemplates/:businessCategory",
+    verifyToken,
     getBusinessAdminTemplates
 );
 
@@ -53,13 +47,15 @@ router.put(
 router.put(
     "/swapSection/:templateId",
     verifyToken,
+    validateSectionsMiddleware,
     swapSections
 );
 
 //swap question
 router.put(
-    "/swapQuestion/:templateId/:sectionId",
+    "/swapQuestion/:templateId",
     verifyToken,
+    validateSwapQuestionsMiddleware,
     swapQuestions
 );
 
@@ -69,6 +65,8 @@ router.put(
     verifyToken,
     activateTemplate
 );
+
+//delete template
 router.delete("/deleteTemplate/:id", verifyToken, deleteTemplate);
 
 export default router;

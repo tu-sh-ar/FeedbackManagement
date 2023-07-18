@@ -46,7 +46,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTemplate = exports.activateTemplate = exports.updateTemplate = exports.createTemplate = exports.swapQuestions = exports.swapSections = exports.getTemplateById = exports.getBusinessAdminTemplates = exports.allotDefaultTemplatesToBusinessAdmin = exports.getDefaultBusinessCategoryTemplates = void 0;
+exports.deleteTemplate = exports.activateTemplate = exports.updateTemplate = exports.createTemplate = exports.swapQuestions = exports.swapSections = exports.getTemplateById = exports.getBusinessAdminTemplates = exports.getDefaultBusinessCategoryTemplates = void 0;
 const feedback_template_model_1 = __importDefault(require("../model/feedback_template_model"));
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const constants_1 = require("../constants/constants");
@@ -55,14 +55,15 @@ const answerFormat_enum_1 = require("../middlewares/enums/answerFormat_enum");
 const yup = __importStar(require("yup"));
 const feedback_template_model_default_1 = __importDefault(require("../model/feedback_template_model_default"));
 const mongoose_1 = __importStar(require("mongoose"));
+const responseUtils_1 = require("../utils/responseUtils");
 //fetches default templates bases on business category
-exports.getDefaultBusinessCategoryTemplates = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getDefaultBusinessCategoryTemplates = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { businessCategoryId } = req.params;
         if (!Number.isInteger(parseInt(businessCategoryId, 10))) {
-            res.status(400).json({ error: 'Invalid businessCategoryId' });
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Invalid businessCategoryId', 400);
         }
-        const templatesByCategory = {};
+        const templatesByCategory = [];
         const aggregateResult = yield feedback_template_model_default_1.default.aggregate([
             {
                 $lookup: {
@@ -102,58 +103,37 @@ exports.getDefaultBusinessCategoryTemplates = (0, express_async_handler_1.defaul
             },
         ]);
         aggregateResult.forEach((result) => {
-            templatesByCategory[result._id] = {
+            templatesByCategory.push({
                 templates: result.templates,
                 feedbackType: result.feedbackType
-            };
+            });
         });
-        res.status(200).json({ templatesByCategory });
+        return (0, responseUtils_1.buildObjectResponse)(res, templatesByCategory);
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return (0, responseUtils_1.buildErrorResponse)(res, 'Internal Server Error', 500);
     }
-}));
-// Allot default templates to business admin on registration
-exports.allotDefaultTemplatesToBusinessAdmin = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { businessAdminId, businessCategoryId } = req.params;
-        // Find the default templates based on the provided businessCategoryId
-        const defaultTemplates = yield feedback_template_model_default_1.default.find({ businessCategory: businessCategoryId });
-        const templates = defaultTemplates.map((defaultTemplate) => ({
-            templateName: defaultTemplate.templateName,
-            templateType: answerFormat_enum_1.TemplateType.DEFAULT,
-            feedbackType: defaultTemplate.feedbackType,
-            businessCategory: defaultTemplate.businessCategory,
-            sections: defaultTemplate.sections,
-            businessAdminId: parseInt(businessAdminId, 10),
-            defaultTemplateId: defaultTemplate._id,
-            used: 0,
-            isActive: false,
-        }));
-        yield feedback_template_model_1.default.insertMany(templates);
-        res.status(200).json({ message: 'Templates alloted successfully' });
-    }
-    catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-}));
+});
+exports.getDefaultBusinessCategoryTemplates = getDefaultBusinessCategoryTemplates;
 //fetches default templates bases on business category
-exports.getBusinessAdminTemplates = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getBusinessAdminTemplates = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        const { businessAdminId } = req.params;
-        if (!Number.isInteger(parseInt(businessAdminId, 10))) {
-            res.status(400).json({ error: 'Invalid businessAdminId' });
+        const businessAdminId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const { businessCategory } = req.params;
+        if (!Number.isInteger(parseInt(businessCategory, 10))) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Invalid businessCategoryId', 400);
         }
-        const templatesByCategory = {};
+        const templatesByCategory = [];
         const aggregateResult = yield feedback_template_model_1.default.aggregate([
             {
                 $match: {
                     $or: [
-                        { businessAdminId: parseInt(businessAdminId, 10) },
+                        { businessAdminId: businessAdminId },
                         { templateType: answerFormat_enum_1.TemplateType.DEFAULT, feedbackType: { $exists: true } }
-                    ]
+                    ],
+                    businessCategory: parseInt(businessCategory, 10)
                 }
             },
             {
@@ -205,119 +185,110 @@ exports.getBusinessAdminTemplates = (0, express_async_handler_1.default)((req, r
             },
         ]);
         aggregateResult.forEach((result) => {
-            templatesByCategory[result._id] = {
+            templatesByCategory.push({
                 templates: result.templates.flat(),
                 feedbackType: result.feedbackType
-            };
+            });
         });
-        res.status(200).json({ templatesByCategory });
+        return (0, responseUtils_1.buildObjectResponse)(res, templatesByCategory);
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return (0, responseUtils_1.buildErrorResponse)(res, 'Internal Server Error', 500);
     }
-}));
+});
+exports.getBusinessAdminTemplates = getBusinessAdminTemplates;
 // Fetches a single template based on templateId with sorted questions and sections
-exports.getTemplateById = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getTemplateById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { templateId } = req.params;
         const template = yield feedback_template_model_1.default.findById(templateId);
         if (!template) {
-            res.status(404).json({ error: 'Template not found' });
-            return;
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Template not found', 404);
         }
-        // Sort sections and questions based on their order
         template.sections.sort((a, b) => a.order - b.order);
         template.sections.forEach((section) => {
             section.questions.sort((a, b) => a.order - b.order);
         });
-        const _a = template.toObject(), { _id } = _a, templateData = __rest(_a, ["_id"]);
-        res.status(200).json(Object.assign({ id: _id }, templateData));
+        const _b = template.toObject(), { _id } = _b, templateData = __rest(_b, ["_id"]);
+        return (0, responseUtils_1.buildObjectResponse)(res, Object.assign({ id: _id }, templateData));
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return (0, responseUtils_1.buildErrorResponse)(res, 'Internal Server Error', 500);
     }
-}));
-exports.swapSections = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.getTemplateById = getTemplateById;
+const swapSections = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { templateId } = req.params;
-        const { sectionId1, sectionId2 } = req.body;
-        // Validate and transform the templateId parameter
+        const sections = req.body;
         const parsedTemplateId = parseInt(templateId);
-        // Check if the transformation was successful
         if (isNaN(parsedTemplateId)) {
-            res.status(400).json({ error: 'Invalid templateId format' });
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Invalid templateId format', 400);
         }
-        // Find the template by ID
         const template = yield feedback_template_model_1.default.findById(parsedTemplateId);
-        // Check if the template exists
         if (!template) {
-            res.status(404).json({ error: 'Template not found' });
-            return;
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Template not found', 404);
         }
-        // Find the sections by their IDs
-        const section1 = template.sections.find((section) => section.id === sectionId1);
-        const section2 = template.sections.find((section) => section.id === sectionId2);
-        // Check if the sections exist
-        if (!section1 || !section2) {
-            res.status(404).json({ error: 'Section not found' });
-            return;
+        const missingSectionIds = [];
+        sections.forEach((section) => {
+            if (!template.sections.some((sectionData) => sectionData.id === section.sectionId)) {
+                missingSectionIds.push(section.sectionId);
+            }
+        });
+        if (missingSectionIds.length > 0) {
+            return (0, responseUtils_1.buildErrorResponse)(res, `Sections not found: ${missingSectionIds.join(', ')}`, 404);
         }
-        // Swap the order of the sections
-        const tempOrder = section1.order;
-        section1.order = section2.order;
-        section2.order = tempOrder;
-        // Save the updated template
+        sections.forEach((section) => {
+            const targetSection = template.sections.find((sectionData) => sectionData.id === section.sectionId);
+            if (targetSection) {
+                targetSection.order = section.newOrder;
+            }
+        });
         yield template.save();
-        res.status(200).json({ message: 'Section order swapped successfully' });
+        return (0, responseUtils_1.buildResponse)(res, 'Section order updated successfully', 200);
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return (0, responseUtils_1.buildErrorResponse)(res, 'Internal Server Error', 500);
     }
-}));
-exports.swapQuestions = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.swapSections = swapSections;
+const swapQuestions = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { templateId, sectionId } = req.params;
-        const { questionId1, questionId2 } = req.body;
+        const { templateId } = req.params;
+        const { questions, sectionId } = req.body;
         const parsedTemplateId = parseInt(templateId);
         const parsedSectionId = parseInt(sectionId);
-        if (isNaN(parsedTemplateId) || isNaN(parsedSectionId)) {
-            res.status(400).json({ error: 'Invalid templateId or sectionId format' });
-        }
         const template = yield feedback_template_model_1.default.findById(parsedTemplateId);
-        let section;
         if (!template) {
-            res.status(404).json({ error: 'Template not found' });
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Template not found', 400);
         }
-        else {
-            section = template.sections.find((section) => section.id === parsedSectionId);
-        }
+        const section = template.sections.find((sec) => sec.id === parsedSectionId);
         if (!section) {
-            res.status(404).json({ error: 'Section not found' });
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Section not found', 400);
         }
-        const question1 = section.fields.find((field) => field.id === questionId1);
-        const question2 = section.fields.find((field) => field.id === questionId2);
-        if (!question1 || !question2) {
-            res.status(404).json({ error: 'Question not found' });
+        for (const question of questions) {
+            const { questionId, newOrder } = question;
+            const targetQuestion = section.questions.find((ques) => ques.id === questionId);
+            if (targetQuestion) {
+                targetQuestion.order = newOrder;
+            }
         }
-        const tempOrder = question1.order;
-        question1.order = question2.order;
-        question2.order = tempOrder;
-        // Save the updated template
-        if (template)
-            yield template.save();
-        res.status(200).json({ message: 'Question order swapped successfully' });
+        yield template.save();
+        return (0, responseUtils_1.buildResponse)(res, 'Question order swapped successfully', 200);
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return (0, responseUtils_1.buildErrorResponse)(res, 'Internal Server Error', 500);
     }
-}));
+});
+exports.swapQuestions = swapQuestions;
 const validateAndTransformForm = (roleId, businessAdminId, formData) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, dynamic_feedback_form_validation_1.validateFormSchema)(formData);
+        console.log(111111, roleId);
         const convertToAnswerFormat = (answerFormat) => {
             const convertedFormat = {
                 type: answerFormat.type,
@@ -331,24 +302,24 @@ const validateAndTransformForm = (roleId, businessAdminId, formData) => __awaite
             }
             return convertedFormat;
         };
-        const convertToQuestionAnswerFormField = (fields) => {
-            return fields.map((field, index) => {
+        const convertToQuestionAnswerFormField = (sections) => {
+            return sections.map((section, index) => {
                 const convertedField = {
                     id: index + 1,
-                    question: field.question,
-                    order: field.order,
-                    answerFormat: convertToAnswerFormat(field.answerFormat),
+                    question: section.question,
+                    order: section.order,
+                    answerFormat: convertToAnswerFormat(section.answerFormat),
                 };
                 return convertedField;
             });
         };
-        const convertToFeedbackFormat = (formats) => {
-            return formats.map((format, index) => {
+        const convertToFeedbackFormat = (sections) => {
+            return sections.map((section, index) => {
                 const convertedFormat = {
                     id: index + 1,
-                    title: format.title,
-                    order: format.order,
-                    questions: convertToQuestionAnswerFormField(format.fields),
+                    title: section.title,
+                    order: section.order,
+                    questions: convertToQuestionAnswerFormField(section.questions),
                 };
                 return convertedFormat;
             });
@@ -376,37 +347,38 @@ const validateAndTransformForm = (roleId, businessAdminId, formData) => __awaite
     }
 });
 // create new feedback template 
-exports.createTemplate = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b, _c, _d;
+const createTemplate = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d, _e;
     try {
-        const businessAdminId = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
-        const roleId = (_c = req.user) === null || _c === void 0 ? void 0 : _c.role;
+        const businessAdminId = (_c = req.user) === null || _c === void 0 ? void 0 : _c.id;
+        const roleId = (_d = req.user) === null || _d === void 0 ? void 0 : _d.role;
         const formData = req.body;
         const data = yield validateAndTransformForm(roleId, businessAdminId, formData);
         console.log(JSON.stringify(data, null, 2));
         yield feedback_template_model_1.default.create(data);
-        res.status(200).json({ message: 'Feedback form created successfully' });
+        return (0, responseUtils_1.buildResponse)(res, "Feedback form created successfully", 200);
     }
     catch (error) {
         console.log(error);
         if (error instanceof yup.ValidationError && (error === null || error === void 0 ? void 0 : error.errors)) {
             // If there's a validation error, send the error response
-            const errorMessage = ((_d = error.errors) === null || _d === void 0 ? void 0 : _d.join(', ')) || 'Validation Error';
-            res.status(400).json({ error: errorMessage });
+            const errorMessage = ((_e = error.errors) === null || _e === void 0 ? void 0 : _e.join(', ')) || 'Validation Error';
+            return (0, responseUtils_1.buildErrorResponse)(res, errorMessage, 400);
         }
         else {
-            res.status(500).json({ error: constants_1.status_codes[500] });
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Internal server error', 500);
         }
     }
-}));
+});
+exports.createTemplate = createTemplate;
 // update template 
 exports.updateTemplate = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e, _f, _g;
+    var _f, _g, _h;
     try {
         const { templateId } = req.params;
         const templateData = req.body;
-        const businessAdminId = (_e = req.user) === null || _e === void 0 ? void 0 : _e.id;
-        const roleId = (_f = req.user) === null || _f === void 0 ? void 0 : _f.role;
+        const businessAdminId = (_f = req.user) === null || _f === void 0 ? void 0 : _f.id;
+        const roleId = (_g = req.user) === null || _g === void 0 ? void 0 : _g.role;
         // Validate and transform the templateId parameter
         const parsedTemplateId = parseInt(templateId);
         // Check if the transformation was successful
@@ -431,7 +403,7 @@ exports.updateTemplate = (0, express_async_handler_1.default)((req, res) => __aw
         console.log(error);
         if (error instanceof yup.ValidationError && (error === null || error === void 0 ? void 0 : error.errors)) {
             // If there's a validation error, send the error response
-            const errorMessage = ((_g = error.errors) === null || _g === void 0 ? void 0 : _g.join(', ')) || 'Validation Error';
+            const errorMessage = ((_h = error.errors) === null || _h === void 0 ? void 0 : _h.join(', ')) || 'Validation Error';
             res.status(400).json({ error: errorMessage });
         }
         else {

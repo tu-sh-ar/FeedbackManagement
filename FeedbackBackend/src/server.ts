@@ -15,7 +15,6 @@ import path from 'path'
 import feedback_template_router from './routes/feedback_template_route';
 import feedback_router from './routes/feedback_route';
 import feedbackResponse_router from './routes/feedback_response_route';
-import category_template_router from './routes/feedback_template_category_route'
 
 //importing test routes
 import user_routes from './routes/user_routes'
@@ -62,7 +61,6 @@ const server_config = () => {
   server.use("/api/feedbackTemplate", feedback_template_router);
   server.use("/api/feedback", feedback_router);
   server.use("/api/response", feedbackResponse_router);
-  server.use("/api/categoryTemplate", category_template_router);
 
   // test routes
   server.use("/api/user", user_routes);
