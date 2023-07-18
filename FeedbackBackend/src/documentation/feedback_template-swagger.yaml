@@ -87,33 +87,7 @@ paths:
                           feedbackType:
                             id: "64b14fe37d75d86fd1af82c1"
                             name: "Product Feedback from Customers"
-  /api/feedbackTemplate/allotDefaultTemplatesToBusinessAdmin/{businessAdminId}/{businessCategoryId}:
-    post:
-      summary: Allot default templates to business admin based on business category
-      tags:
-        - Feedback Template  
-      security:
-        - JWTAuth: []
-      parameters:
-        - in: path
-          name: businessAdminId
-          schema:
-            type: integer
-          required: true
-          description: The business admin ID
-        - in: path
-          name: businessCategoryId
-          schema:
-            type: integer
-          required: true
-          description: The business category ID
-      responses:
-        200:
-          description: Successful response
-        500:
-          description: Internal server error
-
-  /api/feedbackTemplate/getBusinessAdminTemplates/{businessAdminId}:
+  /api/feedbackTemplate/getBusinessAdminTemplates/{businessCategory}:
     get:
       summary: Fetches templates based on businessAdminId
       tags:
@@ -122,12 +96,12 @@ paths:
         - JWTAuth: []
       parameters:
         - in: path
-          name: businessAdminId
+          name: businessCategory
           required: true
           schema:
             type: integer
             example: 1
-          description: ID of the business admin
+          description: ID of the business category
       responses:
         200:
           description: Successful response with the templates segregated by FeedbackCategory
@@ -140,12 +114,13 @@ paths:
                   value:
                     templatesByCategory:
                       Product Feedback from Customers:
-                        - id: "64b161d57d75d86fd1af82d4"
-                          templateName: "Default Template 1"              
-                          isActive: true
-                          feedbackType:
-                            id: "64b14fe37d75d86fd1af82c1"
-                            name: "Product Feedback from Customers"
+                        templates:
+                          - id: "64b161d57d75d86fd1af82d4"
+                            templateName: "Default Template 1"              
+                            isActive: true
+                        feedbackType:
+                          id: "64b14fe37d75d86fd1af82c1"
+                          name: "Product Feedback from Customers"
   /api/feedbackTemplate/create:
     post:
       summary: Create a new default/custom feedback form template

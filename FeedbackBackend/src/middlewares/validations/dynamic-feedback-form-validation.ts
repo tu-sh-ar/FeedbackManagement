@@ -34,7 +34,7 @@ const ERROR_NON_EMPTY_FORMATS = 'Formats array must not be empty';
 
 // Schema definition
 const formSchema = yup.object().shape({
-    businessCategory: yup.number(),
+    businessCategory: yup.number().required(),
     feedbackType: yup.string().required(),
     feedbackFormName: yup.string().max(MAX_QUESTION_LENGTH).required(ERROR_QUESTION_REQUIRED),
     sections: yup

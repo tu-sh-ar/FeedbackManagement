@@ -9,17 +9,18 @@ import * as yup from 'yup';
 import { FeedbackFormBodySchema } from '../constants/interface';
 import FeedbackCategory, { IFeedbackCaregory } from '../model/feedback_category_model';
 import FeedbackDefaultTemplate from '../model/feedback_template_model_default';
-import { ObjectId } from 'mongodb';
 import mongoose, { Types } from 'mongoose';
+import { buildErrorResponse, buildObjectResponse, buildResponse } from '../utils/responseUtils';
+import { TemplateSectionRequest } from '../middlewares/validations/request-body-validations';
 
 
 //fetches default templates bases on business category
-export const getDefaultBusinessCategoryTemplates = asyncHandler(async (req: Request, res: Response) => {
+export const getDefaultBusinessCategoryTemplates = async (req: Request, res: Response) => {
     try {
         const { businessCategoryId } = req.params;
 
         if (!Number.isInteger(parseInt(businessCategoryId, 10))) {
-            res.status(400).json({ error: 'Invalid businessCategoryId' });
+            return buildErrorResponse(res, 'Invalid businessCategoryId', 400);
         }
 
         const templatesByCategory: any = {};
@@ -70,51 +71,24 @@ export const getDefaultBusinessCategoryTemplates = asyncHandler(async (req: Requ
             }
         });
 
-        res.status(200).json({ templatesByCategory });
+        return buildObjectResponse(res, templatesByCategory)
+
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return buildErrorResponse(res, 'Internal Server Error', 500);
     }
-})
-
-
-// Allot default templates to business admin on registration
-export const allotDefaultTemplatesToBusinessAdmin = asyncHandler(async (req: Request, res: Response) => {
-    try {
-        const { businessAdminId, businessCategoryId } = req.params;
-
-        // Find the default templates based on the provided businessCategoryId
-        const defaultTemplates = await FeedbackDefaultTemplate.find({ businessCategory: businessCategoryId });
-
-        const templates = defaultTemplates.map((defaultTemplate) => ({
-            templateName: defaultTemplate.templateName,
-            templateType: TemplateType.DEFAULT,
-            feedbackType: defaultTemplate.feedbackType,
-            businessCategory: defaultTemplate.businessCategory,
-            sections: defaultTemplate.sections,
-            businessAdminId: parseInt(businessAdminId, 10),
-            defaultTemplateId: defaultTemplate._id,
-            used: 0,
-            isActive: false,
-        }));
-
-        await FeedbackTemplate.insertMany(templates);
-
-        res.status(200).json({ message: 'Templates alloted successfully' });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-})
+}
 
 
 //fetches default templates bases on business category
-export const getBusinessAdminTemplates = asyncHandler(async (req: Request, res: Response) => {
+export const getBusinessAdminTemplates = async (req: Request, res: Response) => {
     try {
-        const { businessAdminId } = req.params;
+        const businessAdminId: number = req.user?.id;
 
-        if (!Number.isInteger(parseInt(businessAdminId, 10))) {
-            res.status(400).json({ error: 'Invalid businessAdminId' });
+        const { businessCategory } = req.params;
+
+        if (!Number.isInteger(parseInt(businessCategory, 10))) {
+            return buildErrorResponse(res, 'Invalid businessCategoryId', 400);
         }
 
         const templatesByCategory: any = {};
@@ -123,9 +97,10 @@ export const getBusinessAdminTemplates = asyncHandler(async (req: Request, res: 
             {
                 $match: {
                     $or: [
-                        { businessAdminId: parseInt(businessAdminId, 10) },
+                        { businessAdminId: businessAdminId },
                         { templateType: TemplateType.DEFAULT, feedbackType: { $exists: true } }
-                    ]
+                    ],
+                    businessCategory: parseInt(businessCategory, 10)
                 }
             },
             {
@@ -184,12 +159,13 @@ export const getBusinessAdminTemplates = asyncHandler(async (req: Request, res: 
             }
         });
 
-        res.status(200).json({ templatesByCategory });
+        return buildObjectResponse(res, templatesByCategory)
+
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return buildErrorResponse(res, 'Internal Server Error', 500);
     }
-})
+}
 
 
 // Fetches a single template based on templateId with sorted questions and sections
@@ -200,11 +176,9 @@ export const getTemplateById = asyncHandler(async (req: Request, res: Response) 
         const template: IFeedbackTemplate | null = await FeedbackTemplate.findById(templateId);
 
         if (!template) {
-            res.status(404).json({ error: 'Template not found' });
-            return;
+            return buildErrorResponse(res, 'Template not found', 404);
         }
 
-        // Sort sections and questions based on their order
         template.sections.sort((a, b) => a.order - b.order);
         template.sections.forEach((section) => {
             section.questions.sort((a, b) => a.order - b.order);
@@ -212,107 +186,97 @@ export const getTemplateById = asyncHandler(async (req: Request, res: Response) 
 
         const { _id, ...templateData } = template.toObject();
 
-        res.status(200).json({ id: _id, ...templateData });
+        return buildObjectResponse(res, { id: _id, ...templateData })
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return buildErrorResponse(res, 'Internal Server Error', 500);
     }
 });
 
 
-export const swapSections = asyncHandler(async (req: Request, res: Response) => {
+export const swapSections = async (req: Request, res: Response) => {
     try {
         const { templateId } = req.params;
-        const { sectionId1, sectionId2 } = req.body;
 
-        // Validate and transform the templateId parameter
+        const sections = req.body as TemplateSectionRequest[];
+
         const parsedTemplateId = parseInt(templateId);
 
-        // Check if the transformation was successful
         if (isNaN(parsedTemplateId)) {
-            res.status(400).json({ error: 'Invalid templateId format' });
+            return buildErrorResponse(res, 'Invalid templateId format', 400);
         }
 
-        // Find the template by ID
         const template = await FeedbackTemplate.findById(parsedTemplateId);
 
-        // Check if the template exists
         if (!template) {
-            res.status(404).json({ error: 'Template not found' });
-            return;
+            return buildErrorResponse(res, 'Template not found', 404);
         }
 
-        // Find the sections by their IDs
-        const section1 = template.sections.find((section) => section.id === sectionId1);
-        const section2 = template.sections.find((section) => section.id === sectionId2);
+        const missingSectionIds: number[] = [];
+        sections.forEach((section) => {
+            if (!template.sections.some((sectionData) => sectionData.id === section.sectionId)) {
+                missingSectionIds.push(section.sectionId);
+            }
+        });
 
-        // Check if the sections exist
-        if (!section1 || !section2) {
-            res.status(404).json({ error: 'Section not found' });
-            return;
+        if (missingSectionIds.length > 0) {
+            return buildErrorResponse(res, `Sections not found: ${missingSectionIds.join(', ')}`, 404);
         }
 
-        // Swap the order of the sections
-        const tempOrder = section1.order;
-        section1.order = section2.order;
-        section2.order = tempOrder;
+        sections.forEach((section) => {
+            const targetSection = template.sections.find((sectionData) => sectionData.id === section.sectionId);
+            if (targetSection) {
+                targetSection.order = section.newOrder;
+            }
+        });
 
-        // Save the updated template
         await template.save();
 
-        res.status(200).json({ message: 'Section order swapped successfully' });
+        return buildResponse(res, 'Section order updated successfully', 200)
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return buildErrorResponse(res, 'Internal Server Error', 500);
     }
-})
+}
 
 
-export const swapQuestions = asyncHandler(async (req: Request, res: Response) => {
+export const swapQuestions = async (req: Request, res: Response) => {
     try {
-        const { templateId, sectionId } = req.params;
-        const { questionId1, questionId2 } = req.body;
+        const { templateId } = req.params;
+        const { questions, sectionId } = req.body;
 
         const parsedTemplateId = parseInt(templateId);
         const parsedSectionId = parseInt(sectionId);
 
-        if (isNaN(parsedTemplateId) || isNaN(parsedSectionId)) {
-            res.status(400).json({ error: 'Invalid templateId or sectionId format' });
-        }
-
         const template = await FeedbackTemplate.findById(parsedTemplateId);
 
-        let section: any;
         if (!template) {
-            res.status(404).json({ error: 'Template not found' });
-        } else {
-            section = template.sections.find((section) => section.id === parsedSectionId);
+            return buildErrorResponse(res, 'Template not found', 400);
         }
+
+        const section = template.sections.find((sec) => sec.id === parsedSectionId);
 
         if (!section) {
-            res.status(404).json({ error: 'Section not found' });
+            return buildErrorResponse(res, 'Section not found', 400);
         }
 
-        const question1 = section.fields.find((field: any) => field.id === questionId1);
-        const question2 = section.fields.find((field: any) => field.id === questionId2);
-
-        if (!question1 || !question2) {
-            res.status(404).json({ error: 'Question not found' });
+        for (const question of questions) {
+            const { questionId, newOrder } = question;
+            const targetQuestion = section.questions.find((ques) => ques.id === questionId);
+            if (targetQuestion) {
+                targetQuestion.order = newOrder;
+            }
         }
 
-        const tempOrder = question1.order;
-        question1.order = question2.order;
-        question2.order = tempOrder;
+        await template.save();
 
-        // Save the updated template
-        if (template) await template.save();
-
-        res.status(200).json({ message: 'Question order swapped successfully' });
+        return buildResponse(res, 'Question order swapped successfully', 200);
+        
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return buildErrorResponse(res, 'Internal Server Error', 500);
     }
-})
+}
 
 
 const validateAndTransformForm = async (
