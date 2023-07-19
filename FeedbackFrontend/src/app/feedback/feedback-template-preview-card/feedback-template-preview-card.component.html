@@ -1,72 +1,24 @@
 <div class="flex-wrapper">
-
-  <div class="card-container">
+  <div class="card-container" *ngFor="let template of templates">
     <mat-card class="base active">
       <mat-card-header>
         <mat-card-title>
-          Default Template 1
+          <span class="bold">{{template.templateName}}</span>
         </mat-card-title>
       </mat-card-header>
       <mat-divider></mat-divider>
       <br>
       <mat-card-content>
         <small class="bold">How would you rate your experience?</small>
-        <app-experience-bar></app-experience-bar>
+        <app-dummy-experience-bar></app-dummy-experience-bar>
         <small class="bold">What more improvements would you suggest?</small>
         <app-dummy-textbox-component></app-dummy-textbox-component>
       </mat-card-content>
     </mat-card>
     <div class="middle">
-      <button mat-flat-button color="primary" routerLink="template/1" matTooltip="View Template">
-        View
+      <button mat-icon-button color="primary" matTooltip="View Template" routerLink="template/{{template.id}}">
+        <img src="../../../assets/eye.svg" alt="view">
       </button>
     </div>
   </div>
-
-  <div class="card-container">
-    <mat-card class="base">
-      <mat-card-header>
-        <mat-card-title>
-          Default Template 1
-        </mat-card-title>
-      </mat-card-header>
-      <mat-divider></mat-divider>
-      <br>
-      <mat-card-content>
-        <small class="bold">How would you rate your experience?</small>
-        <app-experience-bar></app-experience-bar>
-        <small class="bold">What more improvements would you suggest?</small>
-        <app-dummy-textbox-component></app-dummy-textbox-component>
-      </mat-card-content>
-    </mat-card>
-    <div class="middle">
-      <button mat-flat-button color="primary" routerLink="template/1" matTooltip="View Template">
-        View
-      </button>
-    </div>
-  </div>
-
-  <div class="card-container">
-    <mat-card class="base">
-      <mat-card-header>
-        <mat-card-title>
-          Default Template 1
-        </mat-card-title>
-      </mat-card-header>
-      <mat-divider></mat-divider>
-      <br>
-      <mat-card-content>
-        <small class="bold">How would you rate your experience?</small>
-        <app-experience-bar></app-experience-bar>
-        <small class="bold">What more improvements would you suggest?</small>
-        <app-dummy-textbox-component></app-dummy-textbox-component>
-      </mat-card-content>
-    </mat-card>
-    <div class="middle">
-      <button mat-flat-button color="primary" routerLink="template/1" matTooltip="View Template">
-        View
-      </button>
-    </div>
-  </div>
-
 </div>

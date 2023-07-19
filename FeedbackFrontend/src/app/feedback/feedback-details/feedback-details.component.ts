@@ -47,12 +47,13 @@ export class FeedbackDetailsComponent implements OnInit{
 
       this._userService.getUser(this.userId).subscribe((res)=>{
         this.user = res;
-      })
-  
-      this._productService.getProduct(this.productId).subscribe((res)=>{
-        this.product = res;
         this.isLoaded = true;
       })
+  
+      // this._productService.getProduct(this.productId).subscribe((res)=>{
+      //   this.product = res;
+      //   this.isLoaded = true;
+      // })
 
     })
 

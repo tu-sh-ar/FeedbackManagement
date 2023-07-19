@@ -14,8 +14,10 @@ import { ExpandedTemplateViewComponent } from './expanded-template-view/expanded
 import { DummyRadioComponentComponent } from './dummy-radio-component/dummy-radio-component.component';
 import { DummyRatingComponentComponent } from './dummy-rating-component/dummy-rating-component.component';
 import { DummyTextboxComponentComponent } from './dummy-textbox-component/dummy-textbox-component.component';
-import { ExperienceBarComponent } from './experience-bar/experience-bar.component';
 import { TemplatePreferencePopupComponent } from './template-preference-popup/template-preference-popup.component';
+import { DummyExperienceBarComponent } from './dummy-experience-bar/dummy-experience-bar.component';
+import { CustomFeedbackGeneratorComponent } from './custom-feedback-generator/custom-feedback-generator.component';
+import { DummyImageUploaderComponent } from './dummy-image-uploader/dummy-image-uploader.component';
 
 @NgModule({
   declarations: [
@@ -30,8 +32,10 @@ import { TemplatePreferencePopupComponent } from './template-preference-popup/te
     DummyRadioComponentComponent,
     DummyRatingComponentComponent,
     DummyTextboxComponentComponent,
-    ExperienceBarComponent,
-    TemplatePreferencePopupComponent
+    TemplatePreferencePopupComponent,
+    DummyExperienceBarComponent,
+    CustomFeedbackGeneratorComponent,
+    DummyImageUploaderComponent
   ],
   imports: [
     CommonModule,

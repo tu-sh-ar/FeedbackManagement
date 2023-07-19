@@ -7,11 +7,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
+  businessEmail!:string;
   
   constructor(private _router: Router){}
 
   ngOnInit():void{
-   
+   this.businessEmail = JSON.parse(localStorage.getItem('user')!).email;
   }
 
   logout():void{

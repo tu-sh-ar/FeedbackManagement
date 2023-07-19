@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent {
+  businessEmail!:string;
 
+  ngOnInit():void{
+    this.businessEmail = JSON.parse(localStorage.getItem('user')!).email;
+  }
 }

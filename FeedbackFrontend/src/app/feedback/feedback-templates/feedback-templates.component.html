@@ -1,44 +1,16 @@
 <h3>Default Templates</h3>
 <mat-divider></mat-divider>
 
-<div class="category-wrapper">
+<div class="category-wrapper" *ngFor="let template of businessRelatedTemplates?.response">
     <div class="head">
         <span class="template-reference bold">
-            Product Feedback Template
+            {{template.feedbackType.name}}
         </span>
-        <button mat-flat-button color="primary" (click)="openTemplatePrefrenceDialog()">
-            Create custom template
+        <button mat-flat-button color="primary" routerLink="custom/{{template.feedbackType.id}}">
+            Create New
         </button>
     </div>
     <div class="scroller">
-        <app-feedback-template-preview-card></app-feedback-template-preview-card>
-    </div>
-</div>
-
-<div class="category-wrapper">
-    <div class="head">
-        <span class="template-reference bold">
-            Service Feedback Template
-        </span>
-        <button mat-flat-button color="primary" (click)="openTemplatePrefrenceDialog()">
-            Create custom template
-        </button>
-    </div>
-    <div class="scroller">
-        <app-feedback-template-preview-card></app-feedback-template-preview-card>
-    </div>
-</div>
-
-<div class="category-wrapper">
-    <div class="head">
-        <span class="template-reference bold">
-            Delivery Feedback Template
-        </span>
-        <button mat-flat-button color="primary" (click)="openTemplatePrefrenceDialog()">
-            Create custom template
-        </button>
-    </div>
-    <div class="scroller">
-        <app-feedback-template-preview-card></app-feedback-template-preview-card>
+        <app-feedback-template-preview-card [templates]="template.templates"></app-feedback-template-preview-card>
     </div>
 </div>

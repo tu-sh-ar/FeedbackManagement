@@ -3,7 +3,7 @@
 }
 .card-container {
   position: relative;
-  width: 50%;
+  width: 40%;
 }
 
 .base {
@@ -11,7 +11,8 @@
   display: block;
   transition: .5s ease;
   backface-visibility: hidden;
-  margin-inline: 0.5em;
+  margin-inline: 0.75em;
+  overflow: hidden;
 }
 
 .active{
@@ -30,7 +31,7 @@
 }
 
 .card-container:hover .base {
-  opacity: 0.3;
+  opacity: 0.1;
 }
 
 .card-container:hover .middle {

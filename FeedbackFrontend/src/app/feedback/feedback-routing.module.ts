@@ -7,6 +7,7 @@ import { PageNotFoundComponent } from '../shared/page-not-found/page-not-found.c
 import { ProfileComponent } from './profile/profile.component';
 import { FeedbackTemplatesComponent } from './feedback-templates/feedback-templates.component';
 import { ExpandedTemplateViewComponent } from './expanded-template-view/expanded-template-view.component';
+import { CustomFeedbackGeneratorComponent } from './custom-feedback-generator/custom-feedback-generator.component';
 
 const routes: Routes = [
   {
@@ -36,8 +37,8 @@ const routes: Routes = [
         component:ExpandedTemplateViewComponent
       },
       {
-        path:"feedback-templates/custom",
-        component:ProfileComponent
+        path:"feedback-templates/custom/:id",
+        component:CustomFeedbackGeneratorComponent
       },
       {
         path:"profile",

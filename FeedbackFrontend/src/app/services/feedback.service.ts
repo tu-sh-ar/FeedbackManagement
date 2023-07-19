@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Feedback, PostFeedbackResponse, GetFeedbackResponse, UpdateResponse, PaginatedFeedbackResponse, FeedbackTemplate } from '../interfaces/feedback';
+import { Feedback, PostFeedbackResponse, GetFeedbackResponse, UpdateResponse, PaginatedFeedbackResponse, CustomFeedbackFormBodySchema, SingleFeedbackTemplateBody} from '../interfaces/feedback';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -64,14 +64,18 @@ export class FeedbackService {
     return this._http.put<UpdateResponse>(`${this.baseURL}response/${responseId}`, data)
   }
 
-  //get active feedback template
-  getFeedbackTemplate(): Observable<FeedbackTemplate[]>{
-    return this._http.get<FeedbackTemplate[]>(`${this.baseURL}feedbackTemplate`);
+  //retrieve all the templates associated to particular business type
+  getBusinessSpecificTemplateDetails(businessCategory:number):Observable<any>{
+    return this._http.get<any>(`${this.baseURL}feedbackTemplate/getBusinessAdminTemplates/${businessCategory}`)
   }
 
-  //update feedback template
-  updateFeedbackTemplate(templateId:string, data: FeedbackTemplate): Observable<FeedbackTemplate>{
-    return this._http.put<FeedbackTemplate>(`${this.baseURL}feedbackTemplate/${templateId}`, data);
+  //create a custom template
+  createCustomTemplate(data:CustomFeedbackFormBodySchema):Observable<any>{
+    return this._http.post<any>(`${this.baseURL}feedbackTemplate/create`, data)
   }
 
+  //get a unique template by template id
+  getTemplateById(templateId:string):Observable<SingleFeedbackTemplateBody>{
+    return this._http.get<SingleFeedbackTemplateBody>(`${this.baseURL}feedbackTemplate/getTemplateById/${templateId}`)
+  }
 }

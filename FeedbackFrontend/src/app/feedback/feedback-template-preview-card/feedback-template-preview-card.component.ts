@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-feedback-template-preview-card',
@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./feedback-template-preview-card.component.scss']
 })
 export class FeedbackTemplatePreviewCardComponent {
-
+  @Input() templates!:{id:string; templateName:string; templateType:number; isActive:boolean}[];
 }

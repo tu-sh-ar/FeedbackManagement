@@ -1,0 +1,84 @@
+<h3>Create Custom Template</h3>
+
+<div class="main-wrapper">
+    <div class="top-section">
+        <div class="bold bm5">Template Name</div>
+        <mat-form-field appearance="outline">
+            <input type="text" matInput [(ngModel)]="custom.feedbackFormName" required="true">
+        </mat-form-field>
+    </div>
+
+    <div class="mid-section">
+        <div *ngFor="let section of custom.sections; let outer_i = index;">
+            <mat-accordion class="example-headers-align" multi>
+
+                <mat-expansion-panel [expanded]="true">
+
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <span class="bold">{{section.title}}</span>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <span></span>
+                            <button mat-icon-button (click)="deleteSection(outer_i)" color="warn">
+                                <img src="../../../assets/delete-red.svg" alt="delete">
+                            </button>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Section Name</mat-label>
+                        <input type="text" matInput [(ngModel)]="section.title">
+                    </mat-form-field>
+                    <br>
+                    <div *ngFor="let qa of section.questions; let inner_i = index;">
+                        <div class="qa-wrapper">
+                            <div class="left-column">
+                                Question
+                            </div>
+                            <mat-form-field appearance="outline" class="right-column" >
+                                <input type="text" [(ngModel)]="qa.question" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="qa-wrapper">
+                            <div class="left-column">
+                                Response
+                            </div>
+                            <mat-form-field appearance="outline" class="right-column">
+                                <mat-select [(ngModel)]="qa.answerFormat.type" (selectionChange)="handleAnswerType($event.value, outer_i, inner_i)">
+                                    <mat-option *ngFor="let option of options" [value]="option.type">{{option.label}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-checkbox class="float-r" color="primary" value="true" [(ngModel)]="qa.answerFormat.required">Mark as required</mat-checkbox>
+                            <span class="warn-color remove-question pointer"
+                                (click)="removeQAFromSection(outer_i, inner_i)">
+                                Remove Question -
+                            </span>
+                        </div>
+                        <br><br>
+                    </div>
+        
+                    <div>
+                        <span class="primary-color add-question pointer" (click)="addQAToSection(outer_i)">
+                            Add Question +
+                        </span>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+    </div>
+
+    <div class="foot-section">
+        <button mat-flat-button color="primary" (click)="addSection()">
+            Add Section
+        </button>
+        <button mat-flat-button color="accent" class="float-r" (click)="saveCustomTemplate()">
+            Save
+        </button>
+        <button mat-flat-button class="float-r" routerLink="/admin/dashboard">
+            Cancel
+        </button>
+    </div>
+</div>

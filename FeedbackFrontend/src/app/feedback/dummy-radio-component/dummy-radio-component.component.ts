@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-dummy-radio-component',
@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class DummyRadioComponentComponent {
   data:string[] = ['1', '2', '3', '4'];
+  @Input() options!:string[];
 }

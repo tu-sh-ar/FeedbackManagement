@@ -1,0 +1,69 @@
+.top-section {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    border-radius: 0.25em;
+    padding: 1.5em 1.5em 0 1.5em;
+    margin-bottom: 1em;
+}
+
+.section-wrapper {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    border-radius: 1em;
+    padding: 1.5em 2.5em;
+    margin-block: 1em;
+}
+
+mat-form-field {
+    width: 100%;
+}
+.bm5{
+    margin-bottom: 0.5em;
+}
+.foot-section {
+    padding-block: 1em;
+}
+
+.add-question,
+.remove-question {
+    margin-bottom: 1em;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.float-r {
+    float: right;
+    margin-inline: 0.25em !important;
+}
+
+.qa-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.left-column {
+    width: 15%;
+}
+
+.right-column {
+    width: 85%;
+    height: 3em;
+    resize: none;
+    margin-block: 1em !important;
+}
+
+.example-action-buttons {
+    padding-bottom: 20px;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.example-headers-align .mat-mdc-form-field+.mat-mdc-form-field {
+    margin-left: 8px;
+}
+mat-expansion-panel{
+    margin-block: 1em !important;
+}

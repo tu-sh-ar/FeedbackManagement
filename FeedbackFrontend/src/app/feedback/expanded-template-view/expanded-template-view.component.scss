@@ -2,12 +2,13 @@
     display: none;
 }
 .head{
-    text-align: end;
-    margin-block: 0.5em;
+    margin-block: 1em;
 }
 .template-reference{
     font-size: 1.25em;
-    float: left;
+}
+.fr{
+    float: right;
 }
 .selected{
     background-color: white !important;
@@ -15,18 +16,18 @@
 }
 .main-wrapper{
     display: flex;
-    height: 80%;
+    height: 85%;
     border: 1px solid rgb(220, 220, 200);
     border-radius: 1em;
     overflow: hidden;
+    margin-block: 1em;
 }
 .left-box{
     background-color: #F1F3F6;
-    width: 20%;
-    overflow-y: scroll;
+    width: 25%;
 }
 .left-box-option{
-    padding: 1.25em 0em 1.25em 1em;
+    padding: 1.25em 1em 1.25em 1em;
     cursor: pointer;
 }
 .right-box{

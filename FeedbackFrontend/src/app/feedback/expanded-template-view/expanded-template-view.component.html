@@ -1,42 +1,34 @@
 <div class="head">
     <span class="template-reference bold">
-        Template Ref 1
-        <app-active-badge></app-active-badge>
+        {{template.response.templateName}}
+        <app-active-badge *ngIf="template?.response?.isActive"></app-active-badge>
     </span>
-    <button mat-flat-button color="primary">
-        Use this template
-    </button>
+    <span class="fr">
+        <button mat-flat-button color="primary" *ngIf="!template?.response?.isActive">
+            Use this template
+        </button>
+    </span>
 </div>
+
 <div class="main-wrapper">
     <div class="left-box">
-        <div class="left-box-option" (click)="activateProduct()" [ngClass]="{'selected':product}">
-            <span class="bold">Product</span>
-        </div>
-        <div class="left-box-option" (click)="activatePackaging()" [ngClass]="{'selected':packaging}">
-            <span class="bold">Packaging</span>
-        </div>
-        <div class="left-box-option" (click)="activateOverall()" [ngClass]="{'selected':overall}">
-            <span class="bold">Overall Satisfaction</span>
+        <div class="left-box-option" *ngFor="let section of template?.response?.sections; let left_i = index;" (click)="handleCards(left_i);" [ngClass]="{'selected':left_i===currentIdx}">
+            <span class="bold">{{section.title}}</span>
         </div>
     </div>
     <div class="right-box">
-        <div *ngIf="product">
-            <span class="bold">How would you rate our product?</span>
-            <app-dummy-rating-component></app-dummy-rating-component>
-            <br>
-            <span class="bold">Please leave a customer review:</span>
-            <app-dummy-textbox-component></app-dummy-textbox-component>
-        </div>
-        <div *ngIf="packaging">
-            <span class="bold">How was the packaging of the shipped order?</span>
-            <app-dummy-rating-component></app-dummy-rating-component>
-            <br>
-            <span class="bold">Did the packaging effectively protect the goods during transit?</span>
-            <app-dummy-radio-component></app-dummy-radio-component>
-        </div>
-        <div *ngIf="overall">
-            <span class="bold">How likely would you recommend this product based on your experience?</span>
-            <app-experience-bar></app-experience-bar>
+        <div *ngFor="let section of template?.response?.sections; let right_i = index;">
+            <div *ngIf="right_i===currentIdx">
+                <div *ngFor="let qa of section.questions">
+                    <span class="bold">{{qa.question}}</span>
+                    <app-dummy-rating-component *ngIf="qa.answerFormat.type==='rating'"></app-dummy-rating-component>
+                    <app-dummy-experience-bar *ngIf="qa.answerFormat.type==='number'"></app-dummy-experience-bar>
+                    <app-dummy-radio-component *ngIf="qa.answerFormat.type==='radio'" [options]="qa.answerFormat.options!"></app-dummy-radio-component>
+                    <app-dummy-textbox-component *ngIf="qa.answerFormat.type==='textarea'"></app-dummy-textbox-component>
+                    <app-dummy-image-uploader *ngIf="qa.answerFormat.type==='file'"></app-dummy-image-uploader>
+                    <br>
+                </div>
+            </div>
         </div>
     </div>
 </div>

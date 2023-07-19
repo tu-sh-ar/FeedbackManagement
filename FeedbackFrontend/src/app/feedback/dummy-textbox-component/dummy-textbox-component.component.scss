@@ -1,4 +1,7 @@
-textarea{
+.textbox{
     width: 100%;
-    resize: none;
+    height: 3em;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 0.5em;
+    margin-inline: 0.25em;
 }
