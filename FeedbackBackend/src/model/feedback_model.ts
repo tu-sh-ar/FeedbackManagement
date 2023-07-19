@@ -10,7 +10,6 @@ interface IFeedback extends Document {
   comment: string;
   feedback_type: string;
   feedback_language: string;
-  additional_fields: Record<string, any>;
   qas: { question: string, answer?: string }[];
   createdAt: Date;
   updatedAt: Date;
@@ -64,10 +63,6 @@ const FeedbackSchema = new Schema(
     feedback_language: {
       type: String,
       required: true,
-    },
-    additional_fields: {
-      type: Map,
-      of: Schema.Types.Mixed,
     },
     qas: [QASchema],
   },

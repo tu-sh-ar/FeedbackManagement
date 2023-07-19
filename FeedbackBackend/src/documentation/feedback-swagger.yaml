@@ -381,12 +381,6 @@ components:
           type: number
           description: Language in which the feedback is given.
           example: 1
-        additional_fields:
-          type: object
-          description: Additional fields given in the feedback.
-          example:
-            field1: "value1"
-            field2: "value2"
         qas:
           type: array
           description: Questions and answers given in the feedback.
@@ -421,9 +415,6 @@ components:
         comment: "Good Product"
         feedback_type: 4
         feedback_language: 1
-        additional_fields:
-          field1: "value1"
-          field2: "value2"
         qas:
           - question: "Q1"
             answer: "A1"
