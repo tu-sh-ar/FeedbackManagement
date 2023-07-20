@@ -152,34 +152,36 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
       }
       for(let qa of section.questions){
         if(qa.question === ""){
-          alert(`Empty question fields are not allowed.`)
+          alert(`Empty question fields are not allowed in section - ${section.title}`)
           return
         }
         if(qa.answerFormat.type === ""){
-          alert(`Empty answer fields are not allowed.`)
+          alert(`Empty answer fields are not allowed in section - ${section.title}`)
           return
         }
         if(qa.answerFormat.type==="radio"){
           if(qa.answerFormat.options?.length===0){
-            alert(`You must provide options for radio based answer types.`)
+            alert(`You must provide options for radio based answer types in section - ${section.title}`)
             return
           }else{
             for(let opt of qa.answerFormat.options!){
-              alert(`You can't have an empty option for a radio answer type.`)
+              if(opt === ""){
+                alert(`You can't have an empty option for a radio answer type in section - ${section.title}`)
+              }
             }
           }  
         }
       }
     }
 
-    // this._feedbackService.createCustomTemplate(this.custom).subscribe((res) => {
-    //   console.log(res);
-    //   this._snackBar.open("Template successfully created.", "OK")
-    //   setTimeout(()=>{
-    //     window.location.reload();
-    //   }, 2500);
-    // }, (err)=>{
-    //   this._snackBar.open("Failed to create the template.", "OK")
-    // })
+    this._feedbackService.createCustomTemplate(this.custom).subscribe((res) => {
+      console.log(res);
+      this._snackBar.open("Template successfully created.", "OK")
+      setTimeout(()=>{
+        window.location.reload();
+      }, 2500);
+    }, (err)=>{
+      this._snackBar.open("Failed to create the template.", "OK")
+    })
   }
 }
