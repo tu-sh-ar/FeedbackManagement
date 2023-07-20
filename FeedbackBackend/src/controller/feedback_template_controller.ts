@@ -10,6 +10,7 @@ import FeedbackDefaultTemplate from '../model/feedback_template_model_default';
 import mongoose, { Types } from 'mongoose';
 import { buildErrorResponse, buildObjectResponse, buildResponse } from '../utils/responseUtils';
 import { TemplateSectionRequest } from '../middlewares/validations/request-body-validations';
+import { ObjectId } from 'mongodb';
 
 
 //fetches default templates bases on business category
@@ -185,6 +186,37 @@ export const getTemplateById = async (req: Request, res: Response) => {
         const { _id, ...templateData } = template.toObject();
 
         return buildObjectResponse(res, { id: _id, ...templateData })
+    } catch (error) {
+        console.log(error);
+        return buildErrorResponse(res, 'Internal Server Error', 500);
+    }
+}
+
+
+export const getTemplateByFeebbackCategoryId = async (req: Request, res: Response) => {
+    try {
+        const businessAdminId: number = req.user?.id;
+
+        const { feedbackTypeId } = req.params;
+
+        if (!Number.isInteger(parseInt(feedbackTypeId, 10))) {
+            return buildErrorResponse(res, 'Invalid feedbackTypeId', 400);
+        }
+
+        const filter: any = {
+            $or: [
+                { businessAdminId: businessAdminId },
+                { businessAdminId: { $exists: false } },
+            ],
+            feedbackType: new Types.ObjectId(feedbackTypeId),
+        };
+
+        const templates: IFeedbackTemplate[] = await FeedbackTemplate.find(
+            filter, { _id: 1, templateName: 1, templateType: 1 })
+            .sort({ templateType: -1 });
+            
+        return buildObjectResponse(res, templates)
+
     } catch (error) {
         console.log(error);
         return buildErrorResponse(res, 'Internal Server Error', 500);
