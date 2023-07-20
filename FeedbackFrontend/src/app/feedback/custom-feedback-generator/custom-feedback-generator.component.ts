@@ -167,6 +167,7 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
             for(let opt of qa.answerFormat.options!){
               if(opt === ""){
                 alert(`You can't have an empty option for a radio answer type in section - ${section.title}`)
+                return
               }
             }
           }  
