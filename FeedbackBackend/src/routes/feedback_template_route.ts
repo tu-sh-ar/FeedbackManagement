@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 
 import { createTemplate, updateTemplate, deleteTemplate, getDefaultBusinessCategoryTemplates, 
-    getBusinessAdminTemplates, swapQuestions, swapSections, getTemplateById, activateTemplate } from "../controller/feedback_template_controller";
+    getBusinessAdminTemplates, swapQuestions, swapSections, getTemplateById, activateTemplate, getTemplateByFeebbackCategoryId } from "../controller/feedback_template_controller";
 import { verifyToken } from "../middlewares/auth/jwt_auth";
 import { validateSectionsMiddleware, validateSwapQuestionsMiddleware } from "../middlewares/validations/request-body-validations";
 
@@ -26,6 +26,13 @@ router.get(
     "/getTemplateById/:templateId",
     verifyToken,
     getTemplateById
+);
+
+//fetch template
+router.get(
+    "/getTemplateByFeebackCategoryId/:feedbackTypeId",
+    verifyToken,
+    getTemplateByFeebbackCategoryId
 );
 
 

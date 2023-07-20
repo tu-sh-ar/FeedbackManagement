@@ -33,7 +33,6 @@ export const getFeedbacks = async (req:Request, res:Response) => {
             product_id: feedback.product_id,
             rating: feedback.rating,
             comment: feedback.comment,
-            review: feedback.additional_fields,
             QA: feedback.qas,
             created_at: feedback.createdAt,
             updated_at: feedback.updatedAt,
@@ -134,7 +133,6 @@ export const get_feedback = async(req:Request, res:Response) => {
             product_id:feedback?.product_id,
             rating:feedback.rating,
             comment:feedback?.comment,
-            review:feedback?.additional_fields,
             QA:feedback?.qas,
             created_at:feedback.createdAt,
             updated_at:feedback.updatedAt
@@ -222,7 +220,6 @@ export const getFeedbacksByDate = async(req:Request, res:Response) => {
                 product_id:feedback?.product_id,
                 rating:feedback.rating,
                 comment:feedback?.comment,
-                review:feedback?.additional_fields,
                 QA:feedback?.qas,
                 created_at:feedback.createdAt,
                 updated_at:feedback.updatedAt
@@ -254,7 +251,6 @@ export const getAllFeedbacks = async(req:Request, res:Response) => {
             // product_name
             rating: feedback.rating,
             comment: feedback?.comment,
-            review: feedback?.additional_fields,
             QA: feedback?.qas,
             created_at: feedback.createdAt,
             updated_at: feedback.updatedAt,

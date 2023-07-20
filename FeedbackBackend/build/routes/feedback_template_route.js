@@ -16,6 +16,8 @@ feedback_template_controller_1.getDefaultBusinessCategoryTemplates);
 router.get("/getBusinessAdminTemplates/:businessCategory", jwt_auth_1.verifyToken, feedback_template_controller_1.getBusinessAdminTemplates);
 //fetch template
 router.get("/getTemplateById/:templateId", jwt_auth_1.verifyToken, feedback_template_controller_1.getTemplateById);
+//fetch template
+router.get("/getTemplateByFeebackCategoryId/:feedbackTypeId", jwt_auth_1.verifyToken, feedback_template_controller_1.getTemplateByFeebbackCategoryId);
 // new template
 router.post("/create", jwt_auth_1.verifyToken, feedback_template_controller_1.createTemplate);
 // update template

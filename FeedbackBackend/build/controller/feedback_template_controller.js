@@ -46,7 +46,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTemplate = exports.activateTemplate = exports.updateTemplate = exports.createTemplate = exports.swapQuestions = exports.swapSections = exports.getTemplateById = exports.getBusinessAdminTemplates = exports.getDefaultBusinessCategoryTemplates = void 0;
+exports.deleteTemplate = exports.activateTemplate = exports.updateTemplate = exports.createTemplate = exports.swapQuestions = exports.swapSections = exports.getTemplateByFeebbackCategoryId = exports.getTemplateById = exports.getBusinessAdminTemplates = exports.getDefaultBusinessCategoryTemplates = void 0;
 const feedback_template_model_1 = __importDefault(require("../model/feedback_template_model"));
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const constants_1 = require("../constants/constants");
@@ -219,6 +219,31 @@ const getTemplateById = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.getTemplateById = getTemplateById;
+const getTemplateByFeebbackCategoryId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c;
+    try {
+        const businessAdminId = (_c = req.user) === null || _c === void 0 ? void 0 : _c.id;
+        const { feedbackTypeId } = req.params;
+        if (!Number.isInteger(parseInt(feedbackTypeId, 10))) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Invalid feedbackTypeId', 400);
+        }
+        const filter = {
+            $or: [
+                { businessAdminId: businessAdminId },
+                { businessAdminId: { $exists: false } },
+            ],
+            feedbackType: new mongoose_1.Types.ObjectId(feedbackTypeId),
+        };
+        const templates = yield feedback_template_model_1.default.find(filter, { _id: 1, templateName: 1, templateType: 1 })
+            .sort({ templateType: -1 });
+        return (0, responseUtils_1.buildObjectResponse)(res, templates);
+    }
+    catch (error) {
+        console.log(error);
+        return (0, responseUtils_1.buildErrorResponse)(res, 'Internal Server Error', 500);
+    }
+});
+exports.getTemplateByFeebbackCategoryId = getTemplateByFeebbackCategoryId;
 const swapSections = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { templateId } = req.params;
@@ -348,10 +373,10 @@ const validateAndTransformForm = (roleId, businessAdminId, formData) => __awaite
 });
 // create new feedback template 
 const createTemplate = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c, _d, _e;
+    var _d, _e, _f;
     try {
-        const businessAdminId = (_c = req.user) === null || _c === void 0 ? void 0 : _c.id;
-        const roleId = (_d = req.user) === null || _d === void 0 ? void 0 : _d.role;
+        const businessAdminId = (_d = req.user) === null || _d === void 0 ? void 0 : _d.id;
+        const roleId = (_e = req.user) === null || _e === void 0 ? void 0 : _e.role;
         const formData = req.body;
         const data = yield validateAndTransformForm(roleId, businessAdminId, formData);
         console.log(JSON.stringify(data, null, 2));
@@ -362,7 +387,7 @@ const createTemplate = (req, res) => __awaiter(void 0, void 0, void 0, function*
         console.log(error);
         if (error instanceof yup.ValidationError && (error === null || error === void 0 ? void 0 : error.errors)) {
             // If there's a validation error, send the error response
-            const errorMessage = ((_e = error.errors) === null || _e === void 0 ? void 0 : _e.join(', ')) || 'Validation Error';
+            const errorMessage = ((_f = error.errors) === null || _f === void 0 ? void 0 : _f.join(', ')) || 'Validation Error';
             return (0, responseUtils_1.buildErrorResponse)(res, errorMessage, 400);
         }
         else {
@@ -373,12 +398,12 @@ const createTemplate = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.createTemplate = createTemplate;
 // update template 
 exports.updateTemplate = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _f, _g, _h;
+    var _g, _h, _j;
     try {
         const { templateId } = req.params;
         const templateData = req.body;
-        const businessAdminId = (_f = req.user) === null || _f === void 0 ? void 0 : _f.id;
-        const roleId = (_g = req.user) === null || _g === void 0 ? void 0 : _g.role;
+        const businessAdminId = (_g = req.user) === null || _g === void 0 ? void 0 : _g.id;
+        const roleId = (_h = req.user) === null || _h === void 0 ? void 0 : _h.role;
         // Validate and transform the templateId parameter
         const parsedTemplateId = parseInt(templateId);
         // Check if the transformation was successful
@@ -403,7 +428,7 @@ exports.updateTemplate = (0, express_async_handler_1.default)((req, res) => __aw
         console.log(error);
         if (error instanceof yup.ValidationError && (error === null || error === void 0 ? void 0 : error.errors)) {
             // If there's a validation error, send the error response
-            const errorMessage = ((_h = error.errors) === null || _h === void 0 ? void 0 : _h.join(', ')) || 'Validation Error';
+            const errorMessage = ((_j = error.errors) === null || _j === void 0 ? void 0 : _j.join(', ')) || 'Validation Error';
             res.status(400).json({ error: errorMessage });
         }
         else {
