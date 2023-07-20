@@ -20,7 +20,6 @@ export class ExpandedTemplateViewComponent implements OnInit {
 
     this._feedbackService.getTemplateById(this.templateId).subscribe((res)=>{
       this.template = res;
-      console.log(this.template)
     })
   }
 

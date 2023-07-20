@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CustomFeedbackFormBodySchema } from 'src/app/interfaces/feedback';
 import { FeedbackService } from 'src/app/services/feedback.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-custom-feedback-generator',
@@ -72,12 +73,19 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
     ]
   };
 
-  constructor(private _feedbackService: FeedbackService, private _activatedRoute: ActivatedRoute) {
-  }
+  constructor(
+    private _feedbackService: FeedbackService,
+    private _activatedRoute: ActivatedRoute,
+    private _snackBar: MatSnackBar
+    ){}
 
   ngOnInit(): void {
     this.custom.businessCategory = JSON.parse(localStorage.getItem('user')!).businessCategory;
     this.custom.feedbackType = this._activatedRoute.snapshot.paramMap.get("id")!;
+  }
+
+  trackByFn(index:number, item:any) {
+    return index;  
   }
 
   addSection(): void {
@@ -110,7 +118,8 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
 
   handleAnswerType(e:string, outerIdx:number, innerIdx:number):void{
     if(e==="radio"){
-      this.custom.sections[outerIdx].questions[innerIdx].answerFormat.options = ["Yes", "No", "Not Sure"];
+      // this.custom.sections[outerIdx].questions[innerIdx].answerFormat.options = ["Yes", "No"];
+      this.custom.sections[outerIdx].questions[innerIdx].answerFormat.options = [""];
     }
     if(e==="starrating" || e==="emojirating"){
       this.custom.sections[outerIdx].questions[innerIdx].answerFormat.upperBound = 5;
@@ -120,30 +129,57 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
     }
   }
 
+  addOption(outerIdx:number, innerIdx:number):void{
+    this.custom.sections[outerIdx].questions[innerIdx].answerFormat.options?.push("");
+  }
+
+
+  deleteOption(outerIdx:number, innerIdx:number,optionIdx:number){
+    this.custom.sections[outerIdx].questions[innerIdx].answerFormat.options?.splice(optionIdx, 1);
+  }
+
   saveCustomTemplate(): void {
+    console.log(this.custom);
+
     if(this.custom.feedbackFormName === ""){
-      alert("Invalid feedback template format.")
+      alert(`Template Name is a mandatory field.`)
       return
     }
     for(let section of this.custom.sections){
       if(section.title===""){
-        alert("Invalid feedback template.")
+        alert(`Section Names are mandatory fields.`)
         return
       }
       for(let qa of section.questions){
         if(qa.question === ""){
-          alert("Invalid feedback template format.")
+          alert(`Empty question fields are not allowed.`)
           return
         }
         if(qa.answerFormat.type === ""){
-          alert("Invalid feedback template format.")
+          alert(`Empty answer fields are not allowed.`)
           return
+        }
+        if(qa.answerFormat.type==="radio"){
+          if(qa.answerFormat.options?.length===0){
+            alert(`You must provide options for radio based answer types.`)
+            return
+          }else{
+            for(let opt of qa.answerFormat.options!){
+              alert(`You can't have an empty option for a radio answer type.`)
+            }
+          }  
         }
       }
     }
 
-    this._feedbackService.createCustomTemplate(this.custom).subscribe((res) => {
-      window.location.reload();
-    })
+    // this._feedbackService.createCustomTemplate(this.custom).subscribe((res) => {
+    //   console.log(res);
+    //   this._snackBar.open("Template successfully created.", "OK")
+    //   setTimeout(()=>{
+    //     window.location.reload();
+    //   }, 2500);
+    // }, (err)=>{
+    //   this._snackBar.open("Failed to create the template.", "OK")
+    // })
   }
 }

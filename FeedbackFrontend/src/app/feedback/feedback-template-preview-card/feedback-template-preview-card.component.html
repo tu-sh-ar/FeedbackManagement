@@ -1,13 +1,12 @@
 <div class="flex-wrapper">
   <div class="card-container" *ngFor="let template of templates">
-    <mat-card class="base active">
+    <mat-card class="base" [ngClass]="{'active':template.isActive}">
       <mat-card-header>
         <mat-card-title>
           <span class="bold">{{template.templateName}}</span>
         </mat-card-title>
+        <br><br>
       </mat-card-header>
-      <mat-divider></mat-divider>
-      <br>
       <mat-card-content>
         <small class="bold">How would you rate your experience?</small>
         <app-dummy-experience-bar></app-dummy-experience-bar>
