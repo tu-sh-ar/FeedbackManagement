@@ -81,7 +81,8 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
 
   ngOnInit(): void {
     this.custom.businessCategory = JSON.parse(localStorage.getItem('user')!).businessCategory;
-    this.custom.feedbackType = this._activatedRoute.snapshot.paramMap.get("id")!;
+    this.custom.feedbackType = this._activatedRoute.snapshot.paramMap.get("categoryId")!;
+    console.log(this.custom.feedbackType);
   }
 
   trackByFn(index:number, item:any) {
@@ -118,7 +119,6 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
 
   handleAnswerType(e:string, outerIdx:number, innerIdx:number):void{
     if(e==="radio"){
-      // this.custom.sections[outerIdx].questions[innerIdx].answerFormat.options = ["Yes", "No"];
       this.custom.sections[outerIdx].questions[innerIdx].answerFormat.options = [""];
     }
     if(e==="starrating" || e==="emojirating"){

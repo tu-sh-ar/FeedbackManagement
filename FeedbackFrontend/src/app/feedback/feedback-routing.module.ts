@@ -33,11 +33,11 @@ const routes: Routes = [
         component:FeedbackTemplatesComponent
       },
       {
-        path:"feedback-templates/template/:id",
+        path:"feedback-templates/template/:templateId",
         component:ExpandedTemplateViewComponent
       },
       {
-        path:"feedback-templates/custom/:id",
+        path:"feedback-templates/custom/:categoryId",
         component:CustomFeedbackGeneratorComponent
       },
       {

@@ -16,7 +16,7 @@ export class ExpandedTemplateViewComponent implements OnInit {
   constructor(private _feedbackService: FeedbackService, private _activatedRoute: ActivatedRoute){}
 
   ngOnInit(): void {
-    this.templateId = this._activatedRoute.snapshot.paramMap.get("id")!;
+    this.templateId = this._activatedRoute.snapshot.paramMap.get("templateId")!;
 
     this._feedbackService.getTemplateById(this.templateId).subscribe((res)=>{
       this.template = res;
