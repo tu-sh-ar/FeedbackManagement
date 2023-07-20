@@ -281,13 +281,13 @@ export const swapQuestions = async (req: Request, res: Response) => {
         const template = await FeedbackTemplate.findById(parsedTemplateId);
 
         if (!template) {
-            return buildErrorResponse(res, 'Template not found', 400);
+            return buildErrorResponse(res, 'Template not found', 404);
         }
 
         const section = template.sections.find((sec) => sec.id === parsedSectionId);
 
         if (!section) {
-            return buildErrorResponse(res, 'Section not found', 400);
+            return buildErrorResponse(res, 'Section not found', 404);
         }
 
         for (const question of questions) {

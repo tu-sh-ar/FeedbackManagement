@@ -275,7 +275,7 @@ paths:
           description: Template not found
         '500':
           description: Internal Server Error
-  /api/feedbackTemplate/swapQuestion/{templateId}/{sectionId}:
+  /api/feedbackTemplate/swapQuestion/{templateId}:
     put:
       summary: Swap Question Order in Template
       tags:
@@ -291,18 +291,12 @@ paths:
             type: string
           required: true
           description: The ID of the feedback template
-        - in: path
-          name: sectionId
-          schema:
-            type: string
-          required: true
-          description: The ID of the section within the template
       security:
         - JWTAuth: []
       requestBody:
         name: QuestionOrder
         required: true
-        description: The request body containing the question IDs to swap
+        description: The request body containing the questions to swap and the section Id 
         content:
           application/json:
             schema:
@@ -337,7 +331,7 @@ paths:
       requestBody:
           name: SectionOrder
           required: true
-          description: The request body containing the section IDs to swap
+          description: The request body containing the section Id and the new oder 
           content:
             application/json:
               schema:
@@ -512,27 +506,27 @@ components:
     SwapSectionOrderRequest:
       type: object
       properties:
-        sectionId1:
+        sectionId:
           type: number
           description: The ID of the first section to swap
-        sectionId2:
+        newOrder:
           type: number
-          description: The ID of the second section to swap
+          description: The new order to be implemented
       required:
         - sectionId1
         - sectionId2
     SwapQuestionOrderRequest:
       type: object
       properties:
-        questionId1:
+        questions:
           type: number
           description: The ID of the first question to swap
-        questionId2:
+        sectionId:
           type: number
           description: The ID of the second question to swap
       required:
-        - questionId1
-        - questionId2
+        - questions
+        - sectionId
     ShortTemplateResponse:
       type: object
       properties:
