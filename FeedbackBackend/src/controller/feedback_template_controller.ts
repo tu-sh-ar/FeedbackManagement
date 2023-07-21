@@ -9,7 +9,7 @@ import { FeedbackFormBodySchema } from '../constants/interface';
 import FeedbackDefaultTemplate from '../model/feedback_template_model_default';
 import mongoose, { Types } from 'mongoose';
 import { buildErrorResponse, buildObjectResponse, buildResponse } from '../utils/responseUtils';
-import { TemplateSectionRequest } from '../middlewares/validations/request-body-validations';
+import { TemplateSectionRequest, QuestionRequest } from '../middlewares/validations/request-body-validations';
 import { ObjectId } from 'mongodb';
 
 
@@ -273,7 +273,7 @@ export const swapSections = async (req: Request, res: Response) => {
 export const swapQuestions = async (req: Request, res: Response) => {
     try {
         const { templateId } = req.params;
-        const { questions, sectionId } = req.body;
+        const { questions, sectionId } = req.body as { questions: QuestionRequest[], sectionId:string};
         
        // const parsedTemplateId = parseInt(templateId);
         const parsedSectionId = parseInt(sectionId);
