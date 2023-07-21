@@ -230,13 +230,13 @@ export const swapSections = async (req: Request, res: Response) => {
 
         const sections = req.body as TemplateSectionRequest[];
 
-        const parsedTemplateId = parseInt(templateId);
+        //const parsedTemplateId = parseInt(templateId);
 
-        if (isNaN(parsedTemplateId)) {
-            return buildErrorResponse(res, 'Invalid templateId format', 400);
-        }
+        // if (isNaN(templateId)) {
+        //     return buildErrorResponse(res, 'Invalid templateId format', 400);
+        // }
 
-        const template = await FeedbackTemplate.findById(parsedTemplateId);
+        const template = await FeedbackTemplate.findById(templateId);
 
         if (!template) {
             return buildErrorResponse(res, 'Template not found', 404);
@@ -274,12 +274,12 @@ export const swapQuestions = async (req: Request, res: Response) => {
     try {
         const { templateId } = req.params;
         const { questions, sectionId } = req.body;
-
-        const parsedTemplateId = parseInt(templateId);
+        
+       // const parsedTemplateId = parseInt(templateId);
         const parsedSectionId = parseInt(sectionId);
 
-        const template = await FeedbackTemplate.findById(parsedTemplateId);
-
+        const template = await FeedbackTemplate.findById(templateId);
+        
         if (!template) {
             return buildErrorResponse(res, 'Template not found', 404);
         }
@@ -304,7 +304,7 @@ export const swapQuestions = async (req: Request, res: Response) => {
 
     } catch (error) {
         console.log(error);
-        return buildErrorResponse(res, 'Internal Server Error', 500);
+        return buildErrorResponse(res, 'Internal Server Error Occured', 500);
     }
 }
 
