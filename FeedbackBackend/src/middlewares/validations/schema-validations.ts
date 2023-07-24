@@ -125,6 +125,11 @@ export const Validate = {
       isNumeric: true,
       errorMessage: 'Invalid delivery agent ID'
     },
+    template_id: {
+      optional: true,
+      isMongoId: true,
+      errorMessage: 'Invalid feedback template ID'
+    },
     product_id: {
       optional: false,
       isNumeric: true,
