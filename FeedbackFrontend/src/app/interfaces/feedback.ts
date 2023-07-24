@@ -38,14 +38,14 @@ export interface UpdateResponse {
 
 export interface CustomFeedbackFormBodySchema {
   feedbackFormName: string;
-  businessCategory:number;
-  feedbackType:string;
+  businessCategory: number;
+  feedbackType: string;
   sections: {
     title: string;
     order?: number;
     questions: {
       order?: number;
-      question: string;     
+      question: string;
       answerFormat: {
         type: string;
         options?: string[];
@@ -56,38 +56,38 @@ export interface CustomFeedbackFormBodySchema {
   }[];
 }
 
-export interface CategoryBasedFeedbackTemplatesDetails {
-  response:{
-    templates : {
-      id:string;
-      templateType:number;
-      templateName:string;
-      isActive:boolean;
+export interface BusinessSpecificFeedbackTemplatesDetails {
+  response: {
+    templates: {
+      id: string;
+      templateType: number;
+      templateName: string;
+      isActive: boolean;
     }[];
-    feedbackType:{
-      id:string;
-      name:string;
+    feedbackType: {
+      id: string;
+      name: string;
     }
   }[];
-  statusCode:number;
+  statusCode: number;
 }
 
 export interface SingleFeedbackTemplateBody {
-  response:{
-    id:string;
-    templateName:string;
-    isActive:boolean;
-    feedbackType:string;
-    businessCategory:number;
-    templateType:number;
-    sections:{
-      id:string;
-      title:string;
-      order:number;
-      questions:{
-        id:number;
-        order:number;
-        question:string;
+  response: {
+    id: string;
+    templateName: string;
+    isActive: boolean;
+    feedbackType: string;
+    businessCategory: number;
+    templateType: number;
+    sections: {
+      id: string;
+      title: string;
+      order: number;
+      questions: {
+        id: number;
+        order: number;
+        question: string;
         answerFormat: {
           type: string;
           options?: string[];
@@ -97,5 +97,14 @@ export interface SingleFeedbackTemplateBody {
       }[]
     }[]
   };
-  statusCode:number;
+  statusCode: number;
+}
+
+export interface CategoryBasedFeedbackTemplatesDetails {
+  response: {
+    _id: string;
+    templateType: number;
+    templateName: string;
+  }[];
+  statusCode: number;
 }

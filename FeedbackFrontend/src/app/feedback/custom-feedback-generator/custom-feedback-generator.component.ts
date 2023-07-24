@@ -73,6 +73,8 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
     ]
   };
 
+  importedTemplateId:string|null = "";
+
   constructor(
     private _feedbackService: FeedbackService,
     private _activatedRoute: ActivatedRoute,
@@ -82,7 +84,13 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
   ngOnInit(): void {
     this.custom.businessCategory = JSON.parse(localStorage.getItem('user')!).businessCategory;
     this.custom.feedbackType = this._activatedRoute.snapshot.paramMap.get("categoryId")!;
-    console.log(this.custom.feedbackType);
+    this.importedTemplateId = this._activatedRoute.snapshot.paramMap.get("templateId");
+
+    if(this.importedTemplateId){
+      this._feedbackService.getTemplateById(this.importedTemplateId).subscribe((res)=>{
+        this.custom.sections = res.response.sections;
+      })
+    }
   }
 
   trackByFn(index:number, item:any) {

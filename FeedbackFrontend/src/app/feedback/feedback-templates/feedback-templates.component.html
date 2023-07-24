@@ -1,13 +1,14 @@
 <h3>Default Templates</h3>
 <mat-divider></mat-divider>
+<mat-progress-bar *ngIf="!businessRelatedTemplates" mode="indeterminate"></mat-progress-bar>
 
 <div class="category-wrapper" *ngFor="let template of businessRelatedTemplates?.response">
     <div class="head">
         <span class="template-reference bold">
             {{template.feedbackType.name}}
         </span>
-        <button mat-flat-button color="primary" routerLink="custom/{{template.feedbackType.id}}">
-            Create New
+        <button mat-icon-button color="primary" (click)="openTemplatePrefrenceDialog(template.feedbackType.id)" matTooltip="Create New Template">
+            <img src="../../../assets/add-button.svg" alt="create">
         </button>
     </div>
     <div class="scroller">

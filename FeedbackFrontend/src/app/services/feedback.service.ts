@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Feedback, PostFeedbackResponse, GetFeedbackResponse, UpdateResponse, PaginatedFeedbackResponse, CustomFeedbackFormBodySchema, SingleFeedbackTemplateBody} from '../interfaces/feedback';
+import { Feedback, PostFeedbackResponse, GetFeedbackResponse, UpdateResponse, PaginatedFeedbackResponse, CustomFeedbackFormBodySchema, SingleFeedbackTemplateBody, CategoryBasedFeedbackTemplatesDetails, BusinessSpecificFeedbackTemplatesDetails} from '../interfaces/feedback';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -64,18 +64,24 @@ export class FeedbackService {
     return this._http.put<UpdateResponse>(`${this.baseURL}response/${responseId}`, data)
   }
 
-  //retrieve all the templates associated to particular business type
-  getBusinessSpecificTemplateDetails(businessCategory:number):Observable<any>{
-    return this._http.get<any>(`${this.baseURL}feedbackTemplate/getBusinessAdminTemplates/${businessCategory}`)
+  //retrieve all the templates details associated to particular business type
+  getBusinessSpecificTemplateDetails(businessCategory:number):Observable<BusinessSpecificFeedbackTemplatesDetails>{
+    return this._http.get<BusinessSpecificFeedbackTemplatesDetails>(`${this.baseURL}feedbackTemplate/getBusinessAdminTemplates/${businessCategory}`)
   }
 
   //create a custom template
-  createCustomTemplate(data:CustomFeedbackFormBodySchema):Observable<any>{
-    return this._http.post<any>(`${this.baseURL}feedbackTemplate/create`, data)
+  createCustomTemplate(data:CustomFeedbackFormBodySchema):Observable<CustomFeedbackFormBodySchema>{
+    return this._http.post<CustomFeedbackFormBodySchema>(`${this.baseURL}feedbackTemplate/create`, data)
   }
 
   //get a unique template by template id
   getTemplateById(templateId:string):Observable<SingleFeedbackTemplateBody>{
     return this._http.get<SingleFeedbackTemplateBody>(`${this.baseURL}feedbackTemplate/getTemplateById/${templateId}`)
   }
+
+  //get category specific templates details
+  getCategoryBasedTemplateDeatils(categoryId:string):Observable<CategoryBasedFeedbackTemplatesDetails>{
+    return this._http.get<CategoryBasedFeedbackTemplatesDetails>(`${this.baseURL}feedbackTemplate/getTemplateByFeebackCategoryId/${categoryId}`);
+  }
+  
 }

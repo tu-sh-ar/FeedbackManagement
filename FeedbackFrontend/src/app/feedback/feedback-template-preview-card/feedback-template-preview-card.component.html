@@ -1,19 +1,11 @@
 <div class="flex-wrapper">
-  <div class="card-container" *ngFor="let template of templates">
-    <mat-card class="base" [ngClass]="{'active':template.isActive}">
-      <mat-card-header>
-        <mat-card-title>
-          <span class="bold">{{template.templateName}}</span>
-        </mat-card-title>
-        <br><br>
-      </mat-card-header>
-      <mat-card-content>
-        <small class="bold">How would you rate your experience?</small>
-        <app-dummy-experience-bar></app-dummy-experience-bar>
-        <small class="bold">What more improvements would you suggest?</small>
-        <app-dummy-textbox-component></app-dummy-textbox-component>
-      </mat-card-content>
-    </mat-card>
+  <div class="card-container" *ngFor="let template of templates; let i = index;">
+    <div class="base" [ngClass]="{'active':template.isActive}">
+      <img src="../../../assets/template-preview-bg-1.svg" alt="bg" *ngIf="i%2===0">
+      <img src="../../../assets/template-preview-bg-2.svg" alt="bg" *ngIf="i%2!==0">
+      <div class="bold title-wrapper">{{template.templateName}}</div>
+    </div>
+
     <div class="middle">
       <button mat-icon-button color="primary" matTooltip="View Template" routerLink="template/{{template.id}}">
         <img src="../../../assets/eye.svg" alt="view">

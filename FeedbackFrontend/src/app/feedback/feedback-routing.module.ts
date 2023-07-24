@@ -41,6 +41,10 @@ const routes: Routes = [
         component:CustomFeedbackGeneratorComponent
       },
       {
+        path:"feedback-templates/custom/:categoryId/:templateId",
+        component:CustomFeedbackGeneratorComponent
+      },
+      {
         path:"profile",
         component:ProfileComponent
       },

@@ -29,6 +29,7 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -62,7 +63,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatNativeDateModule,
     MatSelectModule,
     MatRadioModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatProgressBarModule
   ],
   exports: [
     MatRippleModule,
@@ -92,7 +94,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatNativeDateModule,
     MatSelectModule,
     MatRadioModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatProgressBarModule
   ]
 })
 export class MaterialModule { }

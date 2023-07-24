@@ -4,7 +4,7 @@ import { FormGroup, FormControl,FormArray, FormBuilder } from '@angular/forms'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplatePreferencePopupComponent } from '../template-preference-popup/template-preference-popup.component';
-import { CategoryBasedFeedbackTemplatesDetails } from 'src/app/interfaces/feedback';
+import { BusinessSpecificFeedbackTemplatesDetails } from 'src/app/interfaces/feedback';
 
 @Component({
   selector: 'app-feedback-templates',
@@ -12,7 +12,7 @@ import { CategoryBasedFeedbackTemplatesDetails } from 'src/app/interfaces/feedba
   styleUrls: ['./feedback-templates.component.scss']
 })
 export class FeedbackTemplatesComponent implements OnInit{
-  businessRelatedTemplates!:CategoryBasedFeedbackTemplatesDetails;
+  businessRelatedTemplates!:BusinessSpecificFeedbackTemplatesDetails;
 
   constructor(public _dialog: MatDialog, private  _feedbackService: FeedbackService){
 
@@ -24,8 +24,12 @@ export class FeedbackTemplatesComponent implements OnInit{
     })
   }
 
-  openTemplatePrefrenceDialog():void{
-    this._dialog.open(TemplatePreferencePopupComponent);
+  openTemplatePrefrenceDialog(categoryId: string):void{
+    this._dialog.open(TemplatePreferencePopupComponent, {
+      data:{
+        categoryId:categoryId
+      }
+    });
   }
 
 }
