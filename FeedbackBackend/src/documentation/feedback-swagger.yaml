@@ -416,15 +416,19 @@ components:
         feedback_type: 4
         feedback_language: 1
         qas:
-          - question: "Q1"
-            answer: "A1"
-          - question: "Q2"
-            answer: "A2"
+          - question: "Was the delivery on time ?"
+            answer: "Yes"
+          - question: "How was the delivery experience?"
+            answer: "Good"
     DeliveryAgentFeedback:
       type: object
       properties:
+        template_id:
+          type: string
+          description: ID of the feedback template used for the feedback.
         deliveryagent_id:
           type: number
+          description: ID of the delivery agent.
         user_id:
           type: string
         product_id:
@@ -437,7 +441,23 @@ components:
           type: number
         feedback_type:
           type: number
+        qas:
+          type: array
+          description: Questions and answers given in the feedback.
+          items:
+            type: object
+            properties:
+              question:
+                type: string
+              answer:
+                type: string
+          example:
+            - question: "Was the delivery on time ?"
+              answer: "Yes"
+            - question: "How was the delivery experience?"
+              answer: "Good"
       example:
+        template_id: "64b512d183f165ae6682e8ca"
         deliveryagent_id: 7
         user_id: "e1ac6adc-388c-477e-912b-60d503c7892a"
         product_id: 9
@@ -445,6 +465,11 @@ components:
         comment: "On Time delivery!"
         feedback_language: 1
         feedback_type: 1
+        qas:
+          - question: "Was the delivery on time ?"
+            answer: "Yes"
+          - question: "How was the delivery experience?"
+            answer: "Good"
   securitySchemes:
     JWTAuth:
       type: http
