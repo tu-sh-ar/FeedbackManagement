@@ -9,7 +9,7 @@ import { FeedbackFormBodySchema } from '../constants/interface';
 import FeedbackDefaultTemplate from '../model/feedback_template_model_default';
 import mongoose, { Types } from 'mongoose';
 import { buildErrorResponse, buildObjectResponse, buildResponse } from '../utils/responseUtils';
-import { TemplateSectionRequest } from '../middlewares/validations/request-body-validations';
+import { TemplateSectionRequest, QuestionRequest } from '../middlewares/validations/request-body-validations';
 import { ObjectId } from 'mongodb';
 
 
@@ -230,13 +230,13 @@ export const swapSections = async (req: Request, res: Response) => {
 
         const sections = req.body as TemplateSectionRequest[];
 
-        const parsedTemplateId = parseInt(templateId);
+        //const parsedTemplateId = parseInt(templateId);
 
-        if (isNaN(parsedTemplateId)) {
-            return buildErrorResponse(res, 'Invalid templateId format', 400);
-        }
+        // if (isNaN(templateId)) {
+        //     return buildErrorResponse(res, 'Invalid templateId format', 400);
+        // }
 
-        const template = await FeedbackTemplate.findById(parsedTemplateId);
+        const template = await FeedbackTemplate.findById(templateId);
 
         if (!template) {
             return buildErrorResponse(res, 'Template not found', 404);
@@ -273,21 +273,21 @@ export const swapSections = async (req: Request, res: Response) => {
 export const swapQuestions = async (req: Request, res: Response) => {
     try {
         const { templateId } = req.params;
-        const { questions, sectionId } = req.body;
-
-        const parsedTemplateId = parseInt(templateId);
+        const { questions, sectionId } = req.body as { questions: QuestionRequest[], sectionId:string};
+        
+       // const parsedTemplateId = parseInt(templateId);
         const parsedSectionId = parseInt(sectionId);
 
-        const template = await FeedbackTemplate.findById(parsedTemplateId);
-
+        const template = await FeedbackTemplate.findById(templateId);
+        
         if (!template) {
-            return buildErrorResponse(res, 'Template not found', 400);
+            return buildErrorResponse(res, 'Template not found', 404);
         }
 
         const section = template.sections.find((sec) => sec.id === parsedSectionId);
 
         if (!section) {
-            return buildErrorResponse(res, 'Section not found', 400);
+            return buildErrorResponse(res, 'Section not found', 404);
         }
 
         for (const question of questions) {
@@ -304,7 +304,7 @@ export const swapQuestions = async (req: Request, res: Response) => {
 
     } catch (error) {
         console.log(error);
-        return buildErrorResponse(res, 'Internal Server Error', 500);
+        return buildErrorResponse(res, 'Internal Server Error Occured', 500);
     }
 }
 
@@ -315,8 +315,6 @@ const validateAndTransformForm = async (
     formData: FeedbackFormBodySchema,) => {
     try {
         await validateFormSchema(formData)
-
-        console.log(111111, roleId)
 
         const convertToAnswerFormat = (answerFormat: any): AnswerFormat => {
             const convertedFormat: AnswerFormat = {
@@ -357,6 +355,7 @@ const validateAndTransformForm = async (
         };
         const convertToFeedbackTemplate = (feedbackForm: FeedbackFormBodySchema) => {
             let feedbackTemplate: any = {
+                businessCategory: feedbackForm.businessCategory,
                 templateName: feedbackForm.feedbackFormName,
                 feedbackType: new Types.ObjectId(feedbackForm.feedbackType),
                 sections: convertToFeedbackFormat(feedbackForm.sections),
