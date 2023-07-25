@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomFeedbackFormBodySchema } from 'src/app/interfaces/feedback';
 import { FeedbackService } from 'src/app/services/feedback.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -48,6 +48,13 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
       value: "file",
       needsOptions: false,
       isTextType: false
+    },
+    {
+      type: "checkbox",
+      label: "Check Box",
+      value: "checkbox",
+      needsOptions: true,
+      isTextType: false
     }
   ];
 
@@ -78,11 +85,12 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
   constructor(
     private _feedbackService: FeedbackService,
     private _activatedRoute: ActivatedRoute,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private _router: Router
     ){}
 
   ngOnInit(): void {
-    this.custom.businessCategory = JSON.parse(localStorage.getItem('user')!).businessCategory;
+    this.custom.businessCategory = parseInt(JSON.parse(localStorage.getItem('user')!).businessCategory);
     this.custom.feedbackType = this._activatedRoute.snapshot.paramMap.get("categoryId")!;
     this.importedTemplateId = this._activatedRoute.snapshot.paramMap.get("templateId");
 
@@ -129,6 +137,9 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
     if(e==="radio"){
       this.custom.sections[outerIdx].questions[innerIdx].answerFormat.options = [""];
     }
+    if(e==="checkbox"){
+      this.custom.sections[outerIdx].questions[innerIdx].answerFormat.options = [""];
+    }
     if(e==="starrating" || e==="emojirating"){
       this.custom.sections[outerIdx].questions[innerIdx].answerFormat.upperBound = 5;
     }
@@ -147,8 +158,6 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
   }
 
   saveCustomTemplate(): void {
-    console.log(this.custom);
-
     if(this.custom.feedbackFormName === ""){
       alert(`Template Name is a mandatory field.`)
       return
@@ -180,14 +189,26 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
             }
           }  
         }
+        if(qa.answerFormat.type==="checkbox"){
+          if(qa.answerFormat.options?.length===0){
+            alert(`You must provide options for checkbox based answer types in section - ${section.title}`)
+            return
+          }else{
+            for(let opt of qa.answerFormat.options!){
+              if(opt === ""){
+                alert(`You can't have an empty option for a checkbox answer type in section - ${section.title}`)
+                return
+              }
+            }
+          }  
+        }
       }
     }
 
     this._feedbackService.createCustomTemplate(this.custom).subscribe((res) => {
-      console.log(res);
       this._snackBar.open("Template successfully created.", "OK")
       setTimeout(()=>{
-        window.location.reload();
+        this._router.navigate(["admin/dashboard/feedback-templates"])
       }, 2500);
     }, (err)=>{
       this._snackBar.open("Failed to create the template.", "OK")

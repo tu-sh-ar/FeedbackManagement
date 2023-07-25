@@ -60,6 +60,15 @@
                             </div>
                             <span (click)="addOption(outer_i, inner_i)" matTooltip="Add Option" class="option-btn primary-color">+</span>
                         </div>
+                        <div *ngIf="qa.answerFormat.type === 'checkbox'" class="option-wrapper">
+                            <div *ngIf="qa.answerFormat.options?.length">
+                                <span *ngFor="let opt of qa.answerFormat.options; let option_i = index; trackBy: trackByFn;" class="option-field-wrapper">
+                                    <input type="text" placeholder="Option" class="option-field" [(ngModel)]="qa?.answerFormat?.options![option_i]">
+                                    <span (click)="deleteOption(outer_i, inner_i, option_i)" class="option-btn warn-color" matTooltip="Remove Option">x</span>
+                                </span>
+                            </div>
+                            <span (click)="addOption(outer_i, inner_i)" matTooltip="Add Option" class="option-btn primary-color">+</span>
+                        </div>
                         <div>
                             <mat-checkbox class="float-r" color="primary" value="true" [(ngModel)]="qa.answerFormat.required">Mark as required</mat-checkbox>
                             <span class="warn-color remove-question pointer"
