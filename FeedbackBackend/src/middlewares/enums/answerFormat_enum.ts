@@ -17,6 +17,8 @@ const FieldTypesMap: Record<
         needsOptions?: boolean;
         isTextType?: boolean;
         needsUpperBound?: boolean;
+        needTotalFilesLimit?: boolean;
+        needPerFileSizeLimit?: boolean;
     }
 > = {
     text: {
@@ -24,16 +26,18 @@ const FieldTypesMap: Record<
         value: "text",
         isTextType: true,
     },
-    file: {
+    file: {     
         label: "File",
         value: "file",
+        needTotalFilesLimit: true,
+        needPerFileSizeLimit: true,
     },
     number: {
         label: "Number",
         value: "number",
         isTextType: true,
     },
-    rating: {
+    starrating: {
         label: "Star Rating",
         value: "number",
         needsUpperBound: true,
@@ -72,14 +76,9 @@ const FieldTypesMap: Record<
         isTextType: false,
     },
     checkbox: {
-        label: "Checkbox Group",
+        label: "Checkbox",
         value: "checkbox",
         needsOptions: true,
-        isTextType: false,
-    },
-    boolean: {
-        label: "Checkbox",
-        value: "boolean",
         isTextType: false,
     },
 };

@@ -316,8 +316,6 @@ const validateAndTransformForm = async (
     try {
         await validateFormSchema(formData)
 
-        console.log(111111, roleId)
-
         const convertToAnswerFormat = (answerFormat: any): AnswerFormat => {
             const convertedFormat: AnswerFormat = {
                 type: answerFormat.type,
@@ -357,6 +355,7 @@ const validateAndTransformForm = async (
         };
         const convertToFeedbackTemplate = (feedbackForm: FeedbackFormBodySchema) => {
             let feedbackTemplate: any = {
+                businessCategory: feedbackForm.businessCategory,
                 templateName: feedbackForm.feedbackFormName,
                 feedbackType: new Types.ObjectId(feedbackForm.feedbackType),
                 sections: convertToFeedbackFormat(feedbackForm.sections),
