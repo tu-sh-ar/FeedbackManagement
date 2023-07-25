@@ -287,6 +287,7 @@ export const createDeliveryAgentFeedbacks = async(req:Request, res:Response ) =>
             res.status(200).send(feedback);
         
     } catch (error) {
+        console.log(error)
         res.status(500).json({error: status_codes[500]});
     }
 }

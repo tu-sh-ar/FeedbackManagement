@@ -82,4 +82,4 @@ const validateSwapQuestionsMiddleware = async (req: Request, res: Response, next
     }
 };
 
-export { TemplateSectionRequest, validateSectionsMiddleware, validateSwapQuestionsMiddleware };
+export { TemplateSectionRequest, validateSectionsMiddleware, validateSwapQuestionsMiddleware , QuestionRequest};

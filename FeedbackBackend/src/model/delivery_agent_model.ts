@@ -4,19 +4,17 @@ import { ObjectId } from 'mongodb';
 
 interface IFeedbackQuestion {
   question: string;
-  answerFormat: answerFormat;
+  answer: string;
 }
 
-const FeedbackQuestionSchema: Schema = new Schema(
+const QASchema: Schema = new Schema(
   {
     question: {
       type: String,
       required: true,
     },
-    answerFormat: {
+    answer: {
       type: String,
-      required: true,
-      enum: Object.values(answerFormat)
     },
   },
   { _id: false }
@@ -58,7 +56,7 @@ interface IDeliveryAgent extends Document {
       type:String
     },
     qas: {
-      type: [FeedbackQuestionSchema],
+      type: [QASchema],
     },
   },
   {timestamps:true, versionKey:false});

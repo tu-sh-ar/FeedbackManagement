@@ -52,7 +52,7 @@ router.put(
 
 //swap sections
 router.put(
-    "/swapSection/:templateId",
+    "/swapSections/:templateId",
     verifyToken,
     validateSectionsMiddleware,
     swapSections
