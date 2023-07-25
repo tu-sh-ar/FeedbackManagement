@@ -97,6 +97,7 @@ export class CustomFeedbackGeneratorComponent implements OnInit {
     if(this.importedTemplateId){
       this._feedbackService.getTemplateById(this.importedTemplateId).subscribe((res)=>{
         this.custom.sections = res.response.sections;
+        console.log(res.response.sections);
       })
     }
   }
