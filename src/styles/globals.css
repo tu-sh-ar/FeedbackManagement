@@ -18,10 +18,96 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
+
+
+label,
+p,
+span,
+h2,
+h1,
+a,
+label,
+div {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+
+/** Tabs start **/
+.ant-tabs {
+  background-color: white;
+  border-radius: 10px;
+}
+
+.ant-tabs-nav {
+  background-color: #F1F3F6;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  overflow: hidden;
+}
+
+.ant-tabs-tab-active {
+  background-color: white !important;
+}
+
+.ant-tabs-tab-btn{
+  font-weight: 600;
+}
+
+@media screen and (max-width: 640px) {
+  .ant-tabs-nav {
+    background-color: white;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    overflow: hidden;
+  }
+  .ant-tabs-tab{
+    margin-left: 0px !important;
+  }
+  .ant-tabs-tab-active {
+    border-bottom: none !important;
+  }
+  .ant-tabs-ink-bar{
+    height: 1px !important;
+    background-color: #e5e7eb !important;
+  }
+
+  .ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: white !important;
+    background-color: #3E3AFF !important;
+    border-radius: 30px;
+    padding: 5px 20px;
+  }
+  .ant-tabs-tab-btn{
+    font-weight: 600;
+    background-color: #EAEAEA !important;
+    border-radius: 30px;
+    padding: 5px 20px;
+    color: #7E8299;
+    margin: auto 10px !important;
+  }
+  
+}
+/** Tabs end **/
+
+
+/** Notification starts*/
+
+.ant-notification-notice{
+  padding: 12px 14px !important;
+}
+
+.ant-notification-notice-message{
+  font-size: 14px !important;
+  font-weight: 600;
+}
+
+/** Notification ends*/
