@@ -1,0 +1,166 @@
+paths:
+  /api/v1/templateResponse/create/{templateId}:
+    post:
+      summary: Create template response
+      description: Create a feedback response based on the given template ID.
+      tags:
+        - Feedback Template Response
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: templateId
+          required: true
+          schema:
+            type: string
+            example: 64c3af7fb8ced47eb0b88ff8
+          description: ID of the template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TemplateResponseDTO'
+            example:
+              authorId: "1"
+              entityId: "1"
+              entityName: "20W Charger ECW"
+              sections:
+                - id: 1
+                  questions:
+                    - id: 1
+                      answer: "Not good"
+      responses:
+        '200':
+          description: Feedback response added successfully
+        '400':
+          description: Invalid request body
+  /api/v1/templateResponse/getResponseById/{responseId}:
+    get:
+      summary: Get a specific response by its ID with its questions
+      tags:
+        - Feedback Template Response
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: responseId
+          required: true
+          schema:
+            type: string
+          description: ID of the response to fetch
+      responses:
+        200:
+          description: Success
+        404:
+          description: Response not found
+        500:
+          description: Internal server error
+  /api/v1/templateResponse/getEntityResponse/{templateId}:
+    get:
+      summary: Get a response details based on based on entity and template
+      tags:
+        - Feedback Template Response
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: templateId
+          required: true
+          schema:
+            type: string
+          description: ID of the template
+      responses:
+        200:
+          description: Success
+        404:
+          description: Response not found
+        500:
+          description: Internal server error
+  /api/v1/templateResponse/getResponseOfEntity/{entityId}/{templateId}:
+    get:
+      summary: Get a responses of the entity
+      tags:
+        - Feedback Template Response
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: templateId
+          required: true
+          schema:
+            type: string
+          description: ID of the template
+        - in: path
+          name: entityId
+          required: true
+          schema:
+            type: string
+          description: ID of the entity
+      responses:
+        200:
+          description: Success
+        404:
+          description: Response not found
+        500:
+          description: Internal server error
+  /api/v1/templateResponse/uploadImages:
+    post:
+      tags:
+        - Feedback Template Response
+      summary: Upload a single file and get URL
+      description: Upload a single file to the server and get a URL to access it
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to upload
+      responses:
+        200:
+          description: Success
+        404:
+          description: Response not found
+        500:
+          description: Internal server error
+components:
+  schemas:
+    QuestionDTO:
+      type: object
+      properties:
+        id:
+          type: number
+        answers:
+          type: string
+    SectionDTO:
+      type: object
+      properties:
+        id:
+          type: number
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionDTO'
+    TemplateResponseDTO:
+      type: object
+      properties:
+        authorId:
+          type: string
+        entityId: 
+          type: string
+        entityName: 
+          type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/SectionDTO'
+  securitySchemes:
+    JWTAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
