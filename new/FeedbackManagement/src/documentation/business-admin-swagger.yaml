@@ -1,0 +1,74 @@
+paths:
+  /api/v1/businessAdmin/allotDefaultTemplatesToBusinessAdmin:
+    post:
+      summary: Add business admin 
+      description: Adds business admin and allot templates.
+      tags:
+        - Business Admin
+      security:
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BusinessAdminBody'
+            example:
+              businessAdminId: 1
+              businessCategoryId: 1
+      responses:
+        '200':
+          description: Template alloted successfully
+        '400':
+          description: Invalid request body
+  /api/v1/businessAdmin/createLink/{serviceId}/{businessAdminId}:
+    post:
+      summary: Create template link.
+      description: Create template link for service.
+      tags:
+        - Business Admin
+      parameters:
+        - name: serviceId
+          in: path
+          description: ID of the service
+          required: true
+          schema:
+            type: string
+        - name: businessAdminId
+          in: path
+          description: ID of the business admin
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkBodySchema'
+            example:
+              authorId: "5"
+              entityId: 64b14fe37d75d86fd1af82c1
+              entityName: "XR 10 Copper"
+              authorName: "Amit singh"
+      security:
+        - JWTAuth: []
+      responses:
+        '200':
+          description: Template alloted successfully
+        '400':
+          description: Invalid request body
+components:
+  schemas:
+    BusinessAdminBody:
+      type: object
+      properties:
+        businessAdminId: number
+        businessCategoryId: number
+    LinkBodySchema:
+      type: object
+      properties:
+        entityId: string
+        entityName: string
+        customerId: string
+        customerName: string
