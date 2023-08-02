@@ -155,7 +155,7 @@ const getBusinessAdminTemplates = (req, res) => __awaiter(void 0, void 0, void 0
                 $project: {
                     id: "$_id",
                     templateServiceCategory: {
-                        id: "$_id",
+                        id: "$templateServiceCategory._id",
                         name: 1,
                     },
                     templates: {
@@ -217,19 +217,8 @@ const getTemplateByFeedbackCategoryId = (req, res) => __awaiter(void 0, void 0, 
     try {
         const businessAdminId = (_c = req.user) === null || _c === void 0 ? void 0 : _c.id;
         const { feedbackTypeId } = req.params;
-        if (!Number.isInteger(parseInt(feedbackTypeId, 10))) {
-            return (0, responseUtils_1.buildErrorResponse)(res, 'Invalid feedbackTypeId', 400);
-        }
-        const businessAdmin = yield businessAdmin_1.BusinessAdmin.findOne({ templateServiceCategoryId: feedbackTypeId, businessAdminId }).populate([
-            {
-                path: 'templates.id',
-                select: '-_id templateName templateType',
-            },
-            {
-                path: 'templateServiceCategoryId',
-                select: '-_id name',
-            }
-        ]);
+        const businessAdmin = yield businessAdmin_1.BusinessAdmin.findOne({ templateServiceCategoryId: new mongoose_1.Types.ObjectId(feedbackTypeId) });
+        console.log(businessAdmin, 'business admin', feedbackTypeId, businessAdminId);
         if (!businessAdmin) {
             return (0, responseUtils_1.buildErrorResponse)(res, 'Business admin not found.', 404);
         }
