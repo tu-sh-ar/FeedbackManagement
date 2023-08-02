@@ -118,7 +118,7 @@ export const getBusinessAdminTemplates = async (req: Request, res: Response) => 
                 $project: {
                     id: "$_id",
                     templateServiceCategory: {
-                        id: "$_id",
+                        id: "$templateServiceCategory_id",
                         name: 1,
                     },
                     templates: {
@@ -190,22 +190,20 @@ export const getTemplateByFeedbackCategoryId = async (req: Request, res: Respons
 
         const { feedbackTypeId } = req.params;
 
-        if (!Number.isInteger(parseInt(feedbackTypeId, 10))) {
-            return buildErrorResponse(res, 'Invalid feedbackTypeId', 400);
-        }
-
         const businessAdmin = await BusinessAdmin.findOne(
-            { templateServiceCategoryId: feedbackTypeId, businessAdminId }
-        ).populate([
+            { templateServiceCategoryId: new Types.ObjectId(feedbackTypeId), businessAdminId })
+        .populate([
             {
                 path: 'templates.id',
-                select: '-_id templateName templateType',
+                select: '_id templateName templateType',
             },
             {
                 path: 'templateServiceCategoryId',
                 select: '-_id name',
             }
         ]);
+
+        console.log(businessAdmin, 'business admin', feedbackTypeId, businessAdminId)
 
         if (!businessAdmin) {
             return buildErrorResponse(res, 'Business admin not found.', 404);
