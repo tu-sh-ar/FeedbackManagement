@@ -118,7 +118,7 @@ export const getBusinessAdminTemplates = async (req: Request, res: Response) => 
                 $project: {
                     id: "$_id",
                     templateServiceCategory: {
-                        id: "$templateServiceCategory_id",
+                        id: "$templateServiceCategory._id",
                         name: 1,
                     },
                     templates: {
