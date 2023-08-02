@@ -118,7 +118,7 @@ export const getBusinessAdminTemplates = async (req: Request, res: Response) => 
                 $project: {
                     id: "$_id",
                     templateServiceCategory: {
-                        id: "$templateServiceCategory._id",
+                        id: "$templateServiceCategory_id",
                         name: 1,
                     },
                     templates: {
@@ -190,10 +190,18 @@ export const getTemplateByFeedbackCategoryId = async (req: Request, res: Respons
 
         const { feedbackTypeId } = req.params;
 
-
         const businessAdmin = await BusinessAdmin.findOne(
-            { templateServiceCategoryId: new Types.ObjectId(feedbackTypeId) })
- 
+            { templateServiceCategoryId: new Types.ObjectId(feedbackTypeId), businessAdminId })
+        .populate([
+            {
+                path: 'templates.id',
+                select: '_id templateName templateType',
+            },
+            {
+                path: 'templateServiceCategoryId',
+                select: '-_id name',
+            }
+        ]);
 
         console.log(businessAdmin, 'business admin', feedbackTypeId, businessAdminId)
 
