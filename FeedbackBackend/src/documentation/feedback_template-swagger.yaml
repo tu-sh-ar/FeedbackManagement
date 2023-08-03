@@ -354,6 +354,97 @@ paths:
           required: true
           description: The ID of the feedback template to fetch
       tags:
+        - Feedback Template
+      responses:
+        '200':
+          description: Template retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateResponse'
+              examples:
+                TemplateExample:
+                  value:
+                          id: "64b161d57d75d86fd1af82d4"
+                          templateName: "Default Template 1"
+                          businessCategory: 1
+                          sections:
+                            - id: 1
+                              title: "Product"
+                              order: 1
+                              questions:
+                                - id: 1
+                                  question: "How satisfied were you with the product? (Rating)"
+                                  answerFormat:
+                                    type: "rating"
+                                    required: false
+                                    upperBound: 5
+                                  order: 1
+                                - id: 2
+                                  question: "Please update photo/video of the product"
+                                  answerFormat:
+                                    type: "file"
+                                    required: true
+                                  order: 2
+                              isActive: true
+                            - id: 2
+                              title: "Packaging"
+                              order: 2
+                              questions:
+                                - id: 4
+                                  question: "How satisfied were you with the quality of the packaging materials used for your order? (Rating)"
+                                  answerFormat:
+                                    type: "rating"
+                                    required: false
+                                    upperBound: 5
+                                  order: 1
+                                - id: 5
+                                  question: "Did the packaging adequately protect the contents of your package?"
+                                  answerFormat:
+                                    type: "radio"
+                                    options:
+                                      - "Yes"
+                                      - "No"
+                                    required: true
+                                  order: 2
+                              isActive: true
+                            - id: 3
+                              title: "Overall Satisfaction"
+                              order: 3
+                              questions:
+                                - id: 9
+                                  question: "Would you recommend the Product to others based on your experience?"
+                                  answerFormat:
+                                    type: "radio"
+                                    options:
+                                      - "Yes"
+                                      - "Maybe"
+                                      - "No"
+                                    required: true
+                                  order: 1
+                              isActive: true
+                          isActive: true
+        '400':
+          description: Bad Request
+        '404':
+          description: Template not found
+        '500':
+          description: Internal Server Error
+  /api/v1/feedbackTemplate/getTemplateByIdAndBusinessAdmin/{templateId}:
+    get:
+      summary: Fetch Template by ID with Sorted Questions and Sections
+      description: |
+        This API retrieves a single feedback template based on the templateId parameter. The questions and sections within the template are sorted according to their order.
+
+        The templateId parameter should be a valid integer representing the ID of the template to fetch.
+      parameters:
+        - in: path
+          name: templateId
+          schema:
+            type: string
+          required: true
+          description: The ID of the feedback template to fetch
+      tags:
         - Feedback Template      
       security:
         - JWTAuth: []
@@ -432,7 +523,7 @@ paths:
           description: Template not found
         '500':
           description: Internal Server Error
-  /api/v1/feedbackTemplate/activateTemplate/{templateId}/{feedbackTypeId}:
+  /api/v1/feedbackTemplate/activateTemplate/{feedbackTypeId}/{templateId}:
     put:
       summary: Activate Template
       tags:
@@ -441,14 +532,14 @@ paths:
         - JWTAuth: []
       description: Activates a template for use, deactivating other active templates for the same business admin and feedback type
       parameters:
-        - name: templateId
-          in: path
-          description: ID of the template
-          required: true
-          type: string
         - name: feedbackTypeId
           in: path
           description: ID of the template service type
+          required: true
+          type: string
+        - name: templateId
+          in: path
+          description: ID of the template
           required: true
           type: string
       responses:

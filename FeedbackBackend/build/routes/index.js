@@ -23,6 +23,7 @@ const template_1 = require("../validations/template");
 const responseController_1 = require("../controllers/responseController");
 const businessAdminController_1 = require("../controllers/businessAdminController");
 const fileHandler_1 = require("../middlewares/fileHandler");
+const serviceCategoryController_1 = require("../controllers/serviceCategoryController");
 //fetching default templates
 router.get("/feedbackTemplate/getDefaultBusinessCategoryTemplates/:businessCategoryId", 
 // verifyToken,
@@ -33,6 +34,8 @@ router.get("/feedbackTemplate/getBusinessAdminTemplates", authentication_1.verif
 router.get("/feedbackTemplate/getTemplateById/:templateId", 
 // verifyToken,
 templateController_1.getTemplateById);
+//fetch template by business admin
+router.get("/feedbackTemplate/getTemplateByIdAndBusinessAdmin/:templateId", authentication_1.verifyToken, templateController_1.getTemplateByIdAndBusinessAdmin);
 //fetch template
 router.get("/feedbackTemplate/getTemplateByFeebackCategoryId/:feedbackTypeId", authentication_1.verifyToken, templateController_1.getTemplateByFeedbackCategoryId);
 // new template
@@ -48,7 +51,7 @@ router.put("/feedbackTemplate/swapSections/:templateId", authentication_1.verify
 //swap question
 router.put("/feedbackTemplate/swapQuestion/:templateId", authentication_1.verifyToken, template_1.validateSwapQuestionsMiddleware, templateController_1.swapQuestions);
 //activate feedback
-router.put("/feedbackTemplate/activateTemplate/:templateId/:feedbackTypeId", authentication_1.verifyToken, templateController_1.activateTemplate);
+router.put("/feedbackTemplate/activateTemplate/:feedbackTypeId/:templateId", authentication_1.verifyToken, templateController_1.activateTemplate);
 // //delete template
 // router.delete("/feedbackTemplate/deleteTemplate/:id", verifyToken, deleteTemplate);
 //response
@@ -62,4 +65,5 @@ router.get("/templateResponse/getResponseOfEntity/:entityId/:templateId", authen
 router.post("/templateResponse/uploadImages", fileHandler_1.upload.single('file'), responseController_1.uploadImages);
 router.post("/businessAdmin/allotDefaultTemplatesToBusinessAdmin", authentication_1.verifyToken, businessAdminController_1.addBusinessAdminAndAllotTemplates);
 router.post("/businessAdmin/createLink/:serviceId/:businessAdminId", authentication_1.verifyToken, businessAdminController_1.getActiveLinkForTemplate);
+router.get("/serviceCategories/getServices/:businessCategoryId", authentication_1.verifyToken, serviceCategoryController_1.getServiceCategories);
 exports.default = router;

@@ -184,6 +184,43 @@ export const getTemplateById = async (req: Request, res: Response) => {
 }
 
 
+export const getTemplateByIdAndBusinessAdmin = async (req: Request, res: Response) => {
+    try {
+        const { templateId } = req.params;
+        const businessAdminId: number = req.user?.id;
+
+        const template: FeedbackTemplateInterface | null = await FeedbackTemplate.findById(templateId);
+
+        if (!template) {
+            return buildErrorResponse(res, 'Template not found', 404);
+        }
+
+        template.sections.sort((a, b) => a.order - b.order);
+        template.sections.forEach((section) => {
+            section.questions.sort((a, b) => a.order - b.order);
+        });
+
+        const businessAdminTemplates = await BusinessAdmin.findOne({
+            businessAdminId,
+            templateServiceCategoryId: new Types.ObjectId(template.feedbackType)
+        })
+
+        const activeItem = businessAdminTemplates?.templates.find(
+            (item) => {
+                return (item.id.equals(template._id) && item.active === true)
+            });
+
+        const isActive = activeItem ? activeItem.active === true : false;
+
+        const { _id, ...templateData } = template.toObject();
+
+        return buildObjectResponse(res, { id: _id, active: isActive, ...templateData })
+    } catch (error) {
+        console.log(error);
+        return buildErrorResponse(res, 'Internal Server Error', 500);
+    }
+}
+
 export const getTemplateByFeedbackCategoryId = async (req: Request, res: Response) => {
     try {
         const businessAdminId: number = req.user?.id;
@@ -192,16 +229,16 @@ export const getTemplateByFeedbackCategoryId = async (req: Request, res: Respons
 
         const businessAdmin = await BusinessAdmin.findOne(
             { templateServiceCategoryId: new Types.ObjectId(feedbackTypeId), businessAdminId })
-        .populate([
-            {
-                path: 'templates.id',
-                select: '_id templateName templateType',
-            },
-            {
-                path: 'templateServiceCategoryId',
-                select: '-_id name',
-            }
-        ]);
+            .populate([
+                {
+                    path: 'templates.id',
+                    select: '_id templateName templateType',
+                },
+                {
+                    path: 'templateServiceCategoryId',
+                    select: '-_id name',
+                }
+            ]);
 
         console.log(businessAdmin, 'business admin', feedbackTypeId, businessAdminId)
 
@@ -505,11 +542,12 @@ export const activateTemplate = async (req: Request, res: Response) => {
 
         const session = await mongoose.startSession();
         session.startTransaction();
-
         try {
-            await BusinessAdmin.findOneAndUpdate(
-                { businessAdminId, templateServiceCategoryId: new Types.ObjectId(feedbackTypeId), 
-                    'templates.active': true },
+            const a = await BusinessAdmin.findOneAndUpdate(
+                {
+                    businessAdminId, templateServiceCategoryId: new Types.ObjectId(feedbackTypeId),
+                    'templates.active': true
+                },
                 { $set: { 'templates.$.active': false } },
                 { new: true, session }
             )
@@ -545,8 +583,8 @@ export const activateTemplate = async (req: Request, res: Response) => {
 //         const parsedTemplateId = templateId;
 
 //         const existingTemplate = await BusinessAdmin.findOne(
-//             { 
-//                 businessAdminId, 
+//             {
+//                 businessAdminId,
 //                 'templates.id': new Types.ObjectId(templateId),
 //                 'used': true
 //             }
