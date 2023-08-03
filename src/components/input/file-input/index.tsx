@@ -45,7 +45,7 @@ export default function FileInput({ onChange }: FileInputProps) {
         if (file.status === "done" && file.response && file.response) {
             url = file.response.response.url;
             setUrls((prevUrls) => [...prevUrls, url]);
-        } else if (file.status === "removed" && file.response && file.response) {
+        } else if (file.status === "removed" && file.response && file.response.response.url) {
             const removedUrl = file.response.response.url;
             setUrls((prevUrls) => prevUrls.filter((item) => item !== removedUrl));
         }
