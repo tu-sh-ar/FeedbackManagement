@@ -46,7 +46,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.activateTemplate = exports.createTemplate = exports.swapQuestions = exports.swapSections = exports.getTemplateByFeedbackCategoryId = exports.getTemplateById = exports.getBusinessAdminTemplates = exports.getDefaultBusinessCategoryTemplates = void 0;
+exports.activateTemplate = exports.createTemplate = exports.swapQuestions = exports.swapSections = exports.getTemplateByFeedbackCategoryId = exports.getTemplateByIdAndBusinessAdmin = exports.getTemplateById = exports.getBusinessAdminTemplates = exports.getDefaultBusinessCategoryTemplates = void 0;
 const template_1 = __importDefault(require("../db/models/template"));
 const template_2 = require("../validations/template");
 const constants_1 = require("../constants/constants");
@@ -155,7 +155,7 @@ const getBusinessAdminTemplates = (req, res) => __awaiter(void 0, void 0, void 0
                 $project: {
                     id: "$_id",
                     templateServiceCategory: {
-                        id: "$templateServiceCategory_id",
+                        id: "$templateServiceCategory._id",
                         name: 1,
                     },
                     templates: {
@@ -212,10 +212,40 @@ const getTemplateById = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.getTemplateById = getTemplateById;
-const getTemplateByFeedbackCategoryId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getTemplateByIdAndBusinessAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c;
     try {
+        const { templateId } = req.params;
         const businessAdminId = (_c = req.user) === null || _c === void 0 ? void 0 : _c.id;
+        const template = yield template_1.default.findById(templateId);
+        if (!template) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Template not found', 404);
+        }
+        template.sections.sort((a, b) => a.order - b.order);
+        template.sections.forEach((section) => {
+            section.questions.sort((a, b) => a.order - b.order);
+        });
+        const businessAdminTemplates = yield businessAdmin_1.BusinessAdmin.findOne({
+            businessAdminId,
+            templateServiceCategoryId: new mongoose_1.Types.ObjectId(template.feedbackType)
+        });
+        const activeItem = businessAdminTemplates === null || businessAdminTemplates === void 0 ? void 0 : businessAdminTemplates.templates.find((item) => {
+            return (item.id.equals(template._id) && item.active === true);
+        });
+        const isActive = activeItem ? activeItem.active === true : false;
+        const _d = template.toObject(), { _id } = _d, templateData = __rest(_d, ["_id"]);
+        return (0, responseUtils_1.buildObjectResponse)(res, Object.assign({ id: _id, active: isActive }, templateData));
+    }
+    catch (error) {
+        console.log(error);
+        return (0, responseUtils_1.buildErrorResponse)(res, 'Internal Server Error', 500);
+    }
+});
+exports.getTemplateByIdAndBusinessAdmin = getTemplateByIdAndBusinessAdmin;
+const getTemplateByFeedbackCategoryId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e;
+    try {
+        const businessAdminId = (_e = req.user) === null || _e === void 0 ? void 0 : _e.id;
         const { feedbackTypeId } = req.params;
         const businessAdmin = yield businessAdmin_1.BusinessAdmin.findOne({ templateServiceCategoryId: new mongoose_1.Types.ObjectId(feedbackTypeId), businessAdminId })
             .populate([
@@ -381,10 +411,10 @@ const validateAndTransformForm = (roleId, businessAdminId, formData) => __awaite
 });
 // create new feedback template 
 const createTemplate = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _d, _e, _f;
+    var _f, _g, _h;
     try {
-        const businessAdminId = (_d = req.user) === null || _d === void 0 ? void 0 : _d.id;
-        const roleId = (_e = req.user) === null || _e === void 0 ? void 0 : _e.role;
+        const businessAdminId = (_f = req.user) === null || _f === void 0 ? void 0 : _f.id;
+        const roleId = (_g = req.user) === null || _g === void 0 ? void 0 : _g.role;
         const formData = req.body;
         const serviceCategory = yield feedbackCategory_1.default.findById(formData.feedbackType);
         if (!serviceCategory) {
@@ -409,7 +439,7 @@ const createTemplate = (req, res) => __awaiter(void 0, void 0, void 0, function*
         console.log(error);
         if (error instanceof yup.ValidationError && (error === null || error === void 0 ? void 0 : error.errors)) {
             // If there's a validation error, send the error response
-            const errorMessage = ((_f = error.errors) === null || _f === void 0 ? void 0 : _f.join(', ')) || 'Validation Error';
+            const errorMessage = ((_h = error.errors) === null || _h === void 0 ? void 0 : _h.join(', ')) || 'Validation Error';
             return (0, responseUtils_1.buildErrorResponse)(res, errorMessage, 400);
         }
         else {
@@ -457,15 +487,18 @@ exports.createTemplate = createTemplate;
 // })
 // activating template
 const activateTemplate = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _g;
+    var _j;
     try {
-        const businessAdminId = (_g = req.user) === null || _g === void 0 ? void 0 : _g.id;
+        const businessAdminId = (_j = req.user) === null || _j === void 0 ? void 0 : _j.id;
         const { templateId, feedbackTypeId } = req.params;
         const session = yield mongoose_1.default.startSession();
         session.startTransaction();
         try {
-            yield businessAdmin_1.BusinessAdmin.findOneAndUpdate({ businessAdminId, templateServiceCategoryId: new mongoose_1.Types.ObjectId(feedbackTypeId),
-                'templates.active': true }, { $set: { 'templates.$.active': false } }, { new: true, session });
+            const a = yield businessAdmin_1.BusinessAdmin.findOneAndUpdate({
+                businessAdminId, templateServiceCategoryId: new mongoose_1.Types.ObjectId(feedbackTypeId),
+                'templates.active': true
+            }, { $set: { 'templates.$.active': false } }, { new: true, session });
+            console.log(a, feedbackTypeId, templateId);
             yield businessAdmin_1.BusinessAdmin.findOneAndUpdate({ businessAdminId, templateServiceCategoryId: new mongoose_1.Types.ObjectId(feedbackTypeId), 'templates.id': new mongoose_1.Types.ObjectId(templateId) }, { $set: { 'templates.$.active': true, 'templates.$.used': true } }, { new: true, session });
             yield session.commitTransaction();
             session.endSession();
@@ -489,8 +522,8 @@ exports.activateTemplate = activateTemplate;
 //         const { templateId } = req.params;
 //         const parsedTemplateId = templateId;
 //         const existingTemplate = await BusinessAdmin.findOne(
-//             { 
-//                 businessAdminId, 
+//             {
+//                 businessAdminId,
 //                 'templates.id': new Types.ObjectId(templateId),
 //                 'used': true
 //             }

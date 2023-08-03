@@ -8,13 +8,15 @@ import { createTemplate, getDefaultBusinessCategoryTemplates,
     getBusinessAdminTemplates, swapQuestions, swapSections, getTemplateById, 
     // activateTemplate, updateTemplate, deleteTemplate,
     getTemplateByFeedbackCategoryId, 
-    activateTemplate} from '../controllers/templateController';
+    activateTemplate,
+    getTemplateByIdAndBusinessAdmin} from '../controllers/templateController';
 
 import { verifyToken } from "../middlewares/authentication";
 import { validateSectionsMiddleware, validateSwapQuestionsMiddleware } from '../validations/template';
 import { createResponse, getResponseBasedOnEntity, getResponseOfEntity, getResponseWithQuestions, uploadImages } from '../controllers/responseController';
 import { addBusinessAdminAndAllotTemplates, getActiveLinkForTemplate } from '../controllers/businessAdminController';
 import uploadMiddleware, { upload } from '../middlewares/fileHandler';
+import { getServiceCategories } from '../controllers/serviceCategoryController';
 
 
 //fetching default templates
@@ -36,6 +38,14 @@ router.get(
     "/feedbackTemplate/getTemplateById/:templateId",
     // verifyToken,
     getTemplateById
+);
+
+
+//fetch template by business admin
+router.get(
+    "/feedbackTemplate/getTemplateByIdAndBusinessAdmin/:templateId",
+    verifyToken,
+    getTemplateByIdAndBusinessAdmin
 );
 
 //fetch template
@@ -78,7 +88,7 @@ router.put(
 
 //activate feedback
 router.put(
-    "/feedbackTemplate/activateTemplate/:templateId/:feedbackTypeId",
+    "/feedbackTemplate/activateTemplate/:feedbackTypeId/:templateId",
     verifyToken,
     activateTemplate
 );
@@ -131,6 +141,12 @@ router.post(
     "/businessAdmin/createLink/:serviceId/:businessAdminId",
     verifyToken,
     getActiveLinkForTemplate
+);
+
+router.get(
+    "/serviceCategories/getServices/:businessCategoryId",
+    verifyToken,
+    getServiceCategories
 );
 
 export default router;

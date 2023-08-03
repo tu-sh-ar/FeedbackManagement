@@ -1,0 +1,20 @@
+paths:
+  /api/v1/serviceCategories/getServices/{businessCategoryId}:
+    get:
+      summary: Get service categories
+      description: Gets service categories list.
+      tags:
+        - Services 
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: businessCategoryId
+          required: true
+          schema:
+            type: number
+            example: 1
+          description: ID of the business category
+      responses:
+        '400':
+          description: Invalid params

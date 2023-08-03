@@ -26,7 +26,7 @@ let database;
 let client = null;
 function configureDB() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield mongoose_1.default.connect("mongodb+srv://yashraj7011:12345@feedbackmanagement.llintv8.mongodb.net/test")
+        yield mongoose_1.default.connect("mongodb+srv://yashraj7011:12345@feedbackmanagement.llintv8.mongodb.net/feedbackmanagement")
             .then(res => console.log("Database connected successfully"))
             .catch(err => console.log(`Database not connected : ${err}`));
     });
