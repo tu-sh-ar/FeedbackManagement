@@ -1,10 +1,10 @@
+import { useEffect, useState, useCallback } from "react";
 import Tabination from "@/components/Tabination";
 import useJwtDecode from "@/hooks/useJwtDecode";
 import { fetchSectionQuestionAnswers, transformTemplateToAnswer } from "@/utils";
 import { validateAnswer } from "@/utils/validation";
 import { Button } from "antd";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { notification } from 'antd';
 import type { NotificationPlacement } from 'antd/es/notification/interface';
 import { urls } from "@/assets/contants";
@@ -53,7 +53,7 @@ export interface OnChangeHandlerFn {
 export type AnswerTypeInterface = string | number | string[] | Boolean | null
 
 
-export default function () {
+export default function FeedbackForm() {
 
     const router = useRouter();
 
@@ -91,7 +91,7 @@ export default function () {
         };
     }, [])
 
-    const fetchTemplateAPI = async (templateId: string) => {
+    const fetchTemplateAPI = useCallback(async (templateId: string) => {
         try {
             const res = await fetch(
                 `${urls.post}/${templateId}`
@@ -101,7 +101,7 @@ export default function () {
         } catch (err) {
             router.replace('/500')
         }
-    };
+    },[router]);
 
     const submitFeedback = async (templateId: string, data: any) => {
         try {
@@ -142,7 +142,7 @@ export default function () {
                 }
             }
         })()
-    }, [decodedToken])
+    }, [decodedToken, fetchTemplateAPI])
 
     const onChangeHandler = (
         sectionId: number,

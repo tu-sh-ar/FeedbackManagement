@@ -3,6 +3,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
+import Image from 'next/image';
 
 
 interface FileInputProps {
@@ -55,7 +56,7 @@ export default function FileInput({ onChange }: FileInputProps) {
 
     useEffect(() => {
         onChange(urls);
-    }, [urls])
+    }, [urls, onChange])
 
     const uploadButton = (
         <div>
@@ -77,7 +78,7 @@ export default function FileInput({ onChange }: FileInputProps) {
                 {files.length >= 8 ? null : uploadButton}
             </Upload>
             <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-                <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                <Image alt="example" style={{ width: '100%' }} src={previewImage} />
             </Modal>
         </>
     )

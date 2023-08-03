@@ -1,4 +1,4 @@
 export const urls = {
-    post: 'http://localhost:3000/api/v1/feedbackTemplate/getTemplateById',
-    get: 'http://localhost:3000/api/v1//templateResponse/create'
+    post: 'https://feedbackbackend-dev.azurewebsites.net/api/v1/feedbackTemplate/getTemplateById',
+    get: 'https://feedbackbackend-dev.azurewebsites.net/api/v1//templateResponse/create'
 }

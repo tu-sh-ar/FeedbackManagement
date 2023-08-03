@@ -36,7 +36,7 @@ const useJwtDecode = (jwtToken: string) => {
             router.replace('/401')
             console.error('Error decoding JWT:', error);
         }
-    }, [jwtToken]);
+    }, [jwtToken, router]);
 
     return decodedToken;
 };
