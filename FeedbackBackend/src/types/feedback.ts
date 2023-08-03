@@ -1,21 +1,30 @@
+export interface sectionInterface {
+    id: number;
+    title: string;
+    order: number;
+    questions: {
+        id: number
+        question: string;
+        answerFormat: {
+            type: string;
+            options?: string[];
+            upperBound?: number;
+        }[];
+        required: boolean;
+        order: number;
+    }[]
+}
+
 export interface FeedbackFormBodySchema {
     businessCategory?: number;
     feedbackType: string;
     feedbackFormName: string;
-    sections: {
-        title: string;
-        order: number;
-        fields: {
-            question: string;
-            answerFormat: {
-                type: string;
-                options?: string[];
-                required: boolean;
-                upperBound?: number;
-            }[];
-            order: number;
-        }[];
-    }[];
+    sections: sectionInterface[];
+}
+
+export interface SectionResponse {
+    id: number;
+    questions: { id: number; answer: any }[];
 }
 
 

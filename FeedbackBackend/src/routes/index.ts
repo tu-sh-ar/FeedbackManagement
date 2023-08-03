@@ -13,7 +13,7 @@ import { createTemplate, getDefaultBusinessCategoryTemplates,
 
 import { verifyToken } from "../middlewares/authentication";
 import { validateSectionsMiddleware, validateSwapQuestionsMiddleware } from '../validations/template';
-import { createResponse, getResponseBasedOnEntity, getResponseOfEntity, getResponseWithQuestions, uploadImages } from '../controllers/responseController';
+import { createResponse, getResponseBasedOnEntityId, getResponseWithQuestions, getResponsesOfEntity, uploadImages } from '../controllers/responseController';
 import { addBusinessAdminAndAllotTemplates, getActiveLinkForTemplate } from '../controllers/businessAdminController';
 import uploadMiddleware, { upload } from '../middlewares/fileHandler';
 import { getServiceCategories } from '../controllers/serviceCategoryController';
@@ -113,15 +113,15 @@ router.get(
 );
 
 router.get(
-    "/templateResponse/getEntityResponse/:templateId",
+    "/templateResponse/getResponseBasedOnEntityId/:serviceId",
     verifyToken,
-    getResponseBasedOnEntity
+    getResponseBasedOnEntityId
 );
 
 router.get(
-    "/templateResponse/getResponseOfEntity/:entityId/:templateId",
+    "/templateResponse/getResponsesOfEntity/:entityId/:templateId",
     verifyToken,
-    getResponseOfEntity
+    getResponsesOfEntity
 );
 
 

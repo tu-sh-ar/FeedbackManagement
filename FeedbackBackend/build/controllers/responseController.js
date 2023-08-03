@@ -35,12 +35,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadImages = exports.getResponseOfEntity = exports.getResponseBasedOnEntity = exports.getResponseWithQuestions = exports.createResponse = void 0;
+exports.uploadImages = exports.getResponsesOfEntity = exports.getResponseBasedOnEntityId = exports.getResponseWithQuestions = exports.createResponse = void 0;
 const yup = __importStar(require("yup"));
 const mongoose_1 = require("mongoose");
 const responseUtils_1 = require("../utils/responseUtils");
 const response_1 = require("../validations/response");
 const feedbackResponse_1 = __importDefault(require("../db/models/feedbackResponse"));
+const businessAdmin_1 = require("../db/models/businessAdmin");
+const utils_1 = require("../utils");
 //create response
 const createResponse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
@@ -76,7 +78,15 @@ const getResponseWithQuestions = (req, res) => __awaiter(void 0, void 0, void 0,
         if (!response) {
             return (0, responseUtils_1.buildErrorResponse)(res, 'Response not found', 404);
         }
-        return (0, responseUtils_1.buildObjectResponse)(res, response);
+        const templateResponse = (0, utils_1.mapQuestionResponses)(response.template.sections, response.sectionResponse);
+        return (0, responseUtils_1.buildObjectResponse)(res, {
+            templateName: response.template.templateName,
+            authorId: response.authorId,
+            authorName: response.authorName,
+            entityName: response.entityName,
+            entityId: response.entityId,
+            templateResponse,
+        });
     }
     catch (error) {
         console.error('Error fetching response:', error);
@@ -84,9 +94,21 @@ const getResponseWithQuestions = (req, res) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.getResponseWithQuestions = getResponseWithQuestions;
-const getResponseBasedOnEntity = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getResponseBasedOnEntityId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c;
     try {
-        const { templateId } = req.params;
+        const { serviceId } = req.params;
+        const businessAdminId = (_c = req.user) === null || _c === void 0 ? void 0 : _c.id;
+        const businessAdminTemplate = yield businessAdmin_1.BusinessAdmin.findOne({
+            businessAdminId, templateServiceCategoryId: new mongoose_1.Types.ObjectId(serviceId),
+            'templates.active': true
+        });
+        if (!businessAdminTemplate) {
+            return (0, responseUtils_1.buildResponse)(res, 'Template is not active', 200);
+        }
+        const activeTemplate = businessAdminTemplate === null || businessAdminTemplate === void 0 ? void 0 : businessAdminTemplate.templates.find((item) => item.active === true);
+        const templateId = activeTemplate === null || activeTemplate === void 0 ? void 0 : activeTemplate.id;
+        console.log(templateId);
         const matchCriteria = templateId ? { template: new mongoose_1.Types.ObjectId(templateId) } : {};
         const responseGroups = yield feedbackResponse_1.default.aggregate([
             {
@@ -109,19 +131,20 @@ const getResponseBasedOnEntity = (req, res) => __awaiter(void 0, void 0, void 0,
                 },
             },
         ]);
-        return (0, responseUtils_1.buildObjectResponse)(res, responseGroups);
+        return (0, responseUtils_1.buildObjectResponse)(res, { templateId, responseGroups });
     }
     catch (error) {
         console.error('Error fetching response:', error);
         return (0, responseUtils_1.buildErrorResponse)(res, 'Internal Server Error', 500);
     }
 });
-exports.getResponseBasedOnEntity = getResponseBasedOnEntity;
-const getResponseOfEntity = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getResponseBasedOnEntityId = getResponseBasedOnEntityId;
+const getResponsesOfEntity = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { entityId, templateId } = req.params;
         // Fetch the response by its ID
-        const response = yield feedbackResponse_1.default.find({ entityId, template: templateId }, { sections: 0, template: 0, entityId: 0 });
+        const response = yield feedbackResponse_1.default.find({ entityId, template: templateId }, { sectionResponse: 0,
+            template: 0, entityId: 0, updatedAt: 0 });
         if (!response) {
             return (0, responseUtils_1.buildErrorResponse)(res, 'Response not found', 404);
         }
@@ -132,7 +155,7 @@ const getResponseOfEntity = (req, res) => __awaiter(void 0, void 0, void 0, func
         return (0, responseUtils_1.buildErrorResponse)(res, 'Internal Server Error', 500);
     }
 });
-exports.getResponseOfEntity = getResponseOfEntity;
+exports.getResponsesOfEntity = getResponsesOfEntity;
 const uploadImages = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.file) {
@@ -148,3 +171,19 @@ const uploadImages = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.uploadImages = uploadImages;
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFtYW4uc2hhaEBleGFtcGxlLmNvbSIsInJvbGUiOiIyIiwiaWQiOiIyIiwiYnVzaW5lc3NDYXRlZ29yeSI6IjEiLCJleHAiOjE2OTU4MTI3NjF9.5Q5rN08DNedqH2Ppja4wK-__GXl6I320wenlc2mLVCI
+// [
+//     { 
+//         id: 1,
+//         title: 1,
+//         questionAnswer: [
+//             { 
+//                 id: 1,
+//                 answerFormat: __,
+//                 answer: __,
+//                 required: true/false
+//             }
+//         ]
+//     },
+//     {}
+// ]

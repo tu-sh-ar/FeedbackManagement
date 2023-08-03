@@ -35,20 +35,20 @@ paths:
           description: Feedback response added successfully
         '400':
           description: Invalid request body
-  /api/v1/templateResponse/getResponseById/{responseId}:
+  /api/v1/templateResponse/getResponseBasedOnEntityId/{serviceId}:
     get:
-      summary: Get a specific response by its ID with its questions
+      summary: Get a response details based on based on entity
       tags:
         - Feedback Template Response
       security:
         - JWTAuth: []
       parameters:
         - in: path
-          name: responseId
+          name: serviceId
           required: true
           schema:
             type: string
-          description: ID of the response to fetch
+          description: ID of the service
       responses:
         200:
           description: Success
@@ -56,28 +56,7 @@ paths:
           description: Response not found
         500:
           description: Internal server error
-  /api/v1/templateResponse/getEntityResponse/{templateId}:
-    get:
-      summary: Get a response details based on based on entity and template
-      tags:
-        - Feedback Template Response
-      security:
-        - JWTAuth: []
-      parameters:
-        - in: path
-          name: templateId
-          required: true
-          schema:
-            type: string
-          description: ID of the template
-      responses:
-        200:
-          description: Success
-        404:
-          description: Response not found
-        500:
-          description: Internal server error
-  /api/v1/templateResponse/getResponseOfEntity/{entityId}/{templateId}:
+  /api/v1/templateResponse/getResponsesOfEntity/{entityId}/{templateId}:
     get:
       summary: Get a responses of the entity
       tags:
@@ -97,6 +76,27 @@ paths:
           schema:
             type: string
           description: ID of the entity
+      responses:
+        200:
+          description: Success
+        404:
+          description: Response not found
+        500:
+          description: Internal server error
+  /api/v1/templateResponse/getResponseById/{responseId}:
+    get:
+      summary: Get a specific response by its ID with its questions
+      tags:
+        - Feedback Template Response
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: responseId
+          required: true
+          schema:
+            type: string
+          description: ID of the response to fetch
       responses:
         200:
           description: Success

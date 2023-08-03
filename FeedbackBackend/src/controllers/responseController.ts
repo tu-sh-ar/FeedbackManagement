@@ -8,6 +8,8 @@ import { Types } from 'mongoose';
 import { buildErrorResponse, buildObjectResponse, buildResponse } from '../utils/responseUtils';
 import { validateResponseSchema } from '../validations/response';
 import FeedbackTemplateResponse from '../db/models/feedbackResponse';
+import { BusinessAdmin } from '../db/models/businessAdmin';
+import { mapQuestionResponses } from '../utils';
 
 
 //create response
@@ -45,11 +47,21 @@ export const getResponseWithQuestions = async (req: Request, res: Response) => {
         // Fetch the response by its ID
         const response = await FeedbackTemplateResponse.findById(responseId).populate('template')
 
+
         if (!response) {
             return buildErrorResponse(res, 'Response not found', 404);
         }
+        const templateResponse = mapQuestionResponses(response.template.sections, 
+            response.sectionResponse);
 
-        return buildObjectResponse(res, response)
+        return buildObjectResponse(res, {
+            templateName: response.template.templateName,
+            authorId: response.authorId,
+            authorName: response.authorName,
+            entityName: response.entityName,
+            entityId: response.entityId,
+            templateResponse,
+        })
     } catch (error) {
         console.error('Error fetching response:', error);
         return buildErrorResponse(res, 'Internal Server Error', 500);
@@ -57,9 +69,28 @@ export const getResponseWithQuestions = async (req: Request, res: Response) => {
 };
 
 
-export const getResponseBasedOnEntity = async (req: Request, res: Response) => {
+export const getResponseBasedOnEntityId = async (req: Request, res: Response) => {
     try {
-        const { templateId } = req.params;
+        const { serviceId } = req.params;
+        const businessAdminId: number = req.user?.id;
+
+        const businessAdminTemplate = await BusinessAdmin.findOne(
+            {
+                businessAdminId, templateServiceCategoryId: new Types.ObjectId(serviceId),
+                'templates.active': true
+            },
+        )
+
+        if (!businessAdminTemplate) {
+            return buildResponse(res, 'Template is not active', 200)
+        }
+
+        const activeTemplate = businessAdminTemplate?.templates
+            .find((item) => item.active === true);
+
+
+        const templateId = activeTemplate?.id;
+        console.log(templateId)
 
         const matchCriteria = templateId ? { template: new Types.ObjectId(templateId) } : {};
 
@@ -85,7 +116,7 @@ export const getResponseBasedOnEntity = async (req: Request, res: Response) => {
             },
         ]);
 
-        return buildObjectResponse(res, responseGroups)
+        return buildObjectResponse(res, { templateId , responseGroups })
     } catch (error) {
         console.error('Error fetching response:', error);
         return buildErrorResponse(res, 'Internal Server Error', 500);
@@ -93,13 +124,14 @@ export const getResponseBasedOnEntity = async (req: Request, res: Response) => {
 };
 
 
-export const getResponseOfEntity = async (req: Request, res: Response) => {
+export const getResponsesOfEntity = async (req: Request, res: Response) => {
     try {
         const { entityId, templateId } = req.params;
 
         // Fetch the response by its ID
         const response = await FeedbackTemplateResponse.find(
-            { entityId, template: templateId }, { sections: 0, template: 0, entityId: 0 })
+            { entityId, template: templateId }, { sectionResponse: 0, 
+                template: 0, entityId: 0, updatedAt: 0 })
 
         if (!response) {
             return buildErrorResponse(res, 'Response not found', 404);
@@ -115,8 +147,8 @@ export const getResponseOfEntity = async (req: Request, res: Response) => {
 
 export const uploadImages = async (req: Request, res: Response) => {
     try {
-        if(!req.file){
-            return  buildErrorResponse(res, 'File is not uploaded', 500);
+        if (!req.file) {
+            return buildErrorResponse(res, 'File is not uploaded', 500);
         }
         const serverURL = 'http://127.0.0.1:3000';
 
@@ -128,3 +160,22 @@ export const uploadImages = async (req: Request, res: Response) => {
         return buildErrorResponse(res, 'Internal Server Error', 500);
     }
 }
+
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFtYW4uc2hhaEBleGFtcGxlLmNvbSIsInJvbGUiOiIyIiwiaWQiOiIyIiwiYnVzaW5lc3NDYXRlZ29yeSI6IjEiLCJleHAiOjE2OTU4MTI3NjF9.5Q5rN08DNedqH2Ppja4wK-__GXl6I320wenlc2mLVCI
+
+// [
+//     { 
+//         id: 1,
+//         title: 1,
+//         questionAnswer: [
+//             { 
+//                 id: 1,
+//                 answerFormat: __,
+//                 answer: __,
+//                 required: true/false
+//             }
+//         ]
+//     },
+//     {}
+// ]
