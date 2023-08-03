@@ -1,18 +1,22 @@
 import mongoose, { Schema, Types } from "mongoose";
 
 interface AnswerFormField extends Document {
-    id: Types.ObjectId;
+    id: number;
     answer: string;
 }
 
-interface FeedbackResponseFormat extends Document {
-    id: Types.ObjectId;
+export interface FeedbackResponseFormat extends Document {
+    id: number;
     questions: AnswerFormField[];
 }
 
 interface TemplateResponseInterface extends Document {
-    templateId: Types.ObjectId;
-    sections: FeedbackResponseFormat[];
+    template: any;
+    authorId: string,
+    authorName?: string,
+    entityName: string,
+    entityId: string;
+    sectionResponse: FeedbackResponseFormat[];
 }
 
 const AnswerFormFieldSchema: Schema = new Schema({

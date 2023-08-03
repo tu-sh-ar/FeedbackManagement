@@ -498,7 +498,6 @@ const activateTemplate = (req, res) => __awaiter(void 0, void 0, void 0, functio
                 businessAdminId, templateServiceCategoryId: new mongoose_1.Types.ObjectId(feedbackTypeId),
                 'templates.active': true
             }, { $set: { 'templates.$.active': false } }, { new: true, session });
-            console.log(a, feedbackTypeId, templateId);
             yield businessAdmin_1.BusinessAdmin.findOneAndUpdate({ businessAdminId, templateServiceCategoryId: new mongoose_1.Types.ObjectId(feedbackTypeId), 'templates.id': new mongoose_1.Types.ObjectId(templateId) }, { $set: { 'templates.$.active': true, 'templates.$.used': true } }, { new: true, session });
             yield session.commitTransaction();
             session.endSession();

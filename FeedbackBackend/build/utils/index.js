@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateUniqueFileName = exports.generateUrlWithToken = exports.areContiguousIntegersStartingFromOne = void 0;
+exports.mapQuestionResponses = exports.generateUniqueFileName = exports.generateUrlWithToken = exports.areContiguousIntegersStartingFromOne = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const constants_1 = require("../constants/constants");
 const path_1 = __importDefault(require("path"));
@@ -44,3 +44,34 @@ function generateUniqueFileName(originalFileName) {
     return uniqueName;
 }
 exports.generateUniqueFileName = generateUniqueFileName;
+function mapQuestionResponses(templateSections, sectionResponse) {
+    return templateSections.map((section) => {
+        const sectionResponseItem = sectionResponse.find((item) => item.id === section.id);
+        if (sectionResponseItem) {
+            return {
+                id: section.id,
+                title: section.title,
+                questionAnswer: section.questions.map((question) => {
+                    const responseQuestion = sectionResponseItem.questions.find((q) => q.id === question.id);
+                    return {
+                        id: question.id,
+                        answerFormat: question.answerFormat,
+                        answer: responseQuestion ? responseQuestion.answer : null,
+                    };
+                }),
+            };
+        }
+        else {
+            return {
+                id: section.id,
+                title: section.title,
+                questionAnswer: section.questions.map((question) => ({
+                    id: question.id,
+                    answerFormat: question.answerFormat,
+                    answer: null,
+                })),
+            };
+        }
+    });
+}
+exports.mapQuestionResponses = mapQuestionResponses;
