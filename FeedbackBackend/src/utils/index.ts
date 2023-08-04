@@ -78,6 +78,7 @@ export function mapQuestionResponses(templateSections: FeedbackFormat[], section
                 title: section.title,
                 questionAnswer: section.questions.map((question) => ({
                     id: question.id,
+                    question: question.question,
                     answerFormat: question.answerFormat,
                     answer: null,
                 })),
