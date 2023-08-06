@@ -67,6 +67,7 @@ export function mapQuestionResponses(templateSections: FeedbackFormat[], section
                     const responseQuestion = sectionResponseItem.questions.find((q) => q.id === question.id);
                     return {
                         id: question.id,
+                        question: question.question,
                         answerFormat: question.answerFormat,
                         answer: responseQuestion ? responseQuestion.answer : null,
                     };
