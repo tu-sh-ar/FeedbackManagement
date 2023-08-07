@@ -19,7 +19,7 @@ export class FeedbackTemplatesComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this._feedbackService.getBusinessSpecificTemplateDetails(JSON.parse(localStorage.getItem('user')!).businessCategory).subscribe((res)=>{
+    this._feedbackService.getBusinessSpecificTemplateDetails().subscribe((res)=>{
       this.businessRelatedTemplates = res;
     })
   }

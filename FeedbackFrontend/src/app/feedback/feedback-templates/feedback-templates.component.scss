@@ -6,9 +6,9 @@
     overflow-x: scroll;
     padding-bottom: 0.5em;
 }
-::-webkit-scrollbar {
-    display: none;
-}
+// ::-webkit-scrollbar {
+//     display: none;
+// }
 .head{
     text-align: end;
     margin-block: 0.5em;
@@ -16,4 +16,8 @@
 .template-reference{
     font-size: 1.25em;
     float: left;
+}
+.create-icon{
+    height: 2em;
+    width: 2em;
 }

@@ -2,19 +2,16 @@
   <mat-card-content>
 
     <span class="bold">Select an existing template or Create a new one.</span>
-
+    <mat-progress-bar mode="indeterminate" *ngIf="!categorySpecificTemplates"></mat-progress-bar>
     <div class="mid-section">
-      <div class="spinner-wrapper" *ngIf="!categorySpecificTemplates">
-        <mat-spinner></mat-spinner>
-      </div>
-      <div class="card-container" *ngFor="let temp of categorySpecificTemplates.response; let i = index;">
+      <div class="card-container" *ngFor="let temp of categorySpecificTemplates?.response?.templates; let i = index;">
         <div class="base">
           <img src="../../../assets/template-preview-bg-1.svg" alt="bg" *ngIf="i%2===0">
           <img src="../../../assets/template-preview-bg-2.svg" alt="bg" *ngIf="i%2!==0">
           <div class="bold title-wrapper">{{temp.templateName}}</div>
         </div>
         <div class="middle">
-          <button mat-icon-button color="primary" matTooltip="Select" routerLink="admin/dashboard/feedback-templates/custom/{{data.categoryId}}/{{temp._id}}" (click)="close()">
+          <button mat-icon-button color="primary" matTooltip="Select" routerLink="admin/dashboard/feedback-templates/custom/{{data.categoryId}}/{{temp.id}}" (click)="close()">
             <mat-icon> import_contacts</mat-icon>
           </button>
         </div>
@@ -23,7 +20,7 @@
 
     <div class="action-wrapper">
       <button mat-flat-button color="primary" routerLink="admin/dashboard/feedback-templates/custom/{{data.categoryId}}"
-        matTooltip="Create New Template" (click)="close()">
+       (click)="close()">
         Create Fresh Template
       </button>
     </div>

@@ -8,6 +8,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { FeedbackTemplatesComponent } from './feedback-templates/feedback-templates.component';
 import { ExpandedTemplateViewComponent } from './expanded-template-view/expanded-template-view.component';
 import { CustomFeedbackGeneratorComponent } from './custom-feedback-generator/custom-feedback-generator.component';
+import { CategoryBasedListComponent } from './category-based-list/category-based-list.component';
+import { EntityBasedFeedbackListComponent } from './entity-based-feedback-list/entity-based-feedback-list.component';
 
 const routes: Routes = [
   {
@@ -17,23 +19,23 @@ const routes: Routes = [
     children:[
       {
         path:"",
-        redirectTo:"feedbacks",
+        redirectTo:"entity-categories",
         pathMatch:"full"
       },
-      {
-        path:"feedbacks",
-        component:FeedbackListComponent
-      },
-      {
-        path:"feedbacks/feedback/:id",
-        component:FeedbackDetailsComponent
-      },
+      // {
+      //   path:"feedbacks",
+      //   component:FeedbackListComponent
+      // },
+      // {
+      //   path:"feedbacks/feedback/:id",
+      //   component:FeedbackDetailsComponent
+      // },
       {
         path:"feedback-templates",
         component:FeedbackTemplatesComponent
       },
       {
-        path:"feedback-templates/template/:templateId",
+        path:"feedback-templates/template/:categoryId/:templateId",
         component:ExpandedTemplateViewComponent
       },
       {
@@ -47,6 +49,18 @@ const routes: Routes = [
       {
         path:"profile",
         component:ProfileComponent
+      },
+      {
+        path:"entity-categories",
+        component:CategoryBasedListComponent
+      },
+      {
+        path:"entity-categories/entity-feedbacks/:entityId/:templateId",
+        component:EntityBasedFeedbackListComponent
+      },
+      {
+        path:"entity-categories/entity-feedbacks/:entityId/:templateId/:responseId",
+        component:FeedbackDetailsComponent
       },
       {
         path:"**",

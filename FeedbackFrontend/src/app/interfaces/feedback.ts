@@ -62,9 +62,10 @@ export interface BusinessSpecificFeedbackTemplatesDetails {
       id: string;
       templateType: number;
       templateName: string;
-      isActive: boolean;
+      active: boolean;
+      used: boolean
     }[];
-    feedbackType: {
+    templateServiceCategory: {
       id: string;
       name: string;
     }
@@ -76,7 +77,7 @@ export interface SingleFeedbackTemplateBody {
   response: {
     id: string;
     templateName: string;
-    isActive: boolean;
+    active: boolean;
     feedbackType: string;
     businessCategory: number;
     templateType: number;
@@ -102,9 +103,76 @@ export interface SingleFeedbackTemplateBody {
 
 export interface CategoryBasedFeedbackTemplatesDetails {
   response: {
-    _id: string;
+    templates:{
+      id: string;
     templateType: number;
     templateName: string;
-  }[];
+    active:boolean;
+    used:boolean;
+    }[];
+    feedbackType: {
+      id: string;
+      name: string;
+    }
+  };
   statusCode: number;
+}
+
+export interface CategoryList{
+  response:{
+    id:string;
+    name:string;
+    businessCategoryId:number;
+    creationType:number;
+  }[];
+  statusCode:number;
+}
+
+export interface EntitiesAssociatedWithCategory{
+  response:{
+    templateId:string;
+    responseGroups:{
+      entityId:string;
+      entityName:string;
+      count:number;
+    }[]
+  };
+  statusCode:number;
+}
+
+export interface FeedbacksAssociatedWithEntity{
+  response:{
+    _id:string;
+    authorId:string;
+    authorName:string;
+    entityName:string;
+    createdAt:string;
+  }[];
+  statusCode:number;
+}
+
+export interface DetailedFeedbackResponse{
+  response:{
+    authorId:number;
+    authorName:string;
+    entityId:string;
+    entityName:string;
+    templateName:string;
+    templateResponse:{
+      id:number;
+      title:string;
+      questionAnswer:{
+        id:number;
+        question:string;
+        answerFormat:{
+          type:string;
+          required:boolean;
+          options?:string[];
+          upperbound?:string;
+        };
+        answer:any;
+      }[];
+    }[];
+  };
+  statusCode:number;
 }

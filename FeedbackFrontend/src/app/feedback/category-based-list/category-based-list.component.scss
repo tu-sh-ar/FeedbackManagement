@@ -1,0 +1,47 @@
+.category-wrapper {
+    padding: 1em 0.5em;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.category {
+    border: 1px solid rgb(200, 200, 200);
+    padding: 0.5em 1em;
+    margin: 0.5em;
+    font-size: 0.75em;
+    cursor: pointer;
+    border-radius: 0.25em;
+    transition-duration: 0.5s;
+}
+
+.category:hover {
+    background-color: #304FFE;
+    color: white;
+}
+
+.selected {
+    color: white;
+    background-color: #304FFE !important;
+}
+
+.feedback-table {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+th {
+    background-color: #F1F3F6 !important;
+}
+
+.grid-control {
+    height: 1.35em;
+    margin-inline: 1em;
+    cursor: pointer;
+}
+
+.display-cell {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}

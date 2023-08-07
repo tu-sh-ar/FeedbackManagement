@@ -1,0 +1,54 @@
+<h3>Feedbacks</h3>
+
+<div>
+    <mat-progress-bar mode="indeterminate" *ngIf="!entitySpecificFeedbacksDataSource"></mat-progress-bar>
+
+    <div *ngIf="entitySpecificFeedbacksDataSource">
+        <table mat-table [dataSource]="entitySpecificFeedbacksDataSource" class="mat-elevation-z2 feedback-table">
+            <ng-container matColumnDef="serial">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <b>S.No.</b>
+                    </th>
+                    <td mat-cell *matCellDef="let element; let i = index;">
+                        {{i+1}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="authorName">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <b>Customer Name</b>
+                    </th>
+                    <td mat-cell *matCellDef="let element;">
+                        {{element.authorName}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="entityName">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <b>Entity</b>
+                    </th>
+                    <td mat-cell *matCellDef="let element;">
+                        {{element.entityName}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="createdAt">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <b>Posted On</b>
+                    </th>
+                    <td mat-cell *matCellDef="let element;">
+                        {{element.createdAt | date}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <b>Actions</b>
+                    </th>
+                    <td mat-cell *matCellDef="let element;">
+                        <button mat-icon-button color="primary" matTooltip="View Details" routerLink="{{element._id}}">
+                            <img src="../../../assets/eye.svg" alt="details">
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayFeedbackColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayFeedbackColumns;"></tr>
+        </table>
+    </div>
+</div>

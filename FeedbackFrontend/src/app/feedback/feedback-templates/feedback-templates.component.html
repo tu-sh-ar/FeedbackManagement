@@ -1,17 +1,15 @@
-<h3>Default Templates</h3>
+<h3>Business Templates</h3>
 <mat-divider></mat-divider>
 <mat-progress-bar *ngIf="!businessRelatedTemplates" mode="indeterminate"></mat-progress-bar>
 
 <div class="category-wrapper" *ngFor="let template of businessRelatedTemplates?.response">
     <div class="head">
         <span class="template-reference bold">
-            {{template.feedbackType.name}}
+            {{template.templateServiceCategory.name}}
         </span>
-        <button mat-icon-button color="primary" (click)="openTemplatePrefrenceDialog(template.feedbackType.id)" matTooltip="Create New Template">
-            <img src="../../../assets/add-button.svg" alt="create">
-        </button>
+        <img src="../../../assets/add-button.svg" class="create-icon" alt="create" (click)="openTemplatePrefrenceDialog(template.templateServiceCategory.id)" matTooltip="Create New Template">
     </div>
     <div class="scroller">
-        <app-feedback-template-preview-card [templates]="template.templates"></app-feedback-template-preview-card>
+        <app-feedback-template-preview-card [category]="template.templateServiceCategory.id" [templates]="template.templates"></app-feedback-template-preview-card>
     </div>
 </div>

@@ -1,6 +1,3 @@
-::-webkit-scrollbar {
-    display: none;
-}
 .head{
     margin-block: 1em;
 }
@@ -16,9 +13,9 @@
 }
 .main-wrapper{
     display: flex;
-    height: 85%;
+    height: 80%;
     border: 1px solid rgb(220, 220, 200);
-    border-radius: 1em;
+    border-radius: 0.75em;
     overflow: hidden;
     margin-block: 1em;
 }
@@ -29,6 +26,7 @@
 .left-box-option{
     padding: 1.25em 1em 1.25em 1em;
     cursor: pointer;
+    overflow-wrap: break-word;
 }
 .right-box{
     width: 80%;

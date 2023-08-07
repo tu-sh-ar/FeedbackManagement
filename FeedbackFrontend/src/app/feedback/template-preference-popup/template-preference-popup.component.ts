@@ -21,7 +21,7 @@ export class TemplatePreferencePopupComponent implements OnInit{
     private _feedbackService: FeedbackService){}
 
   ngOnInit(): void {
-    this._feedbackService.getCategoryBasedTemplateDeatils(this.data.categoryId).subscribe((res)=>{
+    this._feedbackService.getCategoryBasedTemplateDetails(this.data.categoryId).subscribe((res)=>{
       this.categorySpecificTemplates = res;
     })
   }

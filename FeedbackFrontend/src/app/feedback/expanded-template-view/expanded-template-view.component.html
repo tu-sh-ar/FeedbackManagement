@@ -1,10 +1,10 @@
 <div class="head">
     <span class="template-reference bold">
-        {{template.response.templateName}}
-        <app-active-badge *ngIf="template?.response?.isActive"></app-active-badge>
+        {{templateName}}
+        <app-active-badge *ngIf="template?.response?.active"></app-active-badge>
     </span>
-    <span class="fr">
-        <button mat-flat-button color="primary" *ngIf="!template?.response?.isActive">
+    <span class="fr" *ngIf="!template?.response?.active">
+        <button mat-flat-button color="primary" (click)="setCurrentTemplateActive()">
             Use this template
         </button>
     </span>
@@ -21,11 +21,13 @@
             <div *ngIf="right_i===currentIdx">
                 <div *ngFor="let qa of section.questions">
                     <span class="bold">{{qa.question}}</span>
-                    <app-dummy-rating-component *ngIf="qa.answerFormat.type==='rating'"></app-dummy-rating-component>
-                    <app-dummy-experience-bar *ngIf="qa.answerFormat.type==='number'"></app-dummy-experience-bar>
+                    <app-dummy-rating-component *ngIf="qa.answerFormat.type==='starrating'"></app-dummy-rating-component>
+                    <app-dummy-experience-bar *ngIf="qa.answerFormat.type==='numberrating'"></app-dummy-experience-bar>
                     <app-dummy-radio-component *ngIf="qa.answerFormat.type==='radio'" [options]="qa.answerFormat.options!"></app-dummy-radio-component>
                     <app-dummy-textbox-component *ngIf="qa.answerFormat.type==='textarea'"></app-dummy-textbox-component>
                     <app-dummy-image-uploader *ngIf="qa.answerFormat.type==='file'"></app-dummy-image-uploader>
+                    <app-dummy-checkbox-component *ngIf="qa.answerFormat.type==='checkbox'" [options]="qa.answerFormat.options!"></app-dummy-checkbox-component>
+                    <app-dummy-emoji-component *ngIf="qa.answerFormat.type==='emojirating'"></app-dummy-emoji-component>
                     <br>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Feedback, PostFeedbackResponse, GetFeedbackResponse, UpdateResponse, PaginatedFeedbackResponse, CustomFeedbackFormBodySchema, SingleFeedbackTemplateBody, CategoryBasedFeedbackTemplatesDetails, BusinessSpecificFeedbackTemplatesDetails} from '../interfaces/feedback';
+import { Feedback, PostFeedbackResponse, GetFeedbackResponse, UpdateResponse, PaginatedFeedbackResponse, CustomFeedbackFormBodySchema, SingleFeedbackTemplateBody, CategoryBasedFeedbackTemplatesDetails, BusinessSpecificFeedbackTemplatesDetails, CategoryList, EntitiesAssociatedWithCategory, FeedbacksAssociatedWithEntity, DetailedFeedbackResponse} from '../interfaces/feedback';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -20,22 +20,6 @@ export class FeedbackService {
 
   getAllFeedbacks():Observable<Feedback[]>{
     return this._http.get<Feedback[]>(`${this.baseURL}feedback/getAllFeedbacks`)
-  }
-
-  //get paginated feedbacks
-  getPaginatedFeedbacks(pageNumber:number, pageSize:number):Observable<PaginatedFeedbackResponse>{
-    let queryParams = new HttpParams();
-    queryParams = queryParams.append("page", pageNumber);
-    queryParams = queryParams.append("size", pageSize);
-    return this._http.get<PaginatedFeedbackResponse>(`${this.baseURL}feedback`, {params:queryParams});
-  }
-
-  //get feedbacks received between particular dates
-  getFeedbacksByDate(startDate:string, endDate:string):Observable<Feedback[]>{
-    let queryParams = new HttpParams();
-    queryParams = queryParams.append("start",startDate);
-    queryParams = queryParams.append("end",endDate);
-    return this._http.get<Feedback[]>(`${this.baseURL}feedback/getFeedbacksByDate`, {params:queryParams});
   }
 
   //gets particular feedback based on feedback id
@@ -65,8 +49,8 @@ export class FeedbackService {
   }
 
   //retrieve all the templates details associated to particular business type
-  getBusinessSpecificTemplateDetails(businessCategory:number):Observable<BusinessSpecificFeedbackTemplatesDetails>{
-    return this._http.get<BusinessSpecificFeedbackTemplatesDetails>(`${this.baseURL}feedbackTemplate/getBusinessAdminTemplates/${businessCategory}`)
+  getBusinessSpecificTemplateDetails():Observable<BusinessSpecificFeedbackTemplatesDetails>{
+    return this._http.get<BusinessSpecificFeedbackTemplatesDetails>(`${this.baseURL}feedbackTemplate/getBusinessAdminTemplates`)
   }
 
   //create a custom template
@@ -76,12 +60,37 @@ export class FeedbackService {
 
   //get a unique template by template id
   getTemplateById(templateId:string):Observable<SingleFeedbackTemplateBody>{
-    return this._http.get<SingleFeedbackTemplateBody>(`${this.baseURL}feedbackTemplate/getTemplateById/${templateId}`)
+    return this._http.get<SingleFeedbackTemplateBody>(`${this.baseURL}feedbackTemplate/getTemplateByIdAndBusinessAdmin/${templateId}`)
   }
 
   //get category specific templates details
-  getCategoryBasedTemplateDeatils(categoryId:string):Observable<CategoryBasedFeedbackTemplatesDetails>{
+  getCategoryBasedTemplateDetails(categoryId:string):Observable<CategoryBasedFeedbackTemplatesDetails>{
     return this._http.get<CategoryBasedFeedbackTemplatesDetails>(`${this.baseURL}feedbackTemplate/getTemplateByFeebackCategoryId/${categoryId}`);
   }
+
+  //set a particular template as active
+  setTemplateAsActive(feedbackTypeId:string, templateId:string):Observable<{message:string; status:number}>{
+    return this._http.put<{message:string; status:number}>(`${this.baseURL}feedbackTemplate/activateTemplate/${feedbackTypeId}/${templateId}`, {})
+  }
+
+  //get category list for the particular business
+  getCategoryList(businessCategoryId:number):Observable<CategoryList>{
+    return this._http.get<CategoryList>(`${this.baseURL}serviceCategories/getServices/${businessCategoryId}`)
+  }
+
+  //get entities associated with a category
+  getEntitiesAssociatedWithCategory(categoryId:string):Observable<EntitiesAssociatedWithCategory>{
+    return this._http.get<EntitiesAssociatedWithCategory>(`${this.baseURL}templateResponse/getResponseBasedOnEntityId/${categoryId}`)
+  }
+
+  //get feedbacks associated with a entity
+  getFeedbacksAssociatedWithEntity(entityId:string, templateId:string):Observable<FeedbacksAssociatedWithEntity>{
+    return this._http.get<FeedbacksAssociatedWithEntity>(`${this.baseURL}templateResponse/getResponsesOfEntity/${entityId}/${templateId}`)
+  }
+
+  //get detailed feedback response for an entity based on response id
+  getDetailedFeedbackResponse(responseId:string):Observable<DetailedFeedbackResponse>{
+    return this._http.get<DetailedFeedbackResponse>(`${this.baseURL}templateResponse/getResponseById/${responseId}`)
+  } 
   
 }

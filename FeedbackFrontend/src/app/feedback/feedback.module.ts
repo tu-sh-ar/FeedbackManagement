@@ -18,6 +18,10 @@ import { TemplatePreferencePopupComponent } from './template-preference-popup/te
 import { DummyExperienceBarComponent } from './dummy-experience-bar/dummy-experience-bar.component';
 import { CustomFeedbackGeneratorComponent } from './custom-feedback-generator/custom-feedback-generator.component';
 import { DummyImageUploaderComponent } from './dummy-image-uploader/dummy-image-uploader.component';
+import { DummyCheckboxComponentComponent } from './dummy-checkbox-component/dummy-checkbox-component.component';
+import { DummyEmojiComponentComponent } from './dummy-emoji-component/dummy-emoji-component.component';
+import { CategoryBasedListComponent } from './category-based-list/category-based-list.component';
+import { EntityBasedFeedbackListComponent } from './entity-based-feedback-list/entity-based-feedback-list.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +39,11 @@ import { DummyImageUploaderComponent } from './dummy-image-uploader/dummy-image-
     TemplatePreferencePopupComponent,
     DummyExperienceBarComponent,
     CustomFeedbackGeneratorComponent,
-    DummyImageUploaderComponent
+    DummyImageUploaderComponent,
+    DummyCheckboxComponentComponent,
+    DummyEmojiComponentComponent,
+    CategoryBasedListComponent,
+    EntityBasedFeedbackListComponent
   ],
   imports: [
     CommonModule,

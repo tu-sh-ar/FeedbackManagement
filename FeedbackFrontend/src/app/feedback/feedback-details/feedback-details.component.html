@@ -1,100 +1,66 @@
 <h3>Feedback Details</h3>
-<div *ngIf="!isLoaded">
-    <mat-spinner></mat-spinner>
-</div>
-<mat-card *ngIf="isLoaded">
-    <mat-card-content *ngIf="feedback">
-        <div class="detail-element">
-            Feedback ID:
-            <span class="spacer"></span>
-            <span class="bold">{{feedback.feedback_id}}</span>
-        </div>
-        <div class="wrapper">
-            <!-- <div class="detail-element" *ngIf="product">
-                Product Name:
-                <span class="spacer"></span>
-                <span class="bold">{{product.name}}</span>
-            </div>
-            <div class="detail-element" *ngIf="product">
-                Product ID:
-                <span class="spacer"></span>
-                <span class="bold">{{product.id}}</span>
-            </div> -->
-            <div class="detail-element" *ngIf="user">
-                Customer Name:
-                <span class="spacer"></span>
-                <span class="bold">{{user.name}}</span>
-            </div>
-            <div class="detail-element" *ngIf="user">
-                Customer Email:
-                <span class="spacer"></span>
-                <span class="bold">{{user.email}}</span>
-            </div>
-        </div>
-        <mat-divider></mat-divider>
-        <div class="detail-element">
-            User Rating:
-            <span class="spacer"></span>
-            <span *ngFor="let star of Arr(feedback.rating)">
-                <img src="../../../assets/star.svg" alt="star" class="icons">
-            </span>
-            <span>({{feedback.rating}})</span>
+
+<mat-card>
+    <mat-card-content>
+        <div>
+            <mat-progress-bar mode="indeterminate" *ngIf="!detailedFeedbackResponse"></mat-progress-bar>
         </div>
 
-        <div class="detail-element">
-            <div>
-                Customer Review:
+        <div *ngIf="detailedFeedbackResponse">
+            <div class="detail-element">
+                <span>Feedback Response ID:</span>
                 &NonBreakingSpace;
-                &NonBreakingSpace;
+                <span class="bold">{{responseId}}</span>
             </div>
-            <div class="grey-box">
-                <span>{{feedback.comment.length? feedback.comment : "Not Available"}}</span>
-                <br>
-                <img class="user-feedback-img"
-                    src="https://www.highsnobiety.com/static-assets/thumbor/OfhXzCQ2riWKX9N-gdhx242CWaU=/1600x1067/www.highsnobiety.com/static-assets/wp-content/uploads/2019/05/11151803/148.jpg"
-                    alt="">
-                <img class="user-feedback-img"
-                    src="https://www.highsnobiety.com/static-assets/thumbor/OfhXzCQ2riWKX9N-gdhx242CWaU=/1600x1067/www.highsnobiety.com/static-assets/wp-content/uploads/2019/05/11151803/148.jpg"
-                    alt="">
-                <img class="user-feedback-img"
-                    src="https://www.highsnobiety.com/static-assets/thumbor/OfhXzCQ2riWKX9N-gdhx242CWaU=/1600x1067/www.highsnobiety.com/static-assets/wp-content/uploads/2019/05/11151803/148.jpg"
-                    alt="">
+            <div class="wrapper">
+                <div class="detail-element">
+                    <span>Customer Name:</span>
+                    &NonBreakingSpace;
+                    <span class="bold">{{authorName}}</span>
+                </div>
+                <div class="detail-element">
+                    <span>Entity Name:</span>
+                    &NonBreakingSpace;
+                    <span class="bold">{{entityName}}</span>
+                </div>
             </div>
-            <br>
-            <div>User Feedback:</div>
-            <div *ngFor="let qa of feedback.QA">
-                <div *ngIf="qa.answer" class="grey-box">
-                    <span>Que: {{qa.question}}</span>
-                    <span class="spacer"></span>
+            <div class="feedback-qa-wrapper grey-box">
+                <div *ngFor="let section of detailedFeedbackResponse?.response?.templateResponse;">
+                    <div class="bold section-title">
+                        {{section.title}}
+                    </div>
+                    <div *ngFor="let qa of section?.questionAnswer;" class="space-adjustment">
+                        <div>{{qa.question}}</div>
+                        <div class="bold" *ngIf="qa.answerFormat.type=='starrating'">
+                            <img src="../../../assets/star.svg" alt="" class="icons" *ngIf="qa.answer">
+                            {{qa.answer?qa.answer:"N/A"}}
+                        </div>
+                        <div class="bold" *ngIf="qa.answerFormat.type=='numberrating'">
+                            {{qa.answer?qa.answer:"N/A"}}
+                        </div>
+                        <div class="bold" *ngIf="qa.answerFormat.type=='emojirating'">
+                            {{qa.answer?qa.answer:"N/A"}}
+                        </div>
+                        <div class="bold" *ngIf="qa.answerFormat.type=='textarea'">
+                            {{qa.answer?qa.answer:"N/A"}}
+                        </div>
+                        <div class="bold" *ngIf="qa.answerFormat.type=='radio'">
+                            {{qa.answer?qa.answer:"N/A"}}
+                        </div>
+                        <div class="bold" *ngIf="qa.answerFormat.type=='checkbox' && checkIfAnswerIsArray(qa.answer)">
+                            {{qa.answer?qa.answer+", ":"N/A"}}
+                        </div>
+                        <div class="bold" *ngIf="qa.answerFormat.type=='file' && checkIfAnswerIsArray(qa.answer)">
+                            <div *ngFor="let img of qa.answer">
+                                <img src="{{img}}" alt="user-feedback-image" class="user-feedback-img">
+                            </div>
+                        </div>
+                    </div>
                     <br>
-                    <span class="bold">Ans: {{qa.answer}}</span>
                 </div>
             </div>
         </div>
 
-        <mat-divider></mat-divider>
-        <br>
-        <mat-form-field class="example-full-width">
-            <mat-label>Your Reply:</mat-label>
-            <textarea [(ngModel)]="response" matInput [disabled]="responseAvailable"></textarea>
-        </mat-form-field>
     </mat-card-content>
 
-    <mat-card-actions align="start">
-        <button mat-flat-button *ngIf="enableReply" (click)="replyToFeedback()">
-            <img src="../../../assets/black-reply.svg" alt="reply">
-            Reply
-        </button>
-        <button mat-icon-button matTooltip="Edit Reply" *ngIf="responseAvailable"
-            (click)="enableTextareaAndSaveButton()">
-            <img src="../../../assets/edit.svg" alt="edit">
-        </button>
-        <button mat-icon-button matTooltip="Delete Reply" *ngIf="responseAvailable" (click)="deleteReply()">
-            <img src="../../../assets/delete.svg" alt="delete">
-        </button>
-        <button mat-flat-button color="accent" (click)="updateReply()" *ngIf="showSave">
-            <mat-icon>save</mat-icon>
-            Save
-        </button>
-    </mat-card-actions>
 </mat-card>

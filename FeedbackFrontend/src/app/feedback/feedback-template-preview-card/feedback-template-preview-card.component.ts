@@ -6,5 +6,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./feedback-template-preview-card.component.scss']
 })
 export class FeedbackTemplatePreviewCardComponent {
-  @Input() templates!:{id:string; templateName:string; templateType:number; isActive:boolean}[];
+  @Input() templates!:{id:string; templateName:string; templateType:number; active:boolean, used:boolean}[];
+  @Input() category!:string;
 }
