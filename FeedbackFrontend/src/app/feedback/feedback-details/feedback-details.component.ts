@@ -15,6 +15,7 @@ export class FeedbackDetailsComponent implements OnInit{
   responseId!:string;
   authorName!:string;
   entityName!:string;
+  currentIdx:number = 0;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -39,6 +40,10 @@ export class FeedbackDetailsComponent implements OnInit{
     } else{
       return true
     }
+  }
+
+  handleCards(leftIdx:number):void{
+    this.currentIdx = leftIdx;
   }
 
 }

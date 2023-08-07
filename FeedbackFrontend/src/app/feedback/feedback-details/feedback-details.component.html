@@ -6,57 +6,61 @@
             <mat-progress-bar mode="indeterminate" *ngIf="!detailedFeedbackResponse"></mat-progress-bar>
         </div>
 
-        <div *ngIf="detailedFeedbackResponse">
+        <div class="detail-element">
+            <span>Feedback Response ID:</span>
+            &NonBreakingSpace;
+            <span class="bold">{{responseId}}</span>
+        </div>
+        <div class="wrapper">
             <div class="detail-element">
-                <span>Feedback Response ID:</span>
+                <span>Customer Name:</span>
                 &NonBreakingSpace;
-                <span class="bold">{{responseId}}</span>
+                <span class="bold">{{authorName}}</span>
             </div>
-            <div class="wrapper">
-                <div class="detail-element">
-                    <span>Customer Name:</span>
-                    &NonBreakingSpace;
-                    <span class="bold">{{authorName}}</span>
-                </div>
-                <div class="detail-element">
-                    <span>Entity Name:</span>
-                    &NonBreakingSpace;
-                    <span class="bold">{{entityName}}</span>
+            <div class="detail-element">
+                <span>Entity Name:</span>
+                &NonBreakingSpace;
+                <span class="bold">{{entityName}}</span>
+            </div>
+        </div>
+
+        <div class="main-wrapper" *ngIf="detailedFeedbackResponse">
+            <div class="left-box">
+                <div class="left-box-option" *ngFor="let section of detailedFeedbackResponse?.response?.templateResponse; let left_i = index;" (click)="handleCards(left_i)" [ngClass]="{'selected':left_i===currentIdx}">
+                    <span class="bold">{{section.title}}</span>
                 </div>
             </div>
-            <div class="feedback-qa-wrapper grey-box">
-                <div *ngFor="let section of detailedFeedbackResponse?.response?.templateResponse;">
-                    <div class="bold section-title">
-                        {{section.title}}
-                    </div>
-                    <div *ngFor="let qa of section?.questionAnswer;" class="space-adjustment">
-                        <div>{{qa.question}}</div>
-                        <div class="bold" *ngIf="qa.answerFormat.type=='starrating'">
-                            <img src="../../../assets/star.svg" alt="" class="icons" *ngIf="qa.answer">
-                            {{qa.answer?qa.answer:"N/A"}}
-                        </div>
-                        <div class="bold" *ngIf="qa.answerFormat.type=='numberrating'">
-                            {{qa.answer?qa.answer:"N/A"}}
-                        </div>
-                        <div class="bold" *ngIf="qa.answerFormat.type=='emojirating'">
-                            {{qa.answer?qa.answer:"N/A"}}
-                        </div>
-                        <div class="bold" *ngIf="qa.answerFormat.type=='textarea'">
-                            {{qa.answer?qa.answer:"N/A"}}
-                        </div>
-                        <div class="bold" *ngIf="qa.answerFormat.type=='radio'">
-                            {{qa.answer?qa.answer:"N/A"}}
-                        </div>
-                        <div class="bold" *ngIf="qa.answerFormat.type=='checkbox' && checkIfAnswerIsArray(qa.answer)">
-                            {{qa.answer?qa.answer+", ":"N/A"}}
-                        </div>
-                        <div class="bold" *ngIf="qa.answerFormat.type=='file' && checkIfAnswerIsArray(qa.answer)">
-                            <div *ngFor="let img of qa.answer">
-                                <img src="{{img}}" alt="user-feedback-image" class="user-feedback-img">
+            <div class="right-box">
+                <div  *ngFor="let section of detailedFeedbackResponse?.response?.templateResponse; let right_i = index;">
+                    <div *ngIf="right_i===currentIdx">
+                        <div *ngFor="let qa of section?.questionAnswer;" class="space-adjustment">
+                            <div>{{qa.question}}</div>
+                            <div class="bold" *ngIf="qa.answerFormat.type=='starrating'">
+                                <img src="../../../assets/star.svg" alt="" class="icons" *ngIf="qa.answer">
+                                {{qa.answer?qa.answer:"N/A"}}
+                            </div>
+                            <div class="bold" *ngIf="qa.answerFormat.type=='numberrating'">
+                                {{qa.answer?qa.answer:"N/A"}}
+                            </div>
+                            <div class="bold" *ngIf="qa.answerFormat.type=='emojirating'">
+                                {{qa.answer?qa.answer:"N/A"}}
+                            </div>
+                            <div class="bold" *ngIf="qa.answerFormat.type=='textarea'">
+                                {{qa.answer?qa.answer:"N/A"}}
+                            </div>
+                            <div class="bold" *ngIf="qa.answerFormat.type=='radio'">
+                                {{qa.answer?qa.answer:"N/A"}}
+                            </div>
+                            <div class="bold" *ngIf="qa.answerFormat.type=='checkbox' && checkIfAnswerIsArray(qa.answer)">
+                                {{qa.answer?qa.answer+", ":"N/A"}}
+                            </div>
+                            <div class="bold" *ngIf="qa.answerFormat.type=='file' && checkIfAnswerIsArray(qa.answer)">
+                                <div *ngFor="let img of qa.answer">
+                                    <img src="{{img}}" alt="user-feedback-image" class="user-feedback-img">
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <br>
                 </div>
             </div>
         </div>
