@@ -10,14 +10,17 @@ interface TabinationProps {
     isMobile: boolean;
     template: FeedbackFormBodySchema;
     onChange: OnChangeHandlerFn;
+    activeTabKey: number;
 }
-export default function Tabination({ mode, isMobile, template, onChange }: TabinationProps) {
+
+export default function Tabination({ mode, isMobile, template, onChange, activeTabKey }: TabinationProps) {
 
     return (
         <Tabs
-            defaultActiveKey="1"
+            activeKey={`${activeTabKey}`}
             tabPosition={isMobile? 'top': 'left'}
             className='w-full'
+            onTabClick={() =>{}}
             items={template.sections.map((item) => {
                     return {
                         label: item.title,

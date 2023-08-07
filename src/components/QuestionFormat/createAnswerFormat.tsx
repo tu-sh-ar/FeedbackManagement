@@ -90,10 +90,10 @@ const FieldTypesMap: Record<
 
 function Question({ question, required }: { question: string, required?: Boolean }) {
     return (
-        <p className='text-[#7E8299] pb-2'>
+        <p className='text-[#000] pb-2'>
             <span className='mr-1'>•</span>
             {question}
-            <span className='text-red-600 ml-1'>{required ?'*': ''}</span>
+            <span className='text-red-600 ml-1'>{required ? '*' : ''}</span>
         </p>
     )
 }
@@ -113,17 +113,17 @@ export default function CreateAnswerFormat({ sectionId, questionId, question, an
 
     switch (type) {
         case "checkbox":
-            return <CheckboxInput 
-                        text={question}
-                        onChange={onChangeHandler}/>;
+            return <CheckboxInput
+                text={question}
+                onChange={onChangeHandler} />;
 
         case "starrating":
             return (
                 <>
-                    <Question question={question} required={required}/>
-                    <StarRating 
-                        count={upperBound ?? 5} 
-                        onChange={onChangeHandler}/>
+                    <Question question={question} required={required} />
+                    <StarRating
+                        count={upperBound ?? 5}
+                        onChange={onChangeHandler} />
                 </>
             );
 
@@ -131,26 +131,26 @@ export default function CreateAnswerFormat({ sectionId, questionId, question, an
             return (
                 <>
                     <Question question={question} required={required} />
-                    <EmojiRating 
-                        count={upperBound ?? 5} 
+                    <EmojiRating
+                        count={upperBound ?? 5}
                         onChange={onChangeHandler} />
                 </>
             );
         case "textarea":
             return (
                 <>
-                    <Question question={question} required={required}  />
-                    <MultilineInput 
-                        minRows={1} 
+                    <Question question={question} required={required} />
+                    <MultilineInput
+                        minRows={1}
                         onChange={onChangeHandler} />
                 </>
             );
         case "radio":
             return (
                 <>
-                    <Question question={question} required={required}  />
-                    <RadioInput 
-                        options={options ?? []} 
+                    <Question question={question} required={required} />
+                    <RadioInput
+                        options={options ?? []}
                         onChange={onChangeHandler} />
                 </>
             );

@@ -1,0 +1,8 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/2ae2e440-f97b-4f07-994c-6b4cdc484ab3/resourceGroups/FeedbackManagementRG/providers/Microsoft.Web/sites/feedback-form-dev",
+    "appService.deploySubpath": ".",
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ]
+}

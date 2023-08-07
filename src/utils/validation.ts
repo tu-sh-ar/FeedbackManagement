@@ -1,4 +1,4 @@
-export const validateAnswer = (validatedAnswer: any) => {
+export const validateAnswer = (section: any) => {
 
     const textareaSchema = (answer: string) => {
         const maxChars = 1000;
@@ -12,26 +12,23 @@ export const validateAnswer = (validatedAnswer: any) => {
     };
 
     const transformedErrors = [];
-    const sections = validatedAnswer.sections;
 
-    for (const section of sections) {
-        const sectionTitle = section.title;
-        const questions = section.questions;
+    const sectionTitle = section.title;
+    const questions = section.questions;
 
-        for (const question_ of questions) {
-            const { id, answerFormat, required, answer, question } = question_;
+    for (const question_ of questions) {
+        const { id, answerFormat, required, answer, question } = question_;
 
-            if (required && (answer === null|| answer.length === 0)) {
-                transformedErrors.push({ sectionTitle, question, error: errorMessages.required });
+        if (required && (answer === null || answer.length === 0)) {
+            transformedErrors.push({ sectionTitle, question, error: errorMessages.required });
+            return transformedErrors;
+        }
+
+        if (answer !== null) {
+
+            if (answerFormat === 'textarea' && !textareaSchema(answer)) {
+                transformedErrors.push({ sectionTitle, question, error: errorMessages.maxChars });
                 return transformedErrors;
-            }
-
-            if (answer !== null) {
-
-                if (answerFormat === 'textarea' && !textareaSchema(answer)) {
-                    transformedErrors.push({ sectionTitle, question, error: errorMessages.maxChars });
-                    return transformedErrors;
-                }
             }
         }
     }

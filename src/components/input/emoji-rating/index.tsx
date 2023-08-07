@@ -18,9 +18,8 @@ interface EmojiRatingProps {
 export default function EmojiRating({ count, onChange }: EmojiRatingProps) {
     return (
         <Rate
-            defaultValue={3}
-            count={count}
-            character={({ index }: { index: number }) => customEmojiIcons[index + 1]}
+            count={5}
+            // character={({ index }: { index: number }) => customEmojiIcons[index + 1]}
             onChange={onChange} />
     )
 }

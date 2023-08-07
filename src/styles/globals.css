@@ -54,39 +54,50 @@ textarea::placeholder {
   overflow: hidden;
 }
 
-.ant-tabs-tab-active {
-  background-color: white !important;
+.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: white !important;
+  border-radius: 0px;
+  padding: 0px 0px;
 }
 
-.ant-tabs-tab-btn{
+.ant-tabs-tab-active {
+  background-color: #3E3AFF !important;
+}
+
+.ant-tabs-tab-btn {
   font-weight: 600;
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 768px) {
   .ant-tabs-nav {
     background-color: white;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
     overflow: hidden;
   }
-  .ant-tabs-tab{
+
+  .ant-tabs-tab {
     margin-left: 0px !important;
   }
+
   .ant-tabs-tab-active {
+    background-color: transparent !important;
     border-bottom: none !important;
   }
-  .ant-tabs-ink-bar{
+
+  .ant-tabs-ink-bar {
     height: 1px !important;
     background-color: #e5e7eb !important;
   }
 
-  .ant-tabs-tab-active .ant-tabs-tab-btn{
+  .ant-tabs-tab-active .ant-tabs-tab-btn {
     color: white !important;
     background-color: #3E3AFF !important;
     border-radius: 30px;
     padding: 5px 20px;
   }
-  .ant-tabs-tab-btn{
+
+  .ant-tabs-tab-btn {
     font-weight: 600;
     background-color: #EAEAEA !important;
     border-radius: 30px;
@@ -94,18 +105,19 @@ textarea::placeholder {
     color: #7E8299;
     margin: auto 10px !important;
   }
-  
+
 }
+
 /** Tabs end **/
 
 
 /** Notification starts*/
 
-.ant-notification-notice{
+.ant-notification-notice {
   padding: 12px 14px !important;
 }
 
-.ant-notification-notice-message{
+.ant-notification-notice-message {
   font-size: 14px !important;
   font-weight: 600;
 }

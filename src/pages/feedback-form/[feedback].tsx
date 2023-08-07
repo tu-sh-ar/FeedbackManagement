@@ -101,7 +101,7 @@ export default function FeedbackForm() {
         } catch (err) {
             router.replace('/500')
         }
-    },[router]);
+    }, [router]);
 
     const submitFeedback = async (templateId: string, data: any) => {
         try {
@@ -177,12 +177,8 @@ export default function FeedbackForm() {
         });
     };
 
-    const submitHandler = async () => {
-        setLoader(true)
-        const response = validateAnswer(answer)
-        const sectionQuestionAnswers = fetchSectionQuestionAnswers(answer);
-
-        if (!decodedToken) return;
+    const validationHandler = () => {
+        const response = validateAnswer(answer.sections[activeTabKey - 1])
         if (response && response.length > 0) {
             setLoader(false)
 
@@ -191,11 +187,29 @@ export default function FeedbackForm() {
             const error = res.error
 
             openNotification('topRight', { title, error })
-            return
+            return false
         }
+        return true
+    }
 
+    const submitHandler = async () => {
+        setLoader(true)
+        if (!validationHandler()) return;
+        if (!decodedToken) return false;
+        const sectionQuestionAnswers = fetchSectionQuestionAnswers(answer);
         await submitFeedback(decodedToken.templateId, sectionQuestionAnswers)
         setLoader(false)
+    }
+
+
+    const [activeTabKey, setActiveTabkey] = useState<number>(1)
+    const onNextTabHandler = () => {
+        if (!validationHandler()) return;
+        setActiveTabkey((e) => e + 1)
+    }
+
+    const onPreviousTabHandler = () => {
+        setActiveTabkey((e) => e - 1)
     }
 
 
@@ -204,18 +218,42 @@ export default function FeedbackForm() {
             items-center p-0 sm:p-24 bg-white sm:bg-transparent`}>
 
             {template && <>
-                <p className="text-left font-semibold text-lg mt-4 sm:text-xl mb-4 sm:mb-2 opacity-50">{template.templateName}</p>
+                <p className="text-left font-semibold text-lg mt-4 
+                    sm:text-xl mb-4 sm:mb-2 opacity-50">{template.templateName}</p>
                 <Tabination
                     mode="left"
                     isMobile={isMobile}
                     template={template}
-                    onChange={onChangeHandler} />
+                    onChange={onChangeHandler}
+                    activeTabKey={activeTabKey} />
                 <div className='flex justify-end w-full mt-4 p-4 sm:p-0'>
-                    <Button
-                        type="primary"
-                        className='bg-[#4096ff]'
-                        loading={loader}
-                        onClick={submitHandler}>Submit</Button>
+                    {
+                        template.sections.length === activeTabKey ?
+                            (<>
+                                {
+                                    activeTabKey !== 1 &&
+                                    (<Button
+                                        type="primary"
+                                        className='bg-[#4096ff] mx-2'
+                                        onClick={onPreviousTabHandler}>Back</Button>)
+                                }
+                                <Button
+                                    type="primary"
+                                    className='bg-[#4096ff]'
+                                    loading={loader}
+                                    onClick={submitHandler}>Submit</Button>
+                            </>
+
+                            ) :
+                            (
+                                <Button
+                                    type="primary"
+                                    className='bg-[#4096ff]'
+                                    loading={loader}
+                                    onClick={onNextTabHandler}>Next</Button>
+                            )
+                    }
+
                 </div>
             </>}
             {contextHolder}
