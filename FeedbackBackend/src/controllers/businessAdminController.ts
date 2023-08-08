@@ -19,12 +19,20 @@ export const addBusinessAdminAndAllotTemplates = async (req: Request, res: Respo
         const businessAdminId = parseInt(req.body.businessAdminId);
         const businessCategoryId = parseInt(req.body.businessCategoryId);
 
+        if (!businessAdminId) {
+            return buildErrorResponse(res, 'businessAdminId must be in body request.', 400);
+        }
+
+        if (!businessCategoryId) {
+            return buildErrorResponse(res, 'businessCategoryId must be in body request.', 400);
+        }
+
         if (isNaN(businessAdminId) || !Number.isInteger(businessAdminId)) {
-            return buildErrorResponse(res, 'businessAdminId must be a valid integer.', 500);
+            return buildErrorResponse(res, 'businessAdminId must be a valid integer.', 400);
         }
 
         if (isNaN(businessCategoryId) || !Number.isInteger(businessCategoryId)) {
-            return buildErrorResponse(res, 'businessCategoryId must be a valid integer.', 500);
+            return buildErrorResponse(res, 'businessCategoryId must be a valid integer.', 400);
         }
 
         const defaultServiceCategories = await FeedbackCategory.find({
@@ -33,7 +41,7 @@ export const addBusinessAdminAndAllotTemplates = async (req: Request, res: Respo
         let businessAdminData = [];
 
         if (defaultServiceCategories.length === 0) {
-            return buildErrorResponse(res, 'Template service categories not found.', 404);
+            return buildErrorResponse(res, 'Template service category not found.', 404);
         }
 
         for (const serviceCategory of defaultServiceCategories) {
@@ -65,6 +73,10 @@ export const getActiveLinkForTemplate = async (req: Request, res: Response) => {
     try {
         const serviceId = req.params.serviceId;
         const businessAdminId = req.params.businessAdminId;
+
+        if(!Types.ObjectId.isValid(serviceId)){
+            return buildErrorResponse(res, 'serviceId format is not valid', 404);
+        }
 
         const bodyData = req.body as LinkBodyDto;
 

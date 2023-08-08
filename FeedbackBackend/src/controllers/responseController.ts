@@ -10,6 +10,7 @@ import { validateResponseSchema } from '../validations/response';
 import FeedbackTemplateResponse from '../db/models/feedbackResponse';
 import { BusinessAdmin } from '../db/models/businessAdmin';
 import { mapQuestionResponses } from '../utils';
+import FeedbackCategory from '../db/models/feedbackCategory';
 
 
 //create response
@@ -18,7 +19,6 @@ export const createResponse = async (req: Request, res: Response) => {
         const businessAdminId: number = req.user?.id;
         const { templateId } = req.params;
         const formData = req.body as TemplateResponseDTO;
-        console.log(formData)
         await validateResponseSchema(formData)
 
         await FeedbackTemplateResponse.create({ template: new Types.ObjectId(templateId), ...formData });
@@ -44,6 +44,10 @@ export const getResponseWithQuestions = async (req: Request, res: Response) => {
     try {
         const { responseId } = req.params;
 
+        if (!Types.ObjectId.isValid(responseId)) {
+            return buildErrorResponse(res, 'responseId format is not valid', 404);
+        }
+
         // Fetch the response by its ID
         const response = await FeedbackTemplateResponse.findById(responseId).populate('template')
 
@@ -51,7 +55,7 @@ export const getResponseWithQuestions = async (req: Request, res: Response) => {
         if (!response) {
             return buildErrorResponse(res, 'Response not found', 404);
         }
-        const templateResponse = mapQuestionResponses(response.template.sections, 
+        const templateResponse = mapQuestionResponses(response.template.sections,
             response.sectionResponse);
 
         return buildObjectResponse(res, {
@@ -74,6 +78,16 @@ export const getResponseBasedOnEntityId = async (req: Request, res: Response) =>
         const { serviceId } = req.params;
         const businessAdminId: number = req.user?.id;
 
+        if (!Types.ObjectId.isValid(serviceId)) {
+            return buildErrorResponse(res, 'serviceId format is not valid', 404);
+        }
+
+        const category = await FeedbackCategory.findById(new Types.ObjectId(serviceId))
+
+        if (!category) {
+            return buildErrorResponse(res, 'Service not found.', 404);
+        }
+
         const businessAdminTemplate = await BusinessAdmin.findOne(
             {
                 businessAdminId, templateServiceCategoryId: new Types.ObjectId(serviceId),
@@ -85,14 +99,9 @@ export const getResponseBasedOnEntityId = async (req: Request, res: Response) =>
             return buildResponse(res, 'Template is not active', 200)
         }
 
-        const activeTemplate = businessAdminTemplate?.templates
-            .find((item) => item.active === true);
+        const templates = businessAdminTemplate?.templates.map((item) => item.id);
 
-
-        const templateId = activeTemplate?.id;
-        console.log(templateId)
-
-        const matchCriteria = templateId ? { template: new Types.ObjectId(templateId) } : {};
+        const matchCriteria = { template: { $in: templates } };
 
         const responseGroups = await FeedbackTemplateResponse.aggregate([
             {
@@ -116,7 +125,7 @@ export const getResponseBasedOnEntityId = async (req: Request, res: Response) =>
             },
         ]);
 
-        return buildObjectResponse(res, { templateId , responseGroups })
+        return buildObjectResponse(res, { responseGroups })
     } catch (error) {
         console.error('Error fetching response:', error);
         return buildErrorResponse(res, 'Internal Server Error', 500);
@@ -126,12 +135,27 @@ export const getResponseBasedOnEntityId = async (req: Request, res: Response) =>
 
 export const getResponsesOfEntity = async (req: Request, res: Response) => {
     try {
-        const { entityId, templateId } = req.params;
+        const { entityId } = req.params;
+        const { pageNumber, pageSize } = req.query;
 
-        // Fetch the response by its ID
+        if (!pageNumber || !pageSize || isNaN(Number(pageNumber)) || isNaN(Number(pageSize))) {
+            return buildErrorResponse(res, 'Invalid pagination parameters', 404);
+        }
+
+        const pageNumberVal = Number(pageNumber);
+        const pageSizeNumberVal = Number(pageSize);
+        if (pageNumberVal < 0 || pageSizeNumberVal < 0) {
+            return buildErrorResponse(res, 'Invalid page or pageSize', 404);
+        }
+
+        // Fetch the responses
         const response = await FeedbackTemplateResponse.find(
-            { entityId, template: templateId }, { sectionResponse: 0, 
-                template: 0, entityId: 0, updatedAt: 0 })
+            { entityId, }, {
+            sectionResponse: 0,
+            template: 0, entityId: 0, updatedAt: 0
+        })
+            .skip((pageNumberVal - 1) * pageSizeNumberVal)
+            .limit(pageSizeNumberVal);
 
         if (!response) {
             return buildErrorResponse(res, 'Response not found', 404);
@@ -150,7 +174,7 @@ export const uploadImages = async (req: Request, res: Response) => {
         if (!req.file) {
             return buildErrorResponse(res, 'File is not uploaded', 500);
         }
-        const serverURL = 'http://127.0.0.1:3000';
+        const serverURL = 'https://feedbackbackend-dev.azurewebsites.net';
 
         const fileURL = `${serverURL}/uploads/${req.file.filename}`;
         return buildObjectResponse(res, { url: fileURL })
@@ -160,22 +184,3 @@ export const uploadImages = async (req: Request, res: Response) => {
         return buildErrorResponse(res, 'Internal Server Error', 500);
     }
 }
-
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFtYW4uc2hhaEBleGFtcGxlLmNvbSIsInJvbGUiOiIyIiwiaWQiOiIyIiwiYnVzaW5lc3NDYXRlZ29yeSI6IjEiLCJleHAiOjE2OTU4MTI3NjF9.5Q5rN08DNedqH2Ppja4wK-__GXl6I320wenlc2mLVCI
-
-// [
-//     { 
-//         id: 1,
-//         title: 1,
-//         questionAnswer: [
-//             { 
-//                 id: 1,
-//                 answerFormat: __,
-//                 answer: __,
-//                 required: true/false
-//             }
-//         ]
-//     },
-//     {}
-// ]

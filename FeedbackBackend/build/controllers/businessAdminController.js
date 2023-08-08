@@ -50,18 +50,24 @@ const addBusinessAdminAndAllotTemplates = (req, res) => __awaiter(void 0, void 0
     try {
         const businessAdminId = parseInt(req.body.businessAdminId);
         const businessCategoryId = parseInt(req.body.businessCategoryId);
+        if (!businessAdminId) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'businessAdminId must be in body request.', 400);
+        }
+        if (!businessCategoryId) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'businessCategoryId must be in body request.', 400);
+        }
         if (isNaN(businessAdminId) || !Number.isInteger(businessAdminId)) {
-            return (0, responseUtils_1.buildErrorResponse)(res, 'businessAdminId must be a valid integer.', 500);
+            return (0, responseUtils_1.buildErrorResponse)(res, 'businessAdminId must be a valid integer.', 400);
         }
         if (isNaN(businessCategoryId) || !Number.isInteger(businessCategoryId)) {
-            return (0, responseUtils_1.buildErrorResponse)(res, 'businessCategoryId must be a valid integer.', 500);
+            return (0, responseUtils_1.buildErrorResponse)(res, 'businessCategoryId must be a valid integer.', 400);
         }
         const defaultServiceCategories = yield feedbackCategory_1.default.find({
             creationType: 2, businessCategoryId
         }).exec();
         let businessAdminData = [];
         if (defaultServiceCategories.length === 0) {
-            return (0, responseUtils_1.buildErrorResponse)(res, 'Template service categories not found.', 404);
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Template service category not found.', 404);
         }
         for (const serviceCategory of defaultServiceCategories) {
             const defaultTemplates = yield template_1.default.find({ feedbackType: serviceCategory._id, templateType: constants_1.TemplateType.DEFAULT }, { _id: 1 }).exec();
@@ -86,6 +92,9 @@ const getActiveLinkForTemplate = (req, res) => __awaiter(void 0, void 0, void 0,
     try {
         const serviceId = req.params.serviceId;
         const businessAdminId = req.params.businessAdminId;
+        if (!mongoose_1.Types.ObjectId.isValid(serviceId)) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'serviceId format is not valid', 404);
+        }
         const bodyData = req.body;
         yield (0, response_1.validateLinkBodySchema)(bodyData);
         const existingTemplate = yield businessAdmin_1.BusinessAdmin.findOne({

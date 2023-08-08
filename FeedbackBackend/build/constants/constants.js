@@ -5,7 +5,7 @@ exports.FieldTypes = exports.TemplateType = exports.feedbackFormUrl = exports.au
 exports.auth_constant = {
     secret: "safmdknfsdDKFKN122sdnmkfnsJDKNF23234Sssds"
 };
-exports.feedbackFormUrl = 'http://127.0.0.1:3001/feedback-form';
+exports.feedbackFormUrl = 'https://feedback-form-dev-app.azurewebsites.net/feedback-form';
 var TemplateType;
 (function (TemplateType) {
     TemplateType[TemplateType["CUSTOM"] = 1] = "CUSTOM";

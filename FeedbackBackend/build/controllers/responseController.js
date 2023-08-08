@@ -43,6 +43,7 @@ const response_1 = require("../validations/response");
 const feedbackResponse_1 = __importDefault(require("../db/models/feedbackResponse"));
 const businessAdmin_1 = require("../db/models/businessAdmin");
 const utils_1 = require("../utils");
+const feedbackCategory_1 = __importDefault(require("../db/models/feedbackCategory"));
 //create response
 const createResponse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
@@ -50,7 +51,6 @@ const createResponse = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const businessAdminId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
         const { templateId } = req.params;
         const formData = req.body;
-        console.log(formData);
         yield (0, response_1.validateResponseSchema)(formData);
         yield feedbackResponse_1.default.create(Object.assign({ template: new mongoose_1.Types.ObjectId(templateId) }, formData));
         console.log(formData, businessAdminId, templateId);
@@ -73,6 +73,9 @@ exports.createResponse = createResponse;
 const getResponseWithQuestions = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { responseId } = req.params;
+        if (!mongoose_1.Types.ObjectId.isValid(responseId)) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'responseId format is not valid', 404);
+        }
         // Fetch the response by its ID
         const response = yield feedbackResponse_1.default.findById(responseId).populate('template');
         if (!response) {
@@ -99,6 +102,13 @@ const getResponseBasedOnEntityId = (req, res) => __awaiter(void 0, void 0, void 
     try {
         const { serviceId } = req.params;
         const businessAdminId = (_c = req.user) === null || _c === void 0 ? void 0 : _c.id;
+        if (!mongoose_1.Types.ObjectId.isValid(serviceId)) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'serviceId format is not valid', 404);
+        }
+        const category = yield feedbackCategory_1.default.findById(new mongoose_1.Types.ObjectId(serviceId));
+        if (!category) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Service not found.', 404);
+        }
         const businessAdminTemplate = yield businessAdmin_1.BusinessAdmin.findOne({
             businessAdminId, templateServiceCategoryId: new mongoose_1.Types.ObjectId(serviceId),
             'templates.active': true
@@ -106,10 +116,8 @@ const getResponseBasedOnEntityId = (req, res) => __awaiter(void 0, void 0, void 
         if (!businessAdminTemplate) {
             return (0, responseUtils_1.buildResponse)(res, 'Template is not active', 200);
         }
-        const activeTemplate = businessAdminTemplate === null || businessAdminTemplate === void 0 ? void 0 : businessAdminTemplate.templates.find((item) => item.active === true);
-        const templateId = activeTemplate === null || activeTemplate === void 0 ? void 0 : activeTemplate.id;
-        console.log(templateId);
-        const matchCriteria = templateId ? { template: new mongoose_1.Types.ObjectId(templateId) } : {};
+        const templates = businessAdminTemplate === null || businessAdminTemplate === void 0 ? void 0 : businessAdminTemplate.templates.map((item) => item.id);
+        const matchCriteria = { template: { $in: templates } };
         const responseGroups = yield feedbackResponse_1.default.aggregate([
             {
                 $match: matchCriteria,
@@ -131,7 +139,7 @@ const getResponseBasedOnEntityId = (req, res) => __awaiter(void 0, void 0, void 
                 },
             },
         ]);
-        return (0, responseUtils_1.buildObjectResponse)(res, { templateId, responseGroups });
+        return (0, responseUtils_1.buildObjectResponse)(res, { responseGroups });
     }
     catch (error) {
         console.error('Error fetching response:', error);
@@ -141,10 +149,23 @@ const getResponseBasedOnEntityId = (req, res) => __awaiter(void 0, void 0, void 
 exports.getResponseBasedOnEntityId = getResponseBasedOnEntityId;
 const getResponsesOfEntity = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { entityId, templateId } = req.params;
-        // Fetch the response by its ID
-        const response = yield feedbackResponse_1.default.find({ entityId, template: templateId }, { sectionResponse: 0,
-            template: 0, entityId: 0, updatedAt: 0 });
+        const { entityId } = req.params;
+        const { pageNumber, pageSize } = req.query;
+        if (!pageNumber || !pageSize || isNaN(Number(pageNumber)) || isNaN(Number(pageSize))) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Invalid pagination parameters', 404);
+        }
+        const pageNumberVal = Number(pageNumber);
+        const pageSizeNumberVal = Number(pageSize);
+        if (pageNumberVal < 0 || pageSizeNumberVal < 0) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Invalid page or pageSize', 404);
+        }
+        // Fetch the responses
+        const response = yield feedbackResponse_1.default.find({ entityId, }, {
+            sectionResponse: 0,
+            template: 0, entityId: 0, updatedAt: 0
+        })
+            .skip((pageNumberVal - 1) * pageSizeNumberVal)
+            .limit(pageSizeNumberVal);
         if (!response) {
             return (0, responseUtils_1.buildErrorResponse)(res, 'Response not found', 404);
         }
@@ -161,7 +182,7 @@ const uploadImages = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         if (!req.file) {
             return (0, responseUtils_1.buildErrorResponse)(res, 'File is not uploaded', 500);
         }
-        const serverURL = 'http://127.0.0.1:3000';
+        const serverURL = 'https://feedbackbackend-dev.azurewebsites.net';
         const fileURL = `${serverURL}/uploads/${req.file.filename}`;
         return (0, responseUtils_1.buildObjectResponse)(res, { url: fileURL });
     }
@@ -171,19 +192,3 @@ const uploadImages = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.uploadImages = uploadImages;
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFtYW4uc2hhaEBleGFtcGxlLmNvbSIsInJvbGUiOiIyIiwiaWQiOiIyIiwiYnVzaW5lc3NDYXRlZ29yeSI6IjEiLCJleHAiOjE2OTU4MTI3NjF9.5Q5rN08DNedqH2Ppja4wK-__GXl6I320wenlc2mLVCI
-// [
-//     { 
-//         id: 1,
-//         title: 1,
-//         questionAnswer: [
-//             { 
-//                 id: 1,
-//                 answerFormat: __,
-//                 answer: __,
-//                 required: true/false
-//             }
-//         ]
-//     },
-//     {}
-// ]

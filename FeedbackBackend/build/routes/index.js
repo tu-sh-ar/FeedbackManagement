@@ -61,7 +61,7 @@ router.post("/templateResponse/create/:templateId",
 responseController_1.createResponse);
 router.get("/templateResponse/getResponseById/:responseId", authentication_1.verifyToken, responseController_1.getResponseWithQuestions);
 router.get("/templateResponse/getResponseBasedOnEntityId/:serviceId", authentication_1.verifyToken, responseController_1.getResponseBasedOnEntityId);
-router.get("/templateResponse/getResponsesOfEntity/:entityId/:templateId", authentication_1.verifyToken, responseController_1.getResponsesOfEntity);
+router.get("/templateResponse/getResponsesOfEntity/:entityId", authentication_1.verifyToken, responseController_1.getResponsesOfEntity);
 router.post("/templateResponse/uploadImages", fileHandler_1.upload.single('file'), responseController_1.uploadImages);
 router.post("/businessAdmin/allotDefaultTemplatesToBusinessAdmin", authentication_1.verifyToken, businessAdminController_1.addBusinessAdminAndAllotTemplates);
 router.post("/businessAdmin/createLink/:serviceId/:businessAdminId", authentication_1.verifyToken, businessAdminController_1.getActiveLinkForTemplate);
