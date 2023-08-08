@@ -148,6 +148,12 @@ export const getResponsesOfEntity = async (req: Request, res: Response) => {
             return buildErrorResponse(res, 'Invalid page or pageSize', 404);
         }
 
+        const totalResponses = await FeedbackTemplateResponse.find(
+            { entityId, }, {
+            sectionResponse: 0,
+            template: 0, entityId: 0, updatedAt: 0
+        }).count()
+
         // Fetch the responses
         const response = await FeedbackTemplateResponse.find(
             { entityId, }, {
@@ -161,7 +167,7 @@ export const getResponsesOfEntity = async (req: Request, res: Response) => {
             return buildErrorResponse(res, 'Response not found', 404);
         }
 
-        return buildObjectResponse(res, response)
+        return buildObjectResponse(res, { data: response, totalResponses })
     } catch (error) {
         console.error('Error fetching response:', error);
         return buildErrorResponse(res, 'Internal Server Error', 500);

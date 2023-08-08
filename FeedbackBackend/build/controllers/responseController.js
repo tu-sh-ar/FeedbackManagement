@@ -159,6 +159,10 @@ const getResponsesOfEntity = (req, res) => __awaiter(void 0, void 0, void 0, fun
         if (pageNumberVal < 0 || pageSizeNumberVal < 0) {
             return (0, responseUtils_1.buildErrorResponse)(res, 'Invalid page or pageSize', 404);
         }
+        const totalResponses = yield feedbackResponse_1.default.find({ entityId, }, {
+            sectionResponse: 0,
+            template: 0, entityId: 0, updatedAt: 0
+        }).count();
         // Fetch the responses
         const response = yield feedbackResponse_1.default.find({ entityId, }, {
             sectionResponse: 0,
@@ -169,7 +173,7 @@ const getResponsesOfEntity = (req, res) => __awaiter(void 0, void 0, void 0, fun
         if (!response) {
             return (0, responseUtils_1.buildErrorResponse)(res, 'Response not found', 404);
         }
-        return (0, responseUtils_1.buildObjectResponse)(res, response);
+        return (0, responseUtils_1.buildObjectResponse)(res, { data: response, totalResponses });
     }
     catch (error) {
         console.error('Error fetching response:', error);
