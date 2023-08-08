@@ -124,7 +124,8 @@ export default function FeedbackForm() {
                 openNotification('topRight',
                     { title: 'Server error', error: 'Something went wrong!' })
             } else {
-                router.replace('/200')
+                openNotification('topRight',
+                    { title: 'Feedback Response', error: 'Successfully submitted!' })
             }
         } catch (error) {
             throw error;
@@ -196,7 +197,7 @@ export default function FeedbackForm() {
         if (!decodedToken) return false;
         const sectionQuestionAnswers = fetchSectionQuestionAnswers(answer);
         await submitFeedback(decodedToken.templateId, sectionQuestionAnswers)
-        // setLoader(false)
+        setLoader(false)
     }
 
 
