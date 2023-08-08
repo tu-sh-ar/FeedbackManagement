@@ -5,10 +5,11 @@ import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 interface CheckboxInputProps {
     onChange: (value:Boolean) => void;
     text: string;
+    error?: string;
 }
 
 export default function CheckboxInput(
-    { text, onChange }: CheckboxInputProps) {
+    { text, onChange, error }: CheckboxInputProps) {
 
     const onChangeHandler = (val: CheckboxChangeEvent) => {
         console.log(val)
@@ -17,6 +18,9 @@ export default function CheckboxInput(
     }
 
     return (
-        <Checkbox onChange={onChangeHandler}>{text}</Checkbox>
+        <>
+            <Checkbox onChange={onChangeHandler}>{text}</Checkbox>
+            {error && <p className='text-red-600 ml-1 mt-2'>{error}</p>}
+        </>
     )
 }

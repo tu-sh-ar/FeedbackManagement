@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { Dispatch } from 'react'
 import CreateAnswerFormat from './createAnswerFormat'
-import { OnChangeHandlerFn } from '@/pages/feedback-form/[feedback]';
+import { ErrorProp, OnChangeHandlerFn } from '@/pages/feedback-form/[feedback]';
 
 interface Question {
     id: number;
@@ -14,18 +14,25 @@ interface Question {
     order: number;
 }
 
-export default function QuestionFormat({ sectionId, questions, onChange }: 
-    { sectionId: number, questions: Question[], onChange: OnChangeHandlerFn }) {
+export default function QuestionFormat({ sectionId, questions, onChange, errors, setErrors }: 
+    { 
+        sectionId: number, 
+        questions: Question[], 
+        onChange: OnChangeHandlerFn,
+        errors: ErrorProp,
+        setErrors: Dispatch<React.SetStateAction<ErrorProp>> }) {
 
     return (
         questions.map((item, index) => (
             <div className='my-6 px-4' key={index}>
                 <CreateAnswerFormat 
+                    errors={errors}
                     question={item.question}
                     sectionId={sectionId} 
                     questionId={item.id}
                     answerFormat={item.answerFormat}
-                    onChange={onChange}/>
+                    onChange={onChange}
+                    setErrors={setErrors}/>
             </div>
         ))
     )

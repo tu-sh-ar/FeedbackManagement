@@ -52,6 +52,7 @@ export interface OnChangeHandlerFn {
 
 export type AnswerTypeInterface = string | number | string[] | Boolean | null
 
+export type ErrorProp = Record<string, string>
 
 export default function FeedbackForm() {
 
@@ -64,6 +65,7 @@ export default function FeedbackForm() {
     const [template, setTemplate] = useState<FeedbackFormBodySchema | null>()
     const [isMobile, setIsMobile] = useState(false);
     const [loader, setLoader] = useState(false)
+    const [errors, setErrors] = useState<ErrorProp>({})
     const [api, contextHolder] = notification.useNotification();
 
     const openNotification = (placement: NotificationPlacement,
@@ -179,14 +181,10 @@ export default function FeedbackForm() {
 
     const validationHandler = () => {
         const response = validateAnswer(answer.sections[activeTabKey - 1])
-        if (response && response.length > 0) {
+        if (response) {
             setLoader(false)
-
-            const res = response[0]
-            const title = `${res.sectionTitle} (${res.question})`
-            const error = res.error
-
-            openNotification('topRight', { title, error })
+            setErrors(response)
+            console.log(response)
             return false
         }
         return true
@@ -198,7 +196,7 @@ export default function FeedbackForm() {
         if (!decodedToken) return false;
         const sectionQuestionAnswers = fetchSectionQuestionAnswers(answer);
         await submitFeedback(decodedToken.templateId, sectionQuestionAnswers)
-        setLoader(false)
+        // setLoader(false)
     }
 
 
@@ -224,6 +222,8 @@ export default function FeedbackForm() {
                     mode="left"
                     isMobile={isMobile}
                     template={template}
+                    errors={errors}
+                    setErrors={setErrors}
                     onChange={onChangeHandler}
                     activeTabKey={activeTabKey} />
                 <div className='flex justify-end w-full mt-4 p-4 sm:p-0'>

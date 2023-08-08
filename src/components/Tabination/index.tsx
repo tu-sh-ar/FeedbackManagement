@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { Tabs } from 'antd';
 import QuestionFormat from '../QuestionFormat';
-import { FeedbackFormBodySchema, OnChangeHandlerFn } from '@/pages/feedback-form/[feedback]';
+import { ErrorProp, FeedbackFormBodySchema, OnChangeHandlerFn } from '@/pages/feedback-form/[feedback]';
 
 type TabPosition = 'left' | 'right' | 'top' | 'bottom';
 
@@ -11,9 +11,11 @@ interface TabinationProps {
     template: FeedbackFormBodySchema;
     onChange: OnChangeHandlerFn;
     activeTabKey: number;
+    errors: ErrorProp;
+    setErrors: Dispatch<React.SetStateAction<ErrorProp>>
 }
 
-export default function Tabination({ mode, isMobile, template, onChange, activeTabKey }: TabinationProps) {
+export default function Tabination({ mode, isMobile, template, onChange, activeTabKey, errors, setErrors }: TabinationProps) {
 
     return (
         <Tabs
@@ -26,6 +28,8 @@ export default function Tabination({ mode, isMobile, template, onChange, activeT
                         label: item.title,
                         key: `${item.id}`,
                         children: <QuestionFormat 
+                            setErrors={setErrors}
+                            errors={errors}
                             sectionId={item.id}
                             questions={item.questions}
                             onChange={onChange}/>,

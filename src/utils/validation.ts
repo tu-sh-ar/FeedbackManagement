@@ -11,23 +11,23 @@ export const validateAnswer = (section: any) => {
         maxChars: "Answer can't have more than 1000 characters.",
     };
 
-    const transformedErrors = [];
+    const transformedErrors: Record<string, string> = {};
 
-    const sectionTitle = section.title;
+    const sectionId = section.id;
     const questions = section.questions;
 
     for (const question_ of questions) {
-        const { id, answerFormat, required, answer, question } = question_;
+        const { id, answerFormat, required, answer } = question_;
 
         if (required && (answer === null || answer.length === 0)) {
-            transformedErrors.push({ sectionTitle, question, error: errorMessages.required });
+            transformedErrors[`${sectionId}_${id}`] = errorMessages.required;
             return transformedErrors;
         }
 
         if (answer !== null) {
 
             if (answerFormat === 'textarea' && !textareaSchema(answer)) {
-                transformedErrors.push({ sectionTitle, question, error: errorMessages.maxChars });
+                transformedErrors[`${sectionId}_${id}`] = errorMessages.required;
                 return transformedErrors;
             }
         }
