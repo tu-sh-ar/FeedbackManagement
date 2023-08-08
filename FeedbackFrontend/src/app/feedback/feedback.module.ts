@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FeedbackRoutingModule } from './feedback-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { FeedbackListComponent } from './feedback-list/feedback-list.component';
 import { FeedbackDetailsComponent } from './feedback-details/feedback-details.component';
 import { ReplyCardComponent } from './reply-card/reply-card.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -22,11 +21,11 @@ import { DummyCheckboxComponentComponent } from './dummy-checkbox-component/dumm
 import { DummyEmojiComponentComponent } from './dummy-emoji-component/dummy-emoji-component.component';
 import { CategoryBasedListComponent } from './category-based-list/category-based-list.component';
 import { EntityBasedFeedbackListComponent } from './entity-based-feedback-list/entity-based-feedback-list.component';
+import { TestNestedTableComponent } from './test-nested-table/test-nested-table.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
-    FeedbackListComponent,
     FeedbackDetailsComponent,
     ReplyCardComponent,
     ProfileComponent,
@@ -43,7 +42,8 @@ import { EntityBasedFeedbackListComponent } from './entity-based-feedback-list/e
     DummyCheckboxComponentComponent,
     DummyEmojiComponentComponent,
     CategoryBasedListComponent,
-    EntityBasedFeedbackListComponent
+    EntityBasedFeedbackListComponent,
+    TestNestedTableComponent
   ],
   imports: [
     CommonModule,

@@ -1,39 +1,56 @@
 <div class="category-wrapper">
-    <div class="category" *ngFor="let category of categories?.response" (click)="setActiveCategory(category.id)"
+    <div class="category" *ngFor="let category of categories?.response" (click)="switchCategory(category.id)"
         [ngClass]="{'selected':selectedCategory===category.id}">
         {{category.name}}
     </div>
 </div>
+
 <mat-progress-bar *ngIf="!selectedCategory" mode="indeterminate"></mat-progress-bar>
+
 <div>
     <mat-progress-bar *ngIf="!categorySpecificEntitiesDataSource" mode="indeterminate"></mat-progress-bar>
+
     <app-no-data-available *ngIf="!categorySpecificEntitiesData?.response?.responseGroups?.length"></app-no-data-available>
+
     <div *ngIf="categorySpecificEntitiesData?.response?.responseGroups?.length">
-        <table mat-table [dataSource]="categorySpecificEntitiesDataSource" class="mat-elevation-z2 feedback-table">
+        <table mat-table [dataSource]="categorySpecificEntitiesDataSource" class="mat-elevation-z2 feedback-table" multiTemplateDataRows>
             <ng-container matColumnDef="serial">
                 <th mat-header-cell *matHeaderCellDef>
                     <b>S.No.</b>
                 </th>
-                <td mat-cell *matCellDef="let element; let i = index;">
+                <td mat-cell *matCellDef="let element; let i = renderIndex;">
                     {{i+1}}
                 </td>
             </ng-container>
             <ng-container matColumnDef="entityId">
                 <th mat-header-cell *matHeaderCellDef>
-                    <b>ID</b>
+                    <b>Entity ID</b>
                 </th>
                 <td mat-cell *matCellDef="let element">
-                    {{element.entityId}}
-                    <!-- <div class="display-cell">
+                    <!-- {{element.entityId}} -->
+                    <div class="display-cell">
                         {{element.entityId}}
-                    <img src="../../../assets/down-arrow.svg" alt="expand" class="grid-control" *ngIf="element.count" (click)="getFeedbacksListBasedOnEntity(element.entityId, categorySpecificEntitiesData.response.templateId)">
-                    <img src="../../../assets/up-arrow.svg" alt="collapse" class="grid-control" *ngIf="element.count">
-                    </div> -->
+                    <img
+                        src="../../../assets/down-arrow.svg"
+                        alt="expand"
+                        class="grid-control"
+                        matTooltip="View Recents"
+                        *ngIf="element.count && !element.isExpanded"
+                        (click)="getFeedbacksListBasedOnEntity(element.entityId); element.isExpanded = !element.isExpanded"
+                        >
+                    <img
+                        src="../../../assets/up-arrow.svg"
+                        alt="collapse"
+                        class="grid-control"
+                        *ngIf="element.count && element.isExpanded"
+                        (click)="element.isExpanded = !element.isExpanded"
+                        >
+                    </div>
                 </td>
             </ng-container>
             <ng-container matColumnDef="entityName">
                 <th mat-header-cell *matHeaderCellDef>
-                    <b>Name</b>
+                    <b>Entity name</b>
                 </th>
                 <td mat-cell *matCellDef="let element">
                     {{element.entityName}}
@@ -52,13 +69,30 @@
                     <b>Action</b>
                 </th>
                 <td mat-cell *matCellDef="let element">
-                    <button mat-icon-button color="primary" matTooltip="View All" routerLink="entity-feedbacks/{{element.entityId}}/{{categorySpecificEntitiesData.response.templateId}}">
+                    <button mat-icon-button color="primary" matTooltip="View All" routerLink="entity-feedbacks/{{element.entityId}}">
                         <img src="../../../assets/eye.svg" alt="details">
                     </button>
                 </td>
             </ng-container>
+
+            <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let element" [attr.colspan]="displayEntityColumns.length">
+                    <div class="city-details-container" [@detailExpand]="element.isExpanded ? 'expanded' : 'collapsed'">
+                      <app-test-nested-table
+                        *ngIf="element.isExpanded"
+                        [parentTableColumns]="displayEntityColumns.length"
+                        [feedbacksDetails]="entitySpecificFeedbacksData"
+                        [feedbackDataSource]="entitySpecificFeedbacksDataSource"
+                        [entityId]="element.entityId"
+                      ></app-test-nested-table>
+                    </div>
+                  </td>
+            </ng-container>
+            
             <tr mat-header-row *matHeaderRowDef="displayEntityColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayEntityColumns;"></tr>
+            <tr mat-row *matRowDef="let element; columns: displayEntityColumns;">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']"></tr>
         </table>
     </div>
 </div>

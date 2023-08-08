@@ -130,11 +130,11 @@ export interface CategoryList{
 
 export interface EntitiesAssociatedWithCategory{
   response:{
-    templateId:string;
     responseGroups:{
       entityId:string;
       entityName:string;
       count:number;
+      isExpanded?:boolean;
     }[]
   };
   statusCode:number;
@@ -142,12 +142,15 @@ export interface EntitiesAssociatedWithCategory{
 
 export interface FeedbacksAssociatedWithEntity{
   response:{
-    _id:string;
-    authorId:string;
-    authorName:string;
-    entityName:string;
-    createdAt:string;
-  }[];
+    data:{
+      _id:string;
+      authorId:string;
+      authorName:string;
+      entityName:string;
+      createdAt:string;
+    }[];
+    totalResponses:number;
+  };
   statusCode:number;
 }
 

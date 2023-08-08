@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { FeedbackListComponent } from './feedback-list/feedback-list.component';
 import { FeedbackDetailsComponent } from './feedback-details/feedback-details.component';
 import { PageNotFoundComponent } from '../shared/page-not-found/page-not-found.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -22,14 +21,6 @@ const routes: Routes = [
         redirectTo:"entity-categories",
         pathMatch:"full"
       },
-      // {
-      //   path:"feedbacks",
-      //   component:FeedbackListComponent
-      // },
-      // {
-      //   path:"feedbacks/feedback/:id",
-      //   component:FeedbackDetailsComponent
-      // },
       {
         path:"feedback-templates",
         component:FeedbackTemplatesComponent
@@ -55,11 +46,11 @@ const routes: Routes = [
         component:CategoryBasedListComponent
       },
       {
-        path:"entity-categories/entity-feedbacks/:entityId/:templateId",
+        path:"entity-categories/entity-feedbacks/:entityId",
         component:EntityBasedFeedbackListComponent
       },
       {
-        path:"entity-categories/entity-feedbacks/:entityId/:templateId/:responseId",
+        path:"entity-categories/entity-feedbacks/:entityId/:responseId",
         component:FeedbackDetailsComponent
       },
       {

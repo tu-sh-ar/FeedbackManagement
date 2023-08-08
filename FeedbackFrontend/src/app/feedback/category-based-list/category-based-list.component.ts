@@ -1,3 +1,4 @@
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { CategoryList, EntitiesAssociatedWithCategory, FeedbacksAssociatedWithEntity } from 'src/app/interfaces/feedback';
@@ -6,20 +7,43 @@ import { FeedbackService } from 'src/app/services/feedback.service';
 @Component({
   selector: 'app-category-based-list',
   templateUrl: './category-based-list.component.html',
-  styleUrls: ['./category-based-list.component.scss']
+  styleUrls: ['./category-based-list.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ]
 })
 export class CategoryBasedListComponent implements OnInit{
   selectedCategory!:string;
+  categories!:CategoryList;
+
+  businessCategory:number = JSON.parse(localStorage.getItem("user")!).businessCategory;
+
   categorySpecificEntitiesDataSource!:MatTableDataSource<{
     entityId:string;
     entityName:string;
     count:number;
+    isExpanded?:boolean;
   }>;
   categorySpecificEntitiesData!:EntitiesAssociatedWithCategory;
-  categories!:CategoryList;
-  businessCategory:number = JSON.parse(localStorage.getItem("user")!).businessCategory;
-
   displayEntityColumns:string[] = ["serial", "entityId", "entityName", "count", "action"]
+
+  entitySpecificFeedbacksData!:FeedbacksAssociatedWithEntity;
+  entitySpecificFeedbacksDataSource!:MatTableDataSource<{
+    _id:string
+    authorId:string;
+    authorName:string;
+    entityName:string;
+    createdAt:string;
+  }>;
+
+  nestedGridPageConfig = {
+    pageNumber: 1,
+    pageSize: 15
+  }
 
   constructor(
     private _feedbackService: FeedbackService,
@@ -35,7 +59,7 @@ export class CategoryBasedListComponent implements OnInit{
     })
   }
 
-  setActiveCategory(categoryId:string):void{
+  switchCategory(categoryId:string):void{
     this.selectedCategory = categoryId;
     this.getEntityListBasedOnCategory(this.selectedCategory);
   }
@@ -43,7 +67,18 @@ export class CategoryBasedListComponent implements OnInit{
   getEntityListBasedOnCategory(categoryId:string):void{
     this._feedbackService.getEntitiesAssociatedWithCategory(categoryId).subscribe((res)=>{
       this.categorySpecificEntitiesData = res;
+      for(let entity of this.categorySpecificEntitiesData.response.responseGroups){
+        entity.isExpanded = false;
+      }
       this.categorySpecificEntitiesDataSource = new MatTableDataSource(this.categorySpecificEntitiesData?.response?.responseGroups);
+      this._changeDetectorRefs.detectChanges();
+    })
+  }
+
+  getFeedbacksListBasedOnEntity(entityId:string):void{
+    this._feedbackService.getFeedbacksAssociatedWithEntity(entityId, this.nestedGridPageConfig.pageNumber, this.nestedGridPageConfig.pageSize).subscribe((res)=>{
+      this.entitySpecificFeedbacksData = res;
+      this.entitySpecificFeedbacksDataSource = new MatTableDataSource(this.entitySpecificFeedbacksData?.response.data);
       this._changeDetectorRefs.detectChanges();
     })
   }

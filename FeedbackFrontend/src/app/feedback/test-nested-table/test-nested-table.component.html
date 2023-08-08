@@ -1,0 +1,80 @@
+<table mat-table matSort [dataSource]="feedbackDataSource" class="mat-elevation-z1 w-100 feedback-table">
+
+    <ng-container matColumnDef="serialnumber">
+        <th mat-header-cell *matHeaderCellDef> S.No. </th>
+        <td mat-cell *matCellDef="let feedback; let i = index;">
+            {{i+1}}
+        </td>
+    </ng-container>
+
+     <ng-container matColumnDef="authorName">
+        <th mat-header-cell *matHeaderCellDef> Customer name </th>
+        <td mat-cell *matCellDef="let feedback">{{ feedback.authorName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="entityName">
+        <th mat-header-cell *matHeaderCellDef> Entity name </th>
+        <td mat-cell *matCellDef="let feedback">{{ feedback.entityName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef> Posted On </th>
+        <td mat-cell *matCellDef="let feedback">{{ feedback.createdAt | date}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let feedback">
+            <button mat-icon-button color="primary" matTooltip="View Details" routerLink="entity-feedbacks/{{entityId}}/{{templateId}}/{{feedback._id}}">
+                <img src="../../../assets/eye.svg" alt="details">
+            </button>
+        </td>
+    </ng-container>
+
+     <!--<ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let cityDetails">
+            <div class="">
+                <button [queryParams]="{factSheetId: cityDetails.factSheetId}" routerLink="../detailsfactsheet"
+                    class="fact-sheet-icons">
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+
+                <button [queryParams]="{factSheetId: cityDetails.factSheetId}" routerLink="../editfactsheet"
+                    class="fact-sheet-icons">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+
+                <button (click)="openConfirmation(cityDetails.factSheetId, countryDetails.id)"
+                    class="fact-sheet-icons">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+
+                <button [queryParams]="copyFactSheetQueryParams(cityDetails.factSheetId, countryDetails)"
+                    routerLink="../addfactsheet" class="fact-sheet-icons">
+                    <i class="fa-solid fa-copy"></i>
+                </button>
+            </div>
+        </td>
+    </ng-container>
+
+    <tr class="mat-row" *matNoDataRow>
+        <td
+            class="mat-cell"
+            [attr.colspan]="parentTableColumns"
+            *ngIf="dataSource.loading$ | async; else noDataFound"
+        >
+            <app-spinner size="xxs"></app-spinner>
+        </td>
+        <ng-template #noDataFound>
+            <td class="mat-cell" [attr.colspan]="parentTableColumns">
+            No Results Found
+            </td>
+        </ng-template>
+    </tr> -->
+    <tr mat-header-row *matHeaderRowDef="displayFeedbackColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayFeedbackColumns;"></tr>
+</table>
+<div class="load-all-footer" routerLink="entity-feedbacks/{{entityId}}/{{templateId}}">
+    View All Feedbacks
+</div>

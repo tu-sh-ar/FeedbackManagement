@@ -55,6 +55,7 @@
                                 {{qa.answer?qa.answer+", ":"N/A"}}
                             </div>
                             <div class="bold" *ngIf="qa.answerFormat.type=='file' && checkIfAnswerIsArray(qa.answer)">
+                                <div *ngIf="qa.answer===null">N/A</div>
                                 <div *ngFor="let img of qa.answer">
                                     <img src="{{img}}" alt="user-feedback-image" class="user-feedback-img">
                                 </div>

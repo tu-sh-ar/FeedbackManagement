@@ -84,8 +84,8 @@ export class FeedbackService {
   }
 
   //get feedbacks associated with a entity
-  getFeedbacksAssociatedWithEntity(entityId:string, templateId:string):Observable<FeedbacksAssociatedWithEntity>{
-    return this._http.get<FeedbacksAssociatedWithEntity>(`${this.baseURL}templateResponse/getResponsesOfEntity/${entityId}/${templateId}`)
+  getFeedbacksAssociatedWithEntity(entityId:string, pageNumber:number, pageSize:number):Observable<FeedbacksAssociatedWithEntity>{
+    return this._http.get<FeedbacksAssociatedWithEntity>(`${this.baseURL}templateResponse/getResponsesOfEntity/${entityId}?pageNumber=${pageNumber}&pageSize=${pageSize}`)
   }
 
   //get detailed feedback response for an entity based on response id
