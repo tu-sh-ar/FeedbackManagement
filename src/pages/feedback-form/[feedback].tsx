@@ -202,6 +202,7 @@ export default function FeedbackForm() {
 
     const [activeTabKey, setActiveTabkey] = useState<number>(1)
     const onNextTabHandler = () => {
+        console.log(activeTabKey)
         if (!validationHandler()) return;
         setActiveTabkey((e) => e + 1)
     }
@@ -246,11 +247,21 @@ export default function FeedbackForm() {
 
                             ) :
                             (
-                                <Button
-                                    type="primary"
-                                    className='bg-[#4096ff]'
-                                    loading={loader}
-                                    onClick={onNextTabHandler}>Next</Button>
+                                <>
+                                    {
+                                        activeTabKey !== 1 &&
+                                        (<Button
+                                            type="primary"
+                                            className='bg-[#4096ff] mx-2'
+                                            onClick={onPreviousTabHandler}>Back</Button>)
+                                    }
+                                    <Button
+                                        type="primary"
+                                        className='bg-[#4096ff]'
+                                        loading={loader}
+                                        onClick={onNextTabHandler}>Next</Button>
+                                </>
+
                             )
                     }
 
