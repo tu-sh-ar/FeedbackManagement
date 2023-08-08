@@ -119,7 +119,7 @@ router.get(
 );
 
 router.get(
-    "/templateResponse/getResponsesOfEntity/:entityId/:templateId",
+    "/templateResponse/getResponsesOfEntity/:entityId",
     verifyToken,
     getResponsesOfEntity
 );

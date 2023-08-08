@@ -163,6 +163,11 @@ export const getTemplateById = async (req: Request, res: Response) => {
     try {
         const { templateId } = req.params;
 
+        
+        if(!Types.ObjectId.isValid(templateId)){
+            return buildErrorResponse(res, 'templateId format is not valid', 404);
+        }
+
         const template: FeedbackTemplateInterface | null = await FeedbackTemplate.findById(templateId);
 
         if (!template) {
@@ -227,6 +232,16 @@ export const getTemplateByFeedbackCategoryId = async (req: Request, res: Respons
 
         const { feedbackTypeId } = req.params;
 
+        if(!Types.ObjectId.isValid(feedbackTypeId)){
+            return buildErrorResponse(res, 'feedbackTypeId format is not valid', 404);
+        }
+
+        const category = await FeedbackCategory.findById(new Types.ObjectId(feedbackTypeId))
+
+        if (!category) {
+            return buildErrorResponse(res, 'Category not found.', 404);
+        }
+
         const businessAdmin = await BusinessAdmin.findOne(
             { templateServiceCategoryId: new Types.ObjectId(feedbackTypeId), businessAdminId })
             .populate([
@@ -240,7 +255,6 @@ export const getTemplateByFeedbackCategoryId = async (req: Request, res: Respons
                 }
             ]);
 
-        console.log(businessAdmin, 'business admin', feedbackTypeId, businessAdminId)
 
         if (!businessAdmin) {
             return buildErrorResponse(res, 'Business admin not found.', 404);
@@ -539,6 +553,27 @@ export const activateTemplate = async (req: Request, res: Response) => {
         const businessAdminId: number = req.user?.id;
 
         const { templateId, feedbackTypeId } = req.params;
+
+        if(!Types.ObjectId.isValid(feedbackTypeId)){
+            return buildErrorResponse(res, 'feedbackTypeId format is not valid', 404);
+        }
+
+        if(!Types.ObjectId.isValid(templateId)){
+            return buildErrorResponse(res, 'templateId format is not valid', 404);
+        }
+
+        const category = await FeedbackCategory.findById(new Types.ObjectId(feedbackTypeId))
+
+        if (!category) {
+            return buildErrorResponse(res, 'Category not found.', 404);
+        }
+
+        const template = await FeedbackTemplate.findById(templateId);
+
+        if (!template) {
+            return buildErrorResponse(res, 'Template not found', 404);
+        }
+
 
         const session = await mongoose.startSession();
         session.startTransaction();

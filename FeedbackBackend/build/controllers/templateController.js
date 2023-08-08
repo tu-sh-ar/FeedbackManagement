@@ -195,6 +195,9 @@ exports.getBusinessAdminTemplates = getBusinessAdminTemplates;
 const getTemplateById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { templateId } = req.params;
+        if (!mongoose_1.Types.ObjectId.isValid(templateId)) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'templateId format is not valid', 404);
+        }
         const template = yield template_1.default.findById(templateId);
         if (!template) {
             return (0, responseUtils_1.buildErrorResponse)(res, 'Template not found', 404);
@@ -247,6 +250,13 @@ const getTemplateByFeedbackCategoryId = (req, res) => __awaiter(void 0, void 0, 
     try {
         const businessAdminId = (_e = req.user) === null || _e === void 0 ? void 0 : _e.id;
         const { feedbackTypeId } = req.params;
+        if (!mongoose_1.Types.ObjectId.isValid(feedbackTypeId)) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'feedbackTypeId format is not valid', 404);
+        }
+        const category = yield feedbackCategory_1.default.findById(new mongoose_1.Types.ObjectId(feedbackTypeId));
+        if (!category) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Category not found.', 404);
+        }
         const businessAdmin = yield businessAdmin_1.BusinessAdmin.findOne({ templateServiceCategoryId: new mongoose_1.Types.ObjectId(feedbackTypeId), businessAdminId })
             .populate([
             {
@@ -258,7 +268,6 @@ const getTemplateByFeedbackCategoryId = (req, res) => __awaiter(void 0, void 0, 
                 select: '-_id name',
             }
         ]);
-        console.log(businessAdmin, 'business admin', feedbackTypeId, businessAdminId);
         if (!businessAdmin) {
             return (0, responseUtils_1.buildErrorResponse)(res, 'Business admin not found.', 404);
         }
@@ -491,6 +500,20 @@ const activateTemplate = (req, res) => __awaiter(void 0, void 0, void 0, functio
     try {
         const businessAdminId = (_j = req.user) === null || _j === void 0 ? void 0 : _j.id;
         const { templateId, feedbackTypeId } = req.params;
+        if (!mongoose_1.Types.ObjectId.isValid(feedbackTypeId)) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'feedbackTypeId format is not valid', 404);
+        }
+        if (!mongoose_1.Types.ObjectId.isValid(templateId)) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'templateId format is not valid', 404);
+        }
+        const category = yield feedbackCategory_1.default.findById(new mongoose_1.Types.ObjectId(feedbackTypeId));
+        if (!category) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Category not found.', 404);
+        }
+        const template = yield template_1.default.findById(templateId);
+        if (!template) {
+            return (0, responseUtils_1.buildErrorResponse)(res, 'Template not found', 404);
+        }
         const session = yield mongoose_1.default.startSession();
         session.startTransaction();
         try {

@@ -19,13 +19,23 @@ const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const documentation_1 = require("./documentation");
 const db_1 = require("./db");
+const responseUtils_1 = require("./utils/responseUtils");
 const startServerAndInitConfiguration = () => __awaiter(void 0, void 0, void 0, function* () {
     const server = (0, express_1.default)();
+    server.use((0, cors_1.default)());
     // using body parser
     server.use(express_1.default.json());
+    server.use((err, req, res, next) => {
+        if (err instanceof SyntaxError && 'body' in err) {
+            (0, responseUtils_1.buildErrorResponse)(res, 'Syntax error, Invalid JSON payload/params ', 400);
+        }
+        else {
+            next();
+        }
+    });
+    server.use(express_1.default.static('uploads'));
     // using cross origin resource sharing for all the routes
     // Access-Control-Allow-Origin: * i.e api accessed from any routes
-    server.use((0, cors_1.default)());
     server.use('/api/v1', routes_1.default);
     const specs = (0, swagger_jsdoc_1.default)(documentation_1.SwaggerOptions);
     server.use("/swagger", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(specs, { explorer: true }));

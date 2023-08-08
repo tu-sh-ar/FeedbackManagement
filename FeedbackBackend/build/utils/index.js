@@ -55,6 +55,7 @@ function mapQuestionResponses(templateSections, sectionResponse) {
                     const responseQuestion = sectionResponseItem.questions.find((q) => q.id === question.id);
                     return {
                         id: question.id,
+                        question: question.question,
                         answerFormat: question.answerFormat,
                         answer: responseQuestion ? responseQuestion.answer : null,
                     };
@@ -67,6 +68,7 @@ function mapQuestionResponses(templateSections, sectionResponse) {
                 title: section.title,
                 questionAnswer: section.questions.map((question) => ({
                     id: question.id,
+                    question: question.question,
                     answerFormat: question.answerFormat,
                     answer: null,
                 })),

@@ -48,7 +48,7 @@ paths:
           required: true
           schema:
             type: string
-          description: ID of the service
+          description: ID of the service 
       responses:
         200:
           description: Success
@@ -56,7 +56,7 @@ paths:
           description: Response not found
         500:
           description: Internal server error
-  /api/v1/templateResponse/getResponsesOfEntity/{entityId}/{templateId}:
+  /api/v1/templateResponse/getResponsesOfEntity/{entityId}:
     get:
       summary: Get a responses of the entity
       tags:
@@ -65,17 +65,21 @@ paths:
         - JWTAuth: []
       parameters:
         - in: path
-          name: templateId
-          required: true
-          schema:
-            type: string
-          description: ID of the template
-        - in: path
           name: entityId
           required: true
           schema:
             type: string
           description: ID of the entity
+        - in: query
+          name: pageNumber
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: pageSize
+          required: true
+          schema:
+            type: number
       responses:
         200:
           description: Success
