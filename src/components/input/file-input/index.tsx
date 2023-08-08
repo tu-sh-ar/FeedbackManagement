@@ -68,7 +68,7 @@ export default function FileInput({ onChange }: FileInputProps) {
     return (
         <>
             <Upload
-                action="http://localhost:3000/api/v1/templateResponse/uploadImages"
+                action="https://feedbackbackend-dev.azurewebsites.net/api/v1/templateResponse/uploadImages"
                 accept='image/jpeg, image/png, image/gif'
                 maxCount={5}
                 listType="picture-card"
