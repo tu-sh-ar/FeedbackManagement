@@ -182,7 +182,7 @@ export const uploadImages = async (req: Request, res: Response) => {
         }
         const serverURL = 'https://feedbackbackend-dev.azurewebsites.net';
 
-        const fileURL = `${serverURL}/uploads/${req.file.filename}`;
+        const fileURL = `${serverURL}/${req.file.filename}`;
         return buildObjectResponse(res, { url: fileURL })
 
     } catch (error) {
