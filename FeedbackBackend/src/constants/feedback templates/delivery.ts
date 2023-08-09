@@ -1,3 +1,9 @@
+/**
+ * @description
+ * These are the default templates created by the super admin
+ * and these will be helping for adding/pushing templates data to DB  
+ */
+
 const delivery = [
     {
         "templateName": "Default Template 3",
