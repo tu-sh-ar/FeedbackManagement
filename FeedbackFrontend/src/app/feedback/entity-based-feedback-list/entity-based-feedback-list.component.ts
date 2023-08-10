@@ -43,7 +43,6 @@ export class EntityBasedFeedbackListComponent implements OnInit{
   getFeedbacksListBasedOnEntity(entityId:string, pageNumber:number, pageSize:number):void{
     this._feedbackService.getFeedbacksAssociatedWithEntity(entityId, pageNumber+1, pageSize).subscribe((res)=>{
       this.entitySpecificFeedbacksData = res;
-      console.log(res);
       this.totalFeedbacks = this.entitySpecificFeedbacksData.response.totalResponses;
       this.entitySpecificFeedbacksDataSource = new MatTableDataSource(this.entitySpecificFeedbacksData.response.data)
     })

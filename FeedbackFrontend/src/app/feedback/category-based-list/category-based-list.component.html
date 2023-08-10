@@ -35,7 +35,7 @@
                         class="grid-control"
                         matTooltip="View Recents"
                         *ngIf="element.count && !element.isExpanded"
-                        (click)="getFeedbacksListBasedOnEntity(element.entityId); element.isExpanded = !element.isExpanded"
+                        (click)="getFeedbacksListBasedOnEntity(element.entityId, nestedGridPageConfig.pageNumber, nestedGridPageConfig.pageSize); element.isExpanded = !element.isExpanded"
                         >
                     <img
                         src="../../../assets/up-arrow.svg"

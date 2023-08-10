@@ -5,7 +5,6 @@ import { FeedbackRoutingModule } from './feedback-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeedbackDetailsComponent } from './feedback-details/feedback-details.component';
-import { ReplyCardComponent } from './reply-card/reply-card.component';
 import { ProfileComponent } from './profile/profile.component';
 import { FeedbackTemplatesComponent } from './feedback-templates/feedback-templates.component';
 import { FeedbackTemplatePreviewCardComponent } from './feedback-template-preview-card/feedback-template-preview-card.component';
@@ -27,7 +26,6 @@ import { TestNestedTableComponent } from './test-nested-table/test-nested-table.
   declarations: [
     DashboardComponent,
     FeedbackDetailsComponent,
-    ReplyCardComponent,
     ProfileComponent,
     FeedbackTemplatesComponent,
     FeedbackTemplatePreviewCardComponent,

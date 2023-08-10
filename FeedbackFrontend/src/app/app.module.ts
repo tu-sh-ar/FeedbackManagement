@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
-import { FeedbackModule } from './feedback/feedback.module';
 import { CoreModule } from './core/core.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
@@ -19,8 +18,7 @@ import { AuthInterceptorService } from './services/auth-interceptor.service';
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
-    FeedbackModule,
-    CoreModule
+    CoreModule,
   ],
   providers: [
     {

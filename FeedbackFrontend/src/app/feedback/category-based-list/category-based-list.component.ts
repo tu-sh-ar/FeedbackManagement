@@ -42,9 +42,9 @@ export class CategoryBasedListComponent implements OnInit{
 
   nestedGridPageConfig = {
     pageNumber: 1,
-    pageSize: 15
+    pageSize: 10
   }
-
+  
   constructor(
     private _feedbackService: FeedbackService,
     private _changeDetectorRefs: ChangeDetectorRef
@@ -75,8 +75,8 @@ export class CategoryBasedListComponent implements OnInit{
     })
   }
 
-  getFeedbacksListBasedOnEntity(entityId:string):void{
-    this._feedbackService.getFeedbacksAssociatedWithEntity(entityId, this.nestedGridPageConfig.pageNumber, this.nestedGridPageConfig.pageSize).subscribe((res)=>{
+  getFeedbacksListBasedOnEntity(entityId:string, pageNumber:number, pageSize:number):void{
+    this._feedbackService.getFeedbacksAssociatedWithEntity(entityId, pageNumber, pageSize).subscribe((res)=>{
       this.entitySpecificFeedbacksData = res;
       this.entitySpecificFeedbacksDataSource = new MatTableDataSource(this.entitySpecificFeedbacksData?.response.data);
       this._changeDetectorRefs.detectChanges();
