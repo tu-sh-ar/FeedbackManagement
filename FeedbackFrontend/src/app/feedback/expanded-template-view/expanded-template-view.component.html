@@ -21,14 +21,13 @@
             <div *ngIf="right_i===currentIdx">
                 <div *ngFor="let qa of section.questions">
                     <span class="bold">{{qa.question}}</span>
-                    <app-dummy-rating-component *ngIf="qa.answerFormat.type==='starrating'"></app-dummy-rating-component>
-                    <app-dummy-experience-bar *ngIf="qa.answerFormat.type==='numberrating'"></app-dummy-experience-bar>
-                    <app-dummy-radio-component *ngIf="qa.answerFormat.type==='radio'" [options]="qa.answerFormat.options!"></app-dummy-radio-component>
-                    <app-dummy-textbox-component *ngIf="qa.answerFormat.type==='textarea'"></app-dummy-textbox-component>
-                    <app-dummy-image-uploader *ngIf="qa.answerFormat.type==='file'"></app-dummy-image-uploader>
-                    <app-dummy-checkbox-component *ngIf="qa.answerFormat.type==='checkbox'" [options]="qa.answerFormat.options!"></app-dummy-checkbox-component>
-                    <app-dummy-emoji-component *ngIf="qa.answerFormat.type==='emojirating'"></app-dummy-emoji-component>
-                    <br>
+                    <app-star-rating *ngIf="qa.answerFormat.type==='starrating'"></app-star-rating>
+                    <app-number-rating *ngIf="qa.answerFormat.type==='numberrating'"></app-number-rating>
+                    <app-emoji-rating *ngIf="qa.answerFormat.type==='emojirating'"></app-emoji-rating>
+                    <app-option-radio *ngIf="qa.answerFormat.type==='radio'" [options]="qa.answerFormat.options!"></app-option-radio>
+                    <app-option-checkbox *ngIf="qa.answerFormat.type==='checkbox'" [options]="qa.answerFormat.options!"></app-option-checkbox>
+                    <app-feedback-textbox *ngIf="qa.answerFormat.type==='textarea'"></app-feedback-textbox>
+                    <app-image-uploader *ngIf="qa.answerFormat.type==='file'"></app-image-uploader>
                 </div>
             </div>
         </div>

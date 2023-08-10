@@ -9,18 +9,18 @@ import { ProfileComponent } from './profile/profile.component';
 import { FeedbackTemplatesComponent } from './feedback-templates/feedback-templates.component';
 import { FeedbackTemplatePreviewCardComponent } from './feedback-template-preview-card/feedback-template-preview-card.component';
 import { ExpandedTemplateViewComponent } from './expanded-template-view/expanded-template-view.component';
-import { DummyRadioComponentComponent } from './dummy-radio-component/dummy-radio-component.component';
-import { DummyRatingComponentComponent } from './dummy-rating-component/dummy-rating-component.component';
-import { DummyTextboxComponentComponent } from './dummy-textbox-component/dummy-textbox-component.component';
 import { TemplatePreferencePopupComponent } from './template-preference-popup/template-preference-popup.component';
-import { DummyExperienceBarComponent } from './dummy-experience-bar/dummy-experience-bar.component';
 import { CustomFeedbackGeneratorComponent } from './custom-feedback-generator/custom-feedback-generator.component';
-import { DummyImageUploaderComponent } from './dummy-image-uploader/dummy-image-uploader.component';
-import { DummyCheckboxComponentComponent } from './dummy-checkbox-component/dummy-checkbox-component.component';
-import { DummyEmojiComponentComponent } from './dummy-emoji-component/dummy-emoji-component.component';
 import { CategoryBasedListComponent } from './category-based-list/category-based-list.component';
 import { EntityBasedFeedbackListComponent } from './entity-based-feedback-list/entity-based-feedback-list.component';
 import { TestNestedTableComponent } from './test-nested-table/test-nested-table.component';
+import { OptionCheckboxComponent } from './option-checkbox/option-checkbox.component';
+import { OptionRadioComponent } from './option-radio/option-radio.component';
+import { EmojiRatingComponent } from './emoji-rating/emoji-rating.component';
+import { StarRatingComponent } from './star-rating/star-rating.component';
+import { FeedbackTextboxComponent } from './feedback-textbox/feedback-textbox.component';
+import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
+import { NumberRatingComponent } from './number-rating/number-rating.component';
 
 @NgModule({
   declarations: [
@@ -30,18 +30,18 @@ import { TestNestedTableComponent } from './test-nested-table/test-nested-table.
     FeedbackTemplatesComponent,
     FeedbackTemplatePreviewCardComponent,
     ExpandedTemplateViewComponent,
-    DummyRadioComponentComponent,
-    DummyRatingComponentComponent,
-    DummyTextboxComponentComponent,
     TemplatePreferencePopupComponent,
-    DummyExperienceBarComponent,
     CustomFeedbackGeneratorComponent,
-    DummyImageUploaderComponent,
-    DummyCheckboxComponentComponent,
-    DummyEmojiComponentComponent,
     CategoryBasedListComponent,
     EntityBasedFeedbackListComponent,
-    TestNestedTableComponent
+    TestNestedTableComponent,
+    OptionCheckboxComponent,
+    OptionRadioComponent,
+    EmojiRatingComponent,
+    StarRatingComponent,
+    FeedbackTextboxComponent,
+    ImageUploaderComponent,
+    NumberRatingComponent
   ],
   imports: [
     CommonModule,
