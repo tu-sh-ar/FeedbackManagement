@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { User } from 'src/app/interfaces/user';
-import { DetailedFeedbackResponse, Feedback, GetFeedbackResponse, PostFeedbackResponse, UpdateResponse } from 'src/app/interfaces/feedback';
+import { DetailedFeedbackResponse } from 'src/app/interfaces/feedback';
 import { FeedbackService } from 'src/app/services/feedback.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 

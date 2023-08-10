@@ -76,7 +76,7 @@
 
             <ng-container matColumnDef="expandedDetail">
                 <td mat-cell *matCellDef="let element" [attr.colspan]="displayEntityColumns.length">
-                    <div class="city-details-container" [@detailExpand]="element.isExpanded ? 'expanded' : 'collapsed'">
+                    <div [@detailExpand]="element.isExpanded ? 'expanded' : 'collapsed'">
                       <app-test-nested-table
                         *ngIf="element.isExpanded"
                         [parentTableColumns]="displayEntityColumns.length"
