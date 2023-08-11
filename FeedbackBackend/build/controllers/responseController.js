@@ -187,7 +187,7 @@ const uploadImages = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             return (0, responseUtils_1.buildErrorResponse)(res, 'File is not uploaded', 500);
         }
         const serverURL = 'https://feedbackbackend-dev.azurewebsites.net';
-        const fileURL = `${serverURL}/uploads/${req.file.filename}`;
+        const fileURL = `${serverURL}/${req.file.filename}`;
         return (0, responseUtils_1.buildObjectResponse)(res, { url: fileURL });
     }
     catch (error) {

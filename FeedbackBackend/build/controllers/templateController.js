@@ -164,19 +164,32 @@ const getBusinessAdminTemplates = (req, res) => __awaiter(void 0, void 0, void 0
                         templateType: "$templates.templateData.templateType",
                         active: "$templates.active",
                         used: "$templates.used",
-                    }
+                    },
+                    createdAt: 1
+                }
+            },
+            {
+                $sort: {
+                    'templates.templateType': -1
                 }
             },
             {
                 $group: {
                     _id: "$_id",
                     templates: { $push: "$templates" },
-                    templateServiceCategory: { $first: "$templateServiceCategory" }
+                    templateServiceCategory: { $first: "$templateServiceCategory" },
+                    createdAt: { $first: "$createdAt" },
+                }
+            },
+            {
+                $sort: {
+                    createdAt: 1
                 }
             },
             {
                 $project: {
-                    _id: 0
+                    _id: 0,
+                    createdAt: 0
                 }
             },
         ]);
