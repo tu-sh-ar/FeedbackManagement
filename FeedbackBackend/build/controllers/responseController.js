@@ -131,11 +131,16 @@ const getResponseBasedOnEntityId = (req, res) => __awaiter(void 0, void 0, void 
                     entityId: { $first: '$entityId' },
                     entityName: { $first: '$entityName' },
                     count: { $sum: 1 },
+                    createdAt: { $first: '$createdAt' }
                 },
+            },
+            {
+                $sort: { createdAt: -1 },
             },
             {
                 $project: {
                     _id: 0,
+                    createdAt: 0
                 },
             },
         ]);
@@ -167,7 +172,7 @@ const getResponsesOfEntity = (req, res) => __awaiter(void 0, void 0, void 0, fun
         const response = yield feedbackResponse_1.default.find({ entityId, }, {
             sectionResponse: 0,
             template: 0, entityId: 0, updatedAt: 0
-        })
+        }).sort({ createdAt: -1 })
             .skip((pageNumberVal - 1) * pageSizeNumberVal)
             .limit(pageSizeNumberVal);
         if (!response) {
@@ -184,7 +189,7 @@ exports.getResponsesOfEntity = getResponsesOfEntity;
 const uploadImages = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.file) {
-            return (0, responseUtils_1.buildErrorResponse)(res, 'File is not uploaded', 500);
+            return (0, responseUtils_1.buildErrorResponse)(res, 'File is not uploaded', 400);
         }
         const serverURL = 'https://feedbackbackend-dev.azurewebsites.net';
         const fileURL = `${serverURL}/${req.file.filename}`;

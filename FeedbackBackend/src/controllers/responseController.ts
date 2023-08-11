@@ -116,11 +116,16 @@ export const getResponseBasedOnEntityId = async (req: Request, res: Response) =>
                     entityId: { $first: '$entityId' },
                     entityName: { $first: '$entityName' },
                     count: { $sum: 1 },
+                    createdAt: { $first: '$createdAt' }
                 },
+            },
+            {
+                $sort: { createdAt: -1 },
             },
             {
                 $project: {
                     _id: 0,
+                    createdAt: 0
                 },
             },
         ]);
@@ -159,7 +164,7 @@ export const getResponsesOfEntity = async (req: Request, res: Response) => {
             { entityId, }, {
             sectionResponse: 0,
             template: 0, entityId: 0, updatedAt: 0
-        })
+        }).sort({ createdAt: -1 })
             .skip((pageNumberVal - 1) * pageSizeNumberVal)
             .limit(pageSizeNumberVal);
 
@@ -178,7 +183,7 @@ export const getResponsesOfEntity = async (req: Request, res: Response) => {
 export const uploadImages = async (req: Request, res: Response) => {
     try {
         if (!req.file) {
-            return buildErrorResponse(res, 'File is not uploaded', 500);
+            return buildErrorResponse(res, 'File is not uploaded', 400);
         }
         const serverURL = 'https://feedbackbackend-dev.azurewebsites.net';
 
