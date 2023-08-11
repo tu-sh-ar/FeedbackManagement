@@ -4,7 +4,7 @@
  * and these will be helping for adding/pushing templates data to DB  
  */
 
-const templates1 = [
+const products = [
     {
         "templateName": "Default Template 3",
         "feedbackType": "64b14fe37d75d86fd1af82c1",

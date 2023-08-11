@@ -26,7 +26,7 @@ const getServiceCategories = (req, res) => __awaiter(void 0, void 0, void 0, fun
                 { businessCategoryId, creationType: 2 },
                 { businessAdminId, creationType: 1 }
             ]
-        }).lean();
+        }).sort({ createdAt: 1 });
         const modifiedCategories = categories.map(category => {
             category.id = category._id;
             delete category._id;
