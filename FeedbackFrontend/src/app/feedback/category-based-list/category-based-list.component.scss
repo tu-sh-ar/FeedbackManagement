@@ -45,3 +45,23 @@ th {
     justify-content: left;
     align-items: center;
 }
+
+tr.example-element-row:not(.example-expanded-row):hover {
+
+    background: whitesmoke;
+  
+  }
+  
+   
+  
+  tr.example-element-row:not(.example-expanded-row):active {
+  
+    background: #efefef;
+  
+  }
+  
+  tr.example-detail-row {
+  
+    height: 0;
+  
+  }

@@ -13,13 +13,13 @@
     <app-no-data-available *ngIf="!categorySpecificEntitiesData?.response?.responseGroups?.length"></app-no-data-available>
 
     <div *ngIf="categorySpecificEntitiesData?.response?.responseGroups?.length">
-        <table mat-table [dataSource]="categorySpecificEntitiesDataSource" class="mat-elevation-z8 feedback-table" multiTemplateDataRows>
-            <ng-container matColumnDef="serial">
+        <table mat-table [dataSource]="categorySpecificEntitiesDataSource" class="mat-elevation-z2 feedback-table" multiTemplateDataRows>
+            <ng-container matColumnDef="index">
                 <th mat-header-cell *matHeaderCellDef>
                     <b>S.No.</b>
                 </th>
-                <td mat-cell *matCellDef="let element; let i = renderIndex;">
-                    {{i+1}}
+                <td mat-cell *matCellDef="let element;">
+                    {{element.index + 1}}
                 </td>
             </ng-container>
             <ng-container matColumnDef="entityId">
@@ -87,12 +87,11 @@
                     </div>
                   </td>
             </ng-container>
-            
 
             <tr mat-header-row *matHeaderRowDef="displayEntityColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayEntityColumns;">
+            <tr mat-row *matRowDef="let row; columns: displayEntityColumns;" [class.example-expanded-row]="row.isExpanded === true">
             </tr>
-            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
         </table>
     </div>
 </div>

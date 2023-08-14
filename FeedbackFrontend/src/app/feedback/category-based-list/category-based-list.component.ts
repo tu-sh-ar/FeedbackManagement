@@ -29,7 +29,7 @@ export class CategoryBasedListComponent implements OnInit{
     isExpanded?:boolean;
   }>;
   categorySpecificEntitiesData!:EntitiesAssociatedWithCategory;
-  displayEntityColumns:string[] = ["serial", "entityId", "entityName", "count", "action"]
+  displayEntityColumns:string[] = ["index", "entityId", "entityName", "count", "action"]
 
   entitySpecificFeedbacksData!:FeedbacksAssociatedWithEntity;
   entitySpecificFeedbacksDataSource!:MatTableDataSource<{
@@ -67,9 +67,7 @@ export class CategoryBasedListComponent implements OnInit{
   getEntityListBasedOnCategory(categoryId:string):void{
     this._feedbackService.getEntitiesAssociatedWithCategory(categoryId).subscribe((res)=>{
       this.categorySpecificEntitiesData = res;
-      for(let entity of this.categorySpecificEntitiesData.response.responseGroups){
-        entity.isExpanded = false;
-      }
+      this.categorySpecificEntitiesData.response.responseGroups = this.categorySpecificEntitiesData.response.responseGroups.map((x, index) => ({...x, isExpanded: false, index}))
       this.categorySpecificEntitiesDataSource = new MatTableDataSource(this.categorySpecificEntitiesData?.response?.responseGroups);
       this._changeDetectorRefs.detectChanges();
     })
