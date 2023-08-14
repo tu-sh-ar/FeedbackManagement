@@ -25,7 +25,7 @@ export class EntityBasedFeedbackListComponent implements OnInit{
 
   totalFeedbacks!:number;
   @ViewChild('paginator') paginator!: MatPaginator;
-  paginationConfig = {
+  paginationConfig:{pageNumber:number; pageSize:number;} = {
     pageNumber:0,
     pageSize:50
   }

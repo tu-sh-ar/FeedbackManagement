@@ -82,10 +82,11 @@ export interface CategoryBasedFeedbackTemplatesDetails {
 
 export interface CategoryList{
   response:{
-    id:string;
+    _id:string;
     name:string;
     businessCategoryId:number;
     creationType:number;
+    createdAt:string;
   }[];
   statusCode:number;
 }

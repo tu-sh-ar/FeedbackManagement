@@ -16,8 +16,8 @@ mat-card{
     padding: 10px;
 }
 .user-feedback-img{
-    height: 4em;
-    width: 4em;
+    height: 50%;
+    width: 50%;
     margin: 0.5em;
 }
 .section-title{
@@ -28,7 +28,7 @@ mat-card{
 }
 .main-wrapper{
     display: flex;
-    min-height: 70vh;
+    height: 80vh;
     border: 1px solid rgb(220, 220, 200);
     border-radius: 0.75em;
     overflow: hidden;
@@ -37,6 +37,7 @@ mat-card{
 .left-box{
     background-color: #F1F3F6;
     width: 25%;
+    overflow-y: scroll;
 }
 .left-box-option{
     padding: 1.25em 1em 1.25em 1em;

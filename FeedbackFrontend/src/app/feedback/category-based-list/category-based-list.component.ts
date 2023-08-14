@@ -40,7 +40,7 @@ export class CategoryBasedListComponent implements OnInit{
     createdAt:string;
   }>;
 
-  nestedGridPageConfig = {
+  nestedGridPageConfig:{pageNumber:number; pageSize:number;} = {
     pageNumber: 1,
     pageSize: 10
   }
@@ -53,7 +53,7 @@ export class CategoryBasedListComponent implements OnInit{
   ngOnInit(): void {
     this._feedbackService.getCategoryList(this.businessCategory).subscribe((res)=>{
       this.categories = res;
-      this.selectedCategory = this.categories.response[0].id;
+      this.selectedCategory = this.categories.response[0]._id;
 
       this.getEntityListBasedOnCategory(this.selectedCategory);
     })
@@ -76,6 +76,12 @@ export class CategoryBasedListComponent implements OnInit{
   }
 
   getFeedbacksListBasedOnEntity(entityId:string, pageNumber:number, pageSize:number):void{
+    for(let entity of this.categorySpecificEntitiesData.response.responseGroups){
+      if(entity.entityId !== entityId){
+        entity.isExpanded = false;
+      }
+    }
+
     this._feedbackService.getFeedbacksAssociatedWithEntity(entityId, pageNumber, pageSize).subscribe((res)=>{
       this.entitySpecificFeedbacksData = res;
       this.entitySpecificFeedbacksDataSource = new MatTableDataSource(this.entitySpecificFeedbacksData?.response.data);
