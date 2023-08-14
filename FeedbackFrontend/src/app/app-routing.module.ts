@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminLoginComponent } from './core/admin-login/admin-login.component';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
-import { DashboardGuardService } from './services/dashboard-guard.service';
+import { DashboardGuardService } from './services/guards/dashboard-guard.service';
 
 const routes: Routes = [
   {
