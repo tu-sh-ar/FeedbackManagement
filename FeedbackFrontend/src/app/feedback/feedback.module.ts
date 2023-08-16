@@ -21,6 +21,7 @@ import { StarRatingComponent } from './star-rating/star-rating.component';
 import { FeedbackTextboxComponent } from './feedback-textbox/feedback-textbox.component';
 import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
 import { NumberRatingComponent } from './number-rating/number-rating.component';
+import { TemplateLinkGeneratorComponent } from './template-link-generator/template-link-generator.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { NumberRatingComponent } from './number-rating/number-rating.component';
     StarRatingComponent,
     FeedbackTextboxComponent,
     ImageUploaderComponent,
-    NumberRatingComponent
+    NumberRatingComponent,
+    TemplateLinkGeneratorComponent
   ],
   imports: [
     CommonModule,

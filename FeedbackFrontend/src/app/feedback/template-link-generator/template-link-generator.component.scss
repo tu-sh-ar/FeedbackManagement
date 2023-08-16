@@ -1,0 +1,36 @@
+mat-card{
+    width: 60vw;;
+}
+.header{
+    font-size: 1.25em;
+}
+.link-wrapper{
+    padding-top: 1em;
+    border-top: 1px solid rgb(200, 200, 200);
+}
+.button-wrapper{
+    text-align: center;
+    margin-bottom: 1em;
+}
+mat-form-field{
+    margin-inline: 2.5%;
+    width: 45%;
+}
+img{
+    height: 1em;
+    width: 1em;
+}
+.img-wrapper{
+    padding: 0.2em;
+    background-color: rgb(230, 230, 230);
+    border-radius: 0.2em;
+}
+.link-holder{
+    height: 2em;
+    width: 95%;
+}
+@media screen and (max-width:850px) {
+    mat-card{
+        width: 95vw;
+    }
+}

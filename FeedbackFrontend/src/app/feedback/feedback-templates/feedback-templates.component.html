@@ -7,7 +7,10 @@
         <span class="template-reference bold">
             {{template.templateServiceCategory.name}}
         </span>
-        <img src="../../../assets/add-button.svg" class="create-icon" alt="create" (click)="openTemplatePrefrenceDialog(template.templateServiceCategory.id)" matTooltip="Create New Template">
+        <div class="action-wrapper">
+            <button mat-flat-button color="primary" class="link-button" (click)="openLinkGeneratorDialog(template.templateServiceCategory.id, template.templateServiceCategory.name)">Generate Feedback Link</button>
+            <img src="../../../assets/add-button.svg" class="create-icon" alt="create" (click)="openTemplatePrefrenceDialog(template.templateServiceCategory.id)" matTooltip="Create New Template">
+        </div>
     </div>
     <div class="scroller">
         <app-feedback-template-preview-card [category]="template.templateServiceCategory.id" [templates]="template.templates"></app-feedback-template-preview-card>

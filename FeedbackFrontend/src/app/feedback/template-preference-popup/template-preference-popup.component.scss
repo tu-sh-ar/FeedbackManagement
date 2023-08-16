@@ -19,7 +19,6 @@ mat-spinner {
 
 .card-container {
     position: relative;
-
 }
 .base {
     opacity: 1;
@@ -59,4 +58,10 @@ mat-spinner {
 
 .card-container:hover .middle {
     opacity: 1;
+}
+
+@media screen and (max-width:850px) {
+    mat-card{
+        width: 90vw;
+    }
 }

@@ -30,6 +30,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 
 
 @NgModule({
@@ -64,7 +65,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatSelectModule,
     MatRadioModule,
     MatCheckboxModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    ClipboardModule
   ],
   exports: [
     MatRippleModule,
@@ -95,7 +97,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatSelectModule,
     MatRadioModule,
     MatCheckboxModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    ClipboardModule
   ]
 })
 export class MaterialModule { }

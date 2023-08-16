@@ -6,12 +6,13 @@
     overflow-x: scroll;
     padding-bottom: 0.5em;
 }
-// ::-webkit-scrollbar {
-//     display: none;
-// }
 .head{
-    text-align: end;
     margin-block: 0.5em;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+
 }
 .template-reference{
     font-size: 1.25em;
@@ -20,4 +21,12 @@
 .create-icon{
     height: 2em;
     width: 2em;
+    margin-inline: 0.5em;
+}
+.link-button{
+    margin-inline: 0.5em;
+}
+.action-wrapper{
+    display: flex;
+    align-items: center;
 }

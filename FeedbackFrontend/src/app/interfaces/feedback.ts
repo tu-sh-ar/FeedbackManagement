@@ -142,3 +142,15 @@ export interface DetailedFeedbackResponse{
   };
   statusCode:number;
 }
+
+export interface LinkGenerationPayload{
+  authorId: string;
+  entityId: string;
+  entityName: string;
+  authorName: string;
+}
+
+export interface GeneratedLinkResponse{
+  response:string;
+  statusCode:number;
+}

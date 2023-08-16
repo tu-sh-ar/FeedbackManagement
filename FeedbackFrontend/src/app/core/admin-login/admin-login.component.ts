@@ -27,7 +27,6 @@ export class AdminLoginComponent {
   })
 
   login():void{
-
     this.disableLogin = true;
 
     if(this.adminLoginForm.value.username && this.adminLoginForm.value.password){

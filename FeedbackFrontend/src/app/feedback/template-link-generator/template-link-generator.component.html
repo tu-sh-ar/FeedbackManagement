@@ -1,0 +1,57 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            <span class="bold header">
+                Feedback Template Link Generator
+            </span>
+        </mat-card-title>
+        <mat-card-subtitle>
+            {{categoryName}}
+        </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-divider></mat-divider>
+    <br>
+
+    <mat-card-content>
+
+        <form [formGroup]="templateLinkGeneratorForm">
+            <mat-form-field appearance="outline">
+                <mat-label>Author ID</mat-label>
+                <input matInput type="text" formControlName="authorId">
+                <mat-error><small>It is a required field.</small></mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Author Name</mat-label>
+                <input matInput type="text" formControlName="authorName">
+                <mat-error><small>It is a required field.</small></mat-error>
+            </mat-form-field>
+            <br>
+            <mat-form-field appearance="outline">
+                <mat-label>Entity ID</mat-label>
+                <input matInput type="text" formControlName="entityId">
+                <mat-error><small>It is a required field.</small></mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Entity Name</mat-label>
+                <input matInput type="text" formControlName="entityName">
+                <mat-error><small>It is a required field.</small></mat-error>
+            </mat-form-field>
+            <div class="button-wrapper">
+                <button mat-flat-button color="accent" (click)="generateLink()">
+                    Generate Link
+                </button>
+            </div>
+        </form>
+
+        <div class="link-wrapper" *ngIf="generatedLink">
+            <div>
+                <input type="text" class="link-holder" [(ngModel)]="generatedLink">
+                <span class="img-wrapper" matTooltip="Copy Link" [cdkCopyToClipboard]="generatedLink" (click)="linkCopiedAlert()">
+                    <img src="../../../assets/copy-icon.svg" alt="copy">
+                </span>
+            </div>
+        </div>
+
+    </mat-card-content>
+</mat-card>

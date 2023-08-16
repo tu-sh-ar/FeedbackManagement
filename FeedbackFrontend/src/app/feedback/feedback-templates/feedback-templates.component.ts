@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplatePreferencePopupComponent } from '../template-preference-popup/template-preference-popup.component';
 import { BusinessSpecificFeedbackTemplatesDetails } from 'src/app/interfaces/feedback';
+import { TemplateLinkGeneratorComponent } from '../template-link-generator/template-link-generator.component';
 
 @Component({
   selector: 'app-feedback-templates',
@@ -30,6 +31,15 @@ export class FeedbackTemplatesComponent implements OnInit{
         categoryId:categoryId
       }
     });
+  }
+
+  openLinkGeneratorDialog(categoryId:string, categoryName:string):void{
+    this._dialog.open(TemplateLinkGeneratorComponent, {
+      data:{
+        categoryId:categoryId,
+        categoryName:categoryName
+      }
+    })
   }
 
 }

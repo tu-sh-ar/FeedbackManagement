@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { CustomFeedbackFormBodySchema, SingleFeedbackTemplateBody, CategoryBasedFeedbackTemplatesDetails, BusinessSpecificFeedbackTemplatesDetails, CategoryList, EntitiesAssociatedWithCategory, FeedbacksAssociatedWithEntity, DetailedFeedbackResponse} from '../interfaces/feedback';
+import { CustomFeedbackFormBodySchema, SingleFeedbackTemplateBody, CategoryBasedFeedbackTemplatesDetails, BusinessSpecificFeedbackTemplatesDetails, CategoryList, EntitiesAssociatedWithCategory, FeedbacksAssociatedWithEntity, DetailedFeedbackResponse, LinkGenerationPayload, GeneratedLinkResponse} from '../interfaces/feedback';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -61,6 +61,11 @@ export class FeedbackService {
   //get detailed feedback response for an entity based on response id
   getDetailedFeedbackResponse(responseId:string):Observable<DetailedFeedbackResponse>{
     return this._http.get<DetailedFeedbackResponse>(`${this.baseURL}templateResponse/getResponseById/${responseId}`)
-  } 
+  }
+
+  //generate template feedback link
+  getGeneratedTemplateLink(serviceId:string, businessAdminId:string, data:LinkGenerationPayload):Observable<GeneratedLinkResponse>{
+    return this._http.post<GeneratedLinkResponse>(`${this.baseURL}businessAdmin/createLink/${serviceId}/${businessAdminId}`, data)
+  }
   
 }
