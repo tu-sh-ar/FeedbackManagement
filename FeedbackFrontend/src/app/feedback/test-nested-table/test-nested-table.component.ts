@@ -24,7 +24,5 @@ export class TestNestedTableComponent {
   }>
 
   ngOnInit(): void {
-    // console.log(this.feedbackDataSource)
-    // console.log(this.entityId);
   }
 }

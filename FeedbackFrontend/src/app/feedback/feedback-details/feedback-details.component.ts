@@ -27,7 +27,6 @@ export class FeedbackDetailsComponent implements OnInit{
 
     this._feedbackService.getDetailedFeedbackResponse(this.responseId).subscribe((res)=>{
       this.detailedFeedbackResponse = res;
-      console.log(res)
       this.authorName = this.detailedFeedbackResponse.response.authorName;
       this.entityName = this.detailedFeedbackResponse.response.entityName;
     })
