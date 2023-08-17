@@ -20,6 +20,7 @@ export class TemplateLinkGeneratorComponent implements OnInit{
   categoryId!:string;
   categoryName!:string;
   generatedLink!:string;
+  generateLinkButtonDisabled:boolean = false;
 
   templateLinkGeneratorForm = new FormGroup({
     authorId: new FormControl("", [Validators.required]),
@@ -65,6 +66,7 @@ export class TemplateLinkGeneratorComponent implements OnInit{
     this._feedbackService.getGeneratedTemplateLink(this.categoryId, this.businessAdminId, payload)
     .subscribe((res)=>{
       this.generatedLink = res.response;
+      this.generateLinkButtonDisabled = true;
     })
   }
 }
