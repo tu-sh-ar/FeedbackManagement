@@ -32,7 +32,6 @@ export class AdminLoginComponent {
     if(this.adminLoginForm.value.username && this.adminLoginForm.value.password){
       this._service.adminLogin({username:this.adminLoginForm.value.username, password:this.adminLoginForm.value.password})
       .subscribe((res)=>{
-        // console.log(res);
         if(res){
           localStorage.setItem("user", JSON.stringify(res));
           this._router.navigate(["admin/dashboard"])
