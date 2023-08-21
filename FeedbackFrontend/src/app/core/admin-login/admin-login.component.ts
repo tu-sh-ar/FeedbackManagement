@@ -48,6 +48,7 @@ export class AdminLoginComponent {
       })
     } else {
       this._snackbar.open("Please enter required fields.", "Dismiss", {duration: 2000});
+      this.disableLogin = false;
     }
   }
 
