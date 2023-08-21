@@ -1,4 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+export interface ImagePath{
+  imgPath:string;
+}
 
 @Component({
   selector: 'app-image-prompt',
@@ -6,5 +11,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./image-prompt.component.scss']
 })
 export class ImagePromptComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<ImagePromptComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: ImagePath
+  ){}
 
 }

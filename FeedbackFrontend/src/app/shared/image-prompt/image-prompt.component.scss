@@ -1,0 +1,12 @@
+.prompt{
+    width: 50vw;
+}
+img{
+    width: 100%;
+    object-fit: cover;
+}
+@media screen and (max-width:850px) {
+    .prompt{
+        width: 90vw;
+    }
+}

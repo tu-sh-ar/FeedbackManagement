@@ -54,7 +54,7 @@
                             <div class="bold" *ngIf="qa.answerFormat.type=='checkbox'">
                                 <div *ngIf="checkIfAnswerIsArray(qa.answer)">
                                     <div *ngFor="let ans of qa.answer">
-                                        <span>{{ans}}, </span>
+                                        <span>- {{ans}}</span>
                                     </div>
                                 </div>
                                 <div *ngIf="!qa.answer" class="bold">
@@ -64,7 +64,7 @@
                             <div class="bold" *ngIf="qa.answerFormat.type=='file'">
                                 <div *ngIf="checkIfAnswerIsArray(qa.answer)">
                                     <span *ngFor="let img of qa.answer">
-                                        <img src="{{img}}" alt="user-feedback-image" class="user-feedback-img" loading="lazy">
+                                        <img src="{{img}}" alt="user-feedback-image" class="user-feedback-img" loading="lazy" (click)="openImagePrompt(img)" matTooltip="Click to see in Full View">
                                     </span>
                                 </div>
                                 <div *ngIf="!qa.answer" class="bold">

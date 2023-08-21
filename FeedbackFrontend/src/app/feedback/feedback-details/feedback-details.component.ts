@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { DetailedFeedbackResponse } from 'src/app/interfaces/feedback';
 import { FeedbackService } from 'src/app/services/feedback.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ImagePromptComponent } from 'src/app/shared/image-prompt/image-prompt.component';
 
 @Component({
   selector: 'app-feedback-details',
@@ -19,7 +21,8 @@ export class FeedbackDetailsComponent implements OnInit{
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _feedbackService: FeedbackService,
-    private _snackbar: MatSnackBar
+    private _snackbar: MatSnackBar,
+    private _dialog: MatDialog
   ){}
 
   ngOnInit(): void {
@@ -42,6 +45,14 @@ export class FeedbackDetailsComponent implements OnInit{
 
   handleCards(leftIdx:number):void{
     this.currentIdx = leftIdx;
+  }
+
+  openImagePrompt(path:string):void{
+    this._dialog.open(ImagePromptComponent, {
+      data:{
+        imgPath: path
+      }
+    })
   }
 
 }

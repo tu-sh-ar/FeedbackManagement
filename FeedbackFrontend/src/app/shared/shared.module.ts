@@ -34,7 +34,8 @@ import { ImagePromptComponent } from './image-prompt/image-prompt.component';
     RouterModule,
     PageNotFoundComponent,
     ActiveBadgeComponent,
-    NoDataAvailableComponent
+    NoDataAvailableComponent,
+    ImagePromptComponent
   ]
 })
 export class SharedModule { }
