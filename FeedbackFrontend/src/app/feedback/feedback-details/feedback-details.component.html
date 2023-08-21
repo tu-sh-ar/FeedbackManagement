@@ -63,9 +63,9 @@
                             </div>
                             <div class="bold" *ngIf="qa.answerFormat.type=='file'">
                                 <div *ngIf="checkIfAnswerIsArray(qa.answer)">
-                                    <div *ngFor="let img of qa.answer">
+                                    <span *ngFor="let img of qa.answer">
                                         <img src="{{img}}" alt="user-feedback-image" class="user-feedback-img" loading="lazy">
-                                    </div>
+                                    </span>
                                 </div>
                                 <div *ngIf="!qa.answer" class="bold">
                                     <p>N/A</p>

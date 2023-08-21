@@ -9,12 +9,14 @@ import { RouterModule } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ActiveBadgeComponent } from './active-badge/active-badge.component';
 import { NoDataAvailableComponent } from './no-data-available/no-data-available.component';
+import { ImagePromptComponent } from './image-prompt/image-prompt.component';
 
 @NgModule({
   declarations: [
     PageNotFoundComponent,
     ActiveBadgeComponent,
-    NoDataAvailableComponent
+    NoDataAvailableComponent,
+    ImagePromptComponent
   ],
   imports: [
     CommonModule,

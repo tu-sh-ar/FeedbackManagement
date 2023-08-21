@@ -16,9 +16,11 @@ mat-card{
     padding: 10px;
 }
 .user-feedback-img{
-    height: 50%;
-    width: 50%;
+    height: 5em;
+    width: 5em;
     margin: 0.5em;
+    object-fit: cover;
+    cursor: pointer;
 }
 .section-title{
     font-size: 1.25em;
